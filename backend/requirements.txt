@@ -24,6 +24,10 @@ psycopg2-binary==2.9.9  # PostgreSQL driver for SQLAlchemy
 
 # HTTP Client (to communicate with other services)
 httpx==0.25.2
+requests==2.31.0
+
+# AI/ML
+anthropic==0.39.0
 
 # Development
 python-dotenv==1.0.0
