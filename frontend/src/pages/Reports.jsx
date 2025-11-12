@@ -46,8 +46,8 @@ export default function Reports() {
                   <FileText size={24} className="text-blue-600" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 truncate">{report.title}</h3>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <h3 className="font-semibold text-gray-900 line-clamp-2 mb-2">{report.title}</h3>
+                  <p className="text-sm text-gray-600 mt-1 truncate">
                     Agent: {report.agent_id}
                   </p>
                   <p className="text-sm text-gray-600">
