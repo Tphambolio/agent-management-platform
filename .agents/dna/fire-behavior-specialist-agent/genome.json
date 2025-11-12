@@ -1,0 +1,483 @@
+{
+  "agent_metadata": {
+    "agent_id": "fire-behavior-specialist-agent",
+    "created_date": "2025-10-28T07:08:16.414274",
+    "total_sessions": 7,
+    "last_active": "2025-10-28T22:46:50.960588"
+  },
+  "skills": {
+    "technical": {},
+    "domain": {
+      "polygon-fire-prediction": {
+        "version": "1.0.0",
+        "description": "Complete workflow for polygon-based fire prediction with data fetching and result generation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "terrain-analysis": {
+        "version": "1.0.0",
+        "description": "Calculate slope, aspect, and topographic features from DEMs for fire spread calculations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fbp-fuel-mapping": {
+        "version": "1.0.0",
+        "description": "Handle fuel type classification and conversion between different fuel systems.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "monte-carlo-workflow": {
+        "version": "1.0.0",
+        "description": "Set up and run Monte Carlo fire simulations with proper parallelization.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fire-visualization": {
+        "version": "1.0.0",
+        "description": "Generate professional maps, animations, and interactive visualizations of fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fbp-fire-behavior": {
+        "version": "1.0.0",
+        "description": "Calculate fire behavior using the Canadian Forest Fire Behavior Prediction (FBP) System.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "historical-fire-validation": {
+        "version": "1.0.0",
+        "description": "Validate simulation outputs against known historical fires for calibration and benchmarking.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "simulation-reporting": {
+        "version": "1.0.0",
+        "description": "Generate comprehensive reports with statistics, visualizations, and interpretation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "geotiff-processor": {
+        "version": "1.0.0",
+        "description": "Load, validate, transform, and export GeoTIFF raster data for fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fwi-weather-processing": {
+        "version": "1.0.0",
+        "description": "Process meteorological data into Fire Weather Index (FWI) System components.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      }
+    }
+  },
+  "experience_bank": {
+    "patterns_known": [
+      {
+        "name": "albini_spotting_model",
+        "description": "",
+        "timestamp": "2025-10-28T07:08:16.414999"
+      },
+      {
+        "name": "albini_required_inputs",
+        "description": "",
+        "timestamp": "2025-10-28T07:08:16.415133"
+      },
+      {
+        "name": "firebrand_size_distribution",
+        "description": "",
+        "timestamp": "2025-10-28T07:08:16.415262"
+      },
+      {
+        "name": "maximum_spotting_distance_formula",
+        "description": "",
+        "timestamp": "2025-10-28T07:08:16.415395"
+      },
+      {
+        "name": "spotting_distance_exponential_distribution",
+        "description": "",
+        "timestamp": "2025-10-28T07:08:16.415518"
+      },
+      {
+        "name": "spotting_cellular_automaton_integration",
+        "description": "",
+        "timestamp": "2025-10-28T07:08:16.415856"
+      },
+      {
+        "name": "deterministic_vs_stochastic_spotting",
+        "description": "",
+        "timestamp": "2025-10-28T07:08:16.415996"
+      },
+      {
+        "name": "spotting_implementation_parameters",
+        "description": "",
+        "timestamp": "2025-10-28T07:08:16.416140"
+      },
+      {
+        "name": "spotting_criticality_thresholds",
+        "description": "",
+        "timestamp": "2025-10-28T07:08:16.416586"
+      },
+      {
+        "name": "slave_lake_spotting_prediction",
+        "description": "",
+        "timestamp": "2025-10-28T07:08:16.416930"
+      },
+      {
+        "name": "modern_spotting_models_2024",
+        "description": "",
+        "timestamp": "2025-10-28T07:08:16.417250"
+      },
+      {
+        "name": "spotting_implementation_roadmap",
+        "description": "",
+        "timestamp": "2025-10-28T07:08:16.418221"
+      },
+      {
+        "name": "spotting_key_equations",
+        "description": "",
+        "timestamp": "2025-10-28T07:08:16.418386"
+      },
+      {
+        "name": "FBP_fire_behavior_prediction",
+        "description": "Correctly identified active crown fire for C3 fuel under extreme conditions",
+        "evidence": "FFMC=94, Wind=40km/h \u2192 ROS=95.65 m/min, Intensity=66,002 kW/m",
+        "validation_status": "SCIENTIFICALLY_VALIDATED",
+        "confidence": "high",
+        "timestamp": "2025-10-28T20:45:36.549045"
+      },
+      {
+        "name": "crown_fire_initiation",
+        "description": "CFB calculation correctly identified 100% crown fraction burned",
+        "evidence": "Active crown fire classification matches observed behavior",
+        "validation_status": "SCIENTIFICALLY_VALIDATED",
+        "confidence": "high",
+        "timestamp": "2025-10-28T20:45:36.549058"
+      },
+      {
+        "name": "rate_of_spread_calculation",
+        "description": "ROS values match expected range for C3 mature pine",
+        "evidence": "Surface ROS: 68.32 m/min, Final ROS: 95.65 m/min",
+        "validation_status": "SCIENTIFICALLY_VALIDATED",
+        "confidence": "high",
+        "timestamp": "2025-10-28T20:45:36.549061"
+      },
+      {
+        "name": "calgary_urban_wildland_interface_simulation",
+        "description": "Successful Monte Carlo simulation for Calgary WUI using synthetic data fallback",
+        "timestamp": "2025-10-28T22:43:38.298041"
+      }
+    ],
+    "techniques_mastered": [],
+    "pitfalls_remembered": [],
+    "insights_discovered": [
+      {
+        "insight": "Ember transport (spotting/firebrand transport) is CRITICAL for extreme wind-driven fires - can increase spread by order of magnitude",
+        "timestamp": "2025-10-28T07:08:16.414292",
+        "context": ""
+      },
+      {
+        "insight": "Spotting occurs ONLY during crown fire (active or passive) - not during surface fire",
+        "timestamp": "2025-10-28T07:08:16.414402",
+        "context": ""
+      },
+      {
+        "insight": "Spotting distance increases dramatically with wind speed and fire intensity - non-linear relationship",
+        "timestamp": "2025-10-28T07:08:16.414529",
+        "context": ""
+      },
+      {
+        "insight": "Spotting increases spread rate non-linearly - can cause order of magnitude increase in fire area",
+        "timestamp": "2025-10-28T07:08:16.415654",
+        "context": ""
+      },
+      {
+        "insight": "Spotting becomes CRITICAL above wind speed threshold of ~40 km/h with crown fire",
+        "timestamp": "2025-10-28T07:08:16.416296",
+        "context": ""
+      },
+      {
+        "insight": "Spotting changes fire behavior qualitatively - not just quantitative increase",
+        "timestamp": "2025-10-28T07:08:16.416439",
+        "context": ""
+      },
+      {
+        "insight": "Slave Lake 2011 is THE canonical case for extreme wind-driven spotting",
+        "timestamp": "2025-10-28T07:08:16.416741",
+        "context": ""
+      },
+      {
+        "insight": "2024 research shows atmospheric waves can increase spotting by 10x beyond classical Albini model",
+        "timestamp": "2025-10-28T07:08:16.417088",
+        "context": ""
+      },
+      {
+        "insight": "Ember transport is the missing piece for modeling extreme wind-driven fires like Slave Lake and Jasper",
+        "timestamp": "2025-10-28T07:08:16.418560",
+        "context": ""
+      },
+      {
+        "insight": "Completed: Comprehensive ember transport and spotting modeling research",
+        "timestamp": "2025-10-28T07:08:16.418742",
+        "context": ""
+      },
+      {
+        "insight": "Ember transport (spotting/firebrand transport) is CRITICAL for extreme wind-driven fires - can increase spread by order of magnitude",
+        "timestamp": "2025-10-28T07:55:53.415953",
+        "context": ""
+      },
+      {
+        "insight": "Spotting occurs ONLY during crown fire (active or passive) - not during surface fire",
+        "timestamp": "2025-10-28T07:55:53.416203",
+        "context": ""
+      },
+      {
+        "insight": "Spotting distance increases dramatically with wind speed and fire intensity - non-linear relationship",
+        "timestamp": "2025-10-28T07:55:53.416757",
+        "context": ""
+      },
+      {
+        "insight": "Spotting increases spread rate non-linearly - can cause order of magnitude increase in fire area",
+        "timestamp": "2025-10-28T07:55:53.417939",
+        "context": ""
+      },
+      {
+        "insight": "Spotting becomes CRITICAL above wind speed threshold of ~40 km/h with crown fire",
+        "timestamp": "2025-10-28T07:55:53.418736",
+        "context": ""
+      },
+      {
+        "insight": "Spotting changes fire behavior qualitatively - not just quantitative increase",
+        "timestamp": "2025-10-28T07:55:53.418931",
+        "context": ""
+      },
+      {
+        "insight": "Slave Lake 2011 is THE canonical case for extreme wind-driven spotting",
+        "timestamp": "2025-10-28T07:55:53.419378",
+        "context": ""
+      },
+      {
+        "insight": "2024 research shows atmospheric waves can increase spotting by 10x beyond classical Albini model",
+        "timestamp": "2025-10-28T07:55:53.419802",
+        "context": ""
+      },
+      {
+        "insight": "Ember transport is the missing piece for modeling extreme wind-driven fires like Slave Lake and Jasper",
+        "timestamp": "2025-10-28T07:55:53.421649",
+        "context": ""
+      },
+      {
+        "insight": "Completed: Comprehensive ember transport and spotting modeling research",
+        "timestamp": "2025-10-28T07:55:53.421859",
+        "context": ""
+      },
+      {
+        "insight": "Calgary Monte Carlo simulation: 100 iterations in 1.03s = 97.3 fires/second performance",
+        "timestamp": "2025-10-28T22:43:38.298037",
+        "context": "Calgary scenario 2025-10-28"
+      },
+      {
+        "insight": "Fire intensity 31,982 kW/m for synthetic Calgary fuels matches Very High classification",
+        "timestamp": "2025-10-28T22:43:38.298038",
+        "context": "Calgary scenario validation"
+      },
+      {
+        "insight": "ROS 83.9 m/min for Alberta boreal fuels under FFMC 65-95 conditions is physically reasonable",
+        "timestamp": "2025-10-28T22:43:38.298038",
+        "context": "Calgary FBP validation"
+      },
+      {
+        "insight": "Graceful degradation successful: synthetic fuel/DEM fallback when real data unavailable",
+        "timestamp": "2025-10-28T22:43:38.298039",
+        "context": "Data resilience pattern"
+      },
+      {
+        "insight": "16% max burn probability indicates moderate risk, not catastrophic - probabilistic output valuable",
+        "timestamp": "2025-10-28T22:43:38.298039",
+        "context": "Risk communication learning"
+      }
+    ],
+    "validation_results": [
+      {
+        "event": "fort_mcmurray_2016_horse_river",
+        "date": "2016-05-01",
+        "score": 65,
+        "findings": {
+          "validated_components": [
+            "FBP_fire_behavior_prediction",
+            "crown_fire_initiation",
+            "rate_of_spread_calculation"
+          ],
+          "issues": [
+            "spatial_spread_mechanism",
+            "simulation_duration",
+            "spotting_frequency"
+          ]
+        },
+        "timestamp": "2025-10-28T20:45:36.549064"
+      },
+      {
+        "event": "fort_mcmurray_2016_horse_river",
+        "date": "2016-05-01",
+        "score": 65,
+        "findings": {
+          "validated_components": [
+            "FBP_fire_behavior_prediction",
+            "crown_fire_initiation",
+            "rate_of_spread_calculation"
+          ],
+          "issues": [
+            "spatial_spread_mechanism",
+            "simulation_duration",
+            "spotting_frequency"
+          ]
+        },
+        "timestamp": "2025-10-28T20:54:23.885054"
+      },
+      {
+        "event": "palisades_2025_california_fire",
+        "date": "2025-01-07",
+        "score": 0,
+        "findings": {
+          "validated_components": [
+            "extreme_wind_modeling",
+            "extreme_drought_conditions"
+          ],
+          "issues": [
+            "fuel_type_representation",
+            "urban_wildland_interface"
+          ]
+        },
+        "error_pct": 109.0,
+        "ecosystem": "california_chaparral",
+        "status": "FAILED - Fuel type mismatch",
+        "timestamp": "2025-10-28T22:23:31.142971"
+      },
+      {
+        "event": "fort_mcmurray_2016_horse_river",
+        "date": "2016-05-01",
+        "score": 65,
+        "findings": {
+          "validated_components": [
+            "FBP_fire_behavior_prediction",
+            "crown_fire_initiation",
+            "rate_of_spread_calculation"
+          ],
+          "issues": [
+            "spatial_spread_mechanism",
+            "simulation_duration",
+            "spotting_frequency"
+          ]
+        },
+        "timestamp": "2025-10-28T22:46:50.960550"
+      }
+    ]
+  },
+  "session_memory": {
+    "last_session_summary": "Researched ember transport physics, Albini spotting model, implementation approaches, and Slave Lake case study. Ready to implement spotting for extreme wind-driven fires.",
+    "next_priorities": [],
+    "work_in_progress": []
+  },
+  "evolution_metrics": {
+    "tasks_completed": 3,
+    "patterns_created": 13,
+    "learning_velocity": "developing",
+    "total_learning_events": 61
+  },
+  "lessons_learned": [
+    {
+      "lesson": "FBP physics are sound, spatial propagation needs work",
+      "category": "model_architecture",
+      "timestamp": "2025-10-28T20:45:36.549066"
+    },
+    {
+      "lesson": "Extreme fires (ROS >80 m/min) require different spread algorithms than moderate fires",
+      "category": "fire_behavior",
+      "timestamp": "2025-10-28T20:45:36.549072"
+    },
+    {
+      "lesson": "Fixed iteration counts fail for variable fire intensities",
+      "category": "simulation_design",
+      "timestamp": "2025-10-28T20:45:36.549073"
+    },
+    {
+      "lesson": "Validation against historical fires reveals issues aesthetic review misses",
+      "category": "validation_methodology",
+      "timestamp": "2025-10-28T20:45:36.549075"
+    },
+    {
+      "lesson": "FBP physics are sound, spatial propagation needs work",
+      "category": "model_architecture",
+      "timestamp": "2025-10-28T20:54:23.885058"
+    },
+    {
+      "lesson": "Extreme fires (ROS >80 m/min) require different spread algorithms than moderate fires",
+      "category": "fire_behavior",
+      "timestamp": "2025-10-28T20:54:23.885061"
+    },
+    {
+      "lesson": "Fixed iteration counts fail for variable fire intensities",
+      "category": "simulation_design",
+      "timestamp": "2025-10-28T20:54:23.885063"
+    },
+    {
+      "lesson": "Validation against historical fires reveals issues aesthetic review misses",
+      "category": "validation_methodology",
+      "timestamp": "2025-10-28T20:54:23.885065"
+    },
+    {
+      "lesson": "Canadian FBP system is ecosystem-specific - not universal",
+      "category": "model_limitations",
+      "timestamp": "2025-10-28T22:23:31.142916"
+    },
+    {
+      "lesson": "California chaparral burns differently than Canadian C7 forests",
+      "category": "fuel_behavior",
+      "timestamp": "2025-10-28T22:23:31.142941"
+    },
+    {
+      "lesson": "Model performs well within design envelope (Canadian forests)",
+      "category": "validation_methodology",
+      "timestamp": "2025-10-28T22:23:31.142946"
+    },
+    {
+      "lesson": "Santa Ana winds are captured by extreme wind speed parameters",
+      "category": "weather_modeling",
+      "timestamp": "2025-10-28T22:23:31.142951"
+    },
+    {
+      "lesson": "Synthetic data fallback enables 100% task completion despite 75% external service availability",
+      "category": "system_resilience",
+      "timestamp": "2025-10-28T22:43:38.298042"
+    },
+    {
+      "lesson": "FBP physics are sound, spatial propagation needs work",
+      "category": "model_architecture",
+      "timestamp": "2025-10-28T22:46:50.960555"
+    },
+    {
+      "lesson": "Extreme fires (ROS >80 m/min) require different spread algorithms than moderate fires",
+      "category": "fire_behavior",
+      "timestamp": "2025-10-28T22:46:50.960558"
+    },
+    {
+      "lesson": "Fixed iteration counts fail for variable fire intensities",
+      "category": "simulation_design",
+      "timestamp": "2025-10-28T22:46:50.960560"
+    },
+    {
+      "lesson": "Validation against historical fires reveals issues aesthetic review misses",
+      "category": "validation_methodology",
+      "timestamp": "2025-10-28T22:46:50.960562"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "current_level": 4,
+  "levels_completed": [
+    1,
+    2,
+    3
+  ],
+  "total_scenarios_completed": 204,
+  "total_scenarios_generated": 0,
+  "pass_rate_by_level": {
+    "1": 0.7,
+    "2": 0.65,
+    "3": 0.6
+  },
+  "started": null,
+  "last_updated": "2025-10-29T04:27:54.701128"
+}

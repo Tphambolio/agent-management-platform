@@ -1,0 +1,43 @@
+{
+  "task_id": "task_005",
+  "task": {
+    "task_id": "task_005",
+    "created": "2025-10-28T22:39:50.638897",
+    "experiment_type": "spread_factor_test",
+    "parameters": {
+      "fire_weather": {
+        "ffmc": 97,
+        "dmc": 85,
+        "dc": 410,
+        "wind_speed": 65,
+        "wind_direction": 45,
+        "temperature": 18,
+        "relative_humidity": 20,
+        "fuel_type": "C7"
+      },
+      "max_iterations": 500,
+      "spotting_enabled": true,
+      "validation_target": {
+        "event": "camp_fire_2018",
+        "actual_area_ha": 28328,
+        "timepoint": "nov_8_24hours"
+      },
+      "spread_factor": 2.5,
+      "embers_per_source": 8,
+      "spotting_check_interval": 3,
+      "fuel_type": "C3",
+      "wind_speed": 50
+    },
+    "reasoning": "Manual test of spread_factor=2.5",
+    "expected_improvement": 0.05,
+    "output_dir": "outputs/experiments/task_005"
+  },
+  "completed": "2025-10-28T22:42:23.476602",
+  "success": true,
+  "metrics": {
+    "iou": 0.761,
+    "dice": 0.864
+  },
+  "runtime_seconds": 144.14219665527344,
+  "output": " Iteration 490: 121346 burning cells, 8.3% area affected\n\n\ud83d\udcc8 Simulation Results:\n   Burned Area: 1085149 cells (8.6%)\n   Mean Burn Probability: 1.000\n   IoU (vs reference): 0.761\n   Dice Coefficient: 0.864\n   RMSE: 0.0000\n\n\u2705 Fire spread raster saved \u2192 outputs/fire_layers/fire_spread.tif\n\u2705 Metrics saved \u2192 outputs/metrics.json\n\n======================================================================\n\ud83c\udfaf ADVANCED FIRE MODEL COMPLETE\n======================================================================\n"
+}

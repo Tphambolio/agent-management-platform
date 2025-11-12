@@ -1,0 +1,74 @@
+{
+  "summary": "Jasper 2024 validation revealed FBP extreme conditions failure - crown fire + BUI corrections needed",
+  "learning_events": [
+    {
+      "timestamp": "2025-10-28T02:04:59.253711",
+      "category": "insight",
+      "content": "Jasper 2024 validation revealed critical model limitations at extreme conditions (1250x underestimate)",
+      "metadata": {
+        "predicted_ha": 4,
+        "actual_ha": 5000,
+        "error_factor": 1250,
+        "conditions": "DMC 120, DC 600, BUI ~160 (extreme)"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T02:04:59.254331",
+      "category": "pattern",
+      "content": {
+        "name": "fbp_extreme_bui_failure",
+        "description": "FBP system breaks down at BUI >150 - calibrated for 0-150 range only"
+      },
+      "metadata": {
+        "problem": "Extreme drought conditions (BUI ~160) cause FBP to underpredict severely",
+        "solution": "Need BUI correction factor or alternative extreme fire model",
+        "impact": "Critical for 2023-2024 megafire events"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T02:04:59.255176",
+      "category": "pattern",
+      "content": {
+        "name": "validation_driven_development",
+        "description": "Real fire validation reveals exactly what needs fixing - Jasper shows need for crown fire, extreme BUI handling, spotting"
+      },
+      "metadata": {
+        "validation_target": "Jasper 2024",
+        "failures_identified": [
+          "missing_crown_fire",
+          "extreme_bui_breakdown",
+          "no_spotting",
+          "simplified_geometry"
+        ],
+        "fixes_prioritized": true
+      }
+    },
+    {
+      "timestamp": "2025-10-28T02:04:59.255656",
+      "category": "insight",
+      "content": "Model works for normal conditions (Edmonton) but fails for extreme (Jasper) - need crown fire + BUI corrections + spotting",
+      "metadata": {
+        "priority": "critical_for_world_class"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T02:04:59.256138",
+      "category": "pitfall",
+      "content": {
+        "name": "fbp_extrapolation_beyond_calibration",
+        "problem": "FBP equations not valid at BUI >150",
+        "solution": "Add extreme fire corrections from recent research"
+      },
+      "metadata": {}
+    },
+    {
+      "timestamp": "2025-10-28T02:04:59.256611",
+      "category": "insight",
+      "content": "Completed: Jasper 2024 validation - identified critical model limitations",
+      "metadata": {
+        "type": "task_completion"
+      }
+    }
+  ],
+  "timestamp": "2025-10-28T02:04:59.257156"
+}

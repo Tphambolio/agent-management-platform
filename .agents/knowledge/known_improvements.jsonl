@@ -1,0 +1,1 @@
+{"timestamp": "2025-10-28T22:12:19.439558", "task_id": "task_001", "parameter": "max_iterations", "old_value": 500, "new_value": 750, "improvement_iou": 0.46079637151652003, "test_iou": 0.64479637151652, "test_dice": 0.8382352829714761, "runtime_seconds": 5.0, "status": "adopted"}

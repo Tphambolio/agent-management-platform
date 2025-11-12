@@ -1,0 +1,98 @@
+{
+  "task_id": "validate_polygon_api",
+  "task_name": "Validate Polygon Fire Prediction API",
+  "description": "Run comprehensive test suite for the polygon-based fire prediction API including security, performance, and integration validation",
+  "priority": "high",
+  "category": "quality_assurance",
+  "assigned_agent": "qa-testing-agent",
+  "skills_required": [
+    "pytest-runner",
+    "polygon-fire-prediction"
+  ],
+  "execution": {
+    "mode": "automated",
+    "schedule": "before_deployment",
+    "timeout_minutes": 10,
+    "retry_on_failure": true,
+    "max_retries": 2
+  },
+  "test_phases": [
+    {
+      "phase": 1,
+      "name": "Quick Validation",
+      "description": "Run unit tests for fast feedback",
+      "command": "python skills/pytest-runner/scripts/run_tests.py --quick",
+      "expected_duration_seconds": 2,
+      "acceptance_criteria": {
+        "min_pass_rate": 1.0,
+        "max_duration_seconds": 5,
+        "required_tests": 21
+      }
+    },
+    {
+      "phase": 2,
+      "name": "Security Validation",
+      "description": "Validate security controls (path traversal, input sanitization)",
+      "command": "python skills/pytest-runner/scripts/run_tests.py --security",
+      "expected_duration_seconds": 1,
+      "acceptance_criteria": {
+        "min_pass_rate": 1.0,
+        "required_tests": 4,
+        "critical": true
+      }
+    },
+    {
+      "phase": 3,
+      "name": "Integration Tests",
+      "description": "Test external API integrations (may skip if APIs unavailable)",
+      "command": "python skills/pytest-runner/scripts/run_tests.py --integration",
+      "expected_duration_seconds": 60,
+      "acceptance_criteria": {
+        "min_pass_rate": 0.8,
+        "allow_skipped": true,
+        "critical": false
+      }
+    },
+    {
+      "phase": 4,
+      "name": "Coverage Analysis",
+      "description": "Ensure code coverage meets standards",
+      "command": "python skills/pytest-runner/scripts/run_tests.py --coverage",
+      "expected_duration_seconds": 5,
+      "acceptance_criteria": {
+        "min_coverage_percent": 85,
+        "critical_paths_covered": [
+          "backend/polygon_prediction_api.py",
+          "backend/data_fetcher/"
+        ]
+      }
+    }
+  ],
+  "success_criteria": {
+    "phase_1_required": true,
+    "phase_2_required": true,
+    "phase_3_required": false,
+    "phase_4_required": true,
+    "overall_pass_rate": 0.95,
+    "no_security_failures": true,
+    "min_coverage": 0.85
+  },
+  "failure_actions": {
+    "notify": ["backend-developer-agent", "software-architect-agent"],
+    "block_deployment": true,
+    "create_issue": true,
+    "escalate_after_retries": true
+  },
+  "reporting": {
+    "generate_agent_report": true,
+    "update_dna": true,
+    "log_to_feedback_registry": true,
+    "output_formats": ["json", "console", "agent_format"]
+  },
+  "metadata": {
+    "created_date": "2025-11-02",
+    "last_updated": "2025-11-02",
+    "version": "1.0.0",
+    "test_suite_version": "1.0.0"
+  }
+}

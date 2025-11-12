@@ -1,0 +1,194 @@
+{
+  "agent": "weather-data-agent",
+  "version": "1.0",
+  "last_updated": "2025-10-28",
+  "tasks": [
+    {
+      "task_id": "weather-001",
+      "priority": "critical",
+      "status": "pending",
+      "objective": "Validate FWI calculations against Van Wagner (1987) standards",
+      "description": "Comprehensive audit of all six FWI components (FFMC, DMC, DC, ISI, BUI, FWI) to ensure scientific accuracy.",
+      "scope": {
+        "files": ["src/core/fwi_calculator.py"],
+        "functions": [
+          "calculate_ffmc",
+          "calculate_dmc",
+          "calculate_dc",
+          "calculate_isi",
+          "calculate_bui",
+          "calculate_fwi"
+        ]
+      },
+      "success_criteria": [
+        "All FWI equations verified against Van Wagner (1987)",
+        "Constants and coefficients match official documentation",
+        "Units are correct and documented",
+        "Valid ranges checked for all inputs/outputs",
+        "Test cases created against reference examples"
+      ],
+      "context": {
+        "reference": "Van Wagner (1987) Forestry Technical Report 35",
+        "current_implementation": "src/core/fwi_calculator.py",
+        "test_suite": "tests/test_fwi_calculator.py"
+      }
+    },
+    {
+      "task_id": "weather-002",
+      "priority": "high",
+      "status": "pending",
+      "objective": "Test Jasper 2024 extreme weather conditions",
+      "description": "Validate FWI system behavior under extreme fire weather: FFMC=94, DMC=120, DC=600, Temp=30°C, RH=15%, Wind=40km/h.",
+      "scope": {
+        "files": ["src/core/fwi_calculator.py", "tests/test_fwi_calculator.py"],
+        "focus_area": "Extreme weather validation"
+      },
+      "success_criteria": [
+        "FWI calculations validated for Jasper 2024 conditions",
+        "Results match expected extreme fire weather indices",
+        "System handles extreme values gracefully",
+        "Edge cases documented (very low RH, high temperature)",
+        "Comparison with historical extreme events"
+      ],
+      "context": {
+        "event": "Jasper 2024 wildfire",
+        "conditions": {
+          "ffmc": 94,
+          "dmc": 120,
+          "dc": 600,
+          "temperature": 30,
+          "rh": 15,
+          "wind_speed": 40
+        }
+      }
+    },
+    {
+      "task_id": "weather-003",
+      "priority": "high",
+      "status": "pending",
+      "objective": "Validate multi-day FWI sequences",
+      "description": "Test FWI calculations over multi-day sequences with varying weather, including rain events.",
+      "scope": {
+        "files": ["src/core/fwi_calculator.py", "tests/test_fwi_calculator.py"],
+        "test_type": "Integration test with time series"
+      },
+      "success_criteria": [
+        "Multi-day sequences calculate correctly",
+        "DMC and DC accumulation validated",
+        "Rain effects properly reduce moisture codes",
+        "Overwintering procedures documented",
+        "Test cases for 7, 14, and 30-day sequences"
+      ]
+    },
+    {
+      "task_id": "weather-004",
+      "priority": "high",
+      "status": "pending",
+      "objective": "Verify hourly FWI methods",
+      "description": "Validate hourly FFMC and FWI calculations for diurnal fire weather variations.",
+      "scope": {
+        "files": ["src/core/fwi_calculator.py"],
+        "functions": ["calculate_hourly_ffmc", "calculate_hourly_fwi"],
+        "focus_area": "Sub-daily weather processing"
+      },
+      "success_criteria": [
+        "Hourly FFMC method verified against Lawson et al. (1996)",
+        "Temperature and humidity cycles handled correctly",
+        "Hourly ISI and FWI updated properly",
+        "Diurnal patterns realistic and validated",
+        "Test cases for full 24-hour cycles"
+      ],
+      "references": [
+        "Lawson et al. (1996) Hourly Fire Weather Index System"
+      ]
+    },
+    {
+      "task_id": "weather-005",
+      "priority": "medium",
+      "status": "pending",
+      "objective": "Validate weather input processing and validation",
+      "description": "Ensure robust weather data handling with proper validation, unit conversions, and error checking.",
+      "scope": {
+        "files": ["src/core/fwi_calculator.py", "src/data/weather_loader.py"],
+        "focus_area": "Data quality and validation"
+      },
+      "success_criteria": [
+        "Input validation implemented for all weather parameters",
+        "Unit conversions documented and tested",
+        "Missing data handling strategy defined",
+        "Out-of-range values detected and handled",
+        "Error messages are clear and actionable"
+      ],
+      "validation_checks": {
+        "temperature": "Valid range: -50 to 50°C",
+        "relative_humidity": "Valid range: 0-100%",
+        "wind_speed": "Valid range: 0-150 km/h",
+        "precipitation": "Valid range: 0-200 mm"
+      }
+    },
+    {
+      "task_id": "weather-006",
+      "priority": "medium",
+      "status": "pending",
+      "objective": "Test FWI-to-FBP integration pipeline",
+      "description": "Validate end-to-end weather → FWI → FBP data flow.",
+      "scope": {
+        "files": [
+          "src/core/fwi_calculator.py",
+          "src/core/fbp_calculator.py",
+          "tests/integration/"
+        ],
+        "focus_area": "System integration"
+      },
+      "success_criteria": [
+        "FWI outputs compatible with FBP inputs",
+        "ISI properly feeds into ROS calculations",
+        "BUI properly affects fire behavior",
+        "Integration tests pass end-to-end",
+        "No data transformation errors"
+      ]
+    },
+    {
+      "task_id": "weather-007",
+      "priority": "low",
+      "status": "pending",
+      "objective": "Document FWI system with scientific references",
+      "description": "Create comprehensive documentation of FWI calculations with citations and examples.",
+      "scope": {
+        "files": ["docs/fwi_system.md", "src/core/fwi_calculator.py"],
+        "output": "Scientific documentation"
+      },
+      "success_criteria": [
+        "All FWI equations documented with LaTeX or clear text",
+        "Citations to Van Wagner (1987) and other sources",
+        "Physical meaning of each index explained",
+        "Valid ranges and limitations documented",
+        "Examples for typical and extreme weather"
+      ]
+    }
+  ],
+  "dependencies": {
+    "requires": [
+      "src/core/fwi_calculator.py must exist",
+      "Python environment with numpy"
+    ],
+    "coordinates_with": [
+      "fbp-algorithm-agent",
+      "scientific-validation-agent",
+      "monte-carlo-agent"
+    ]
+  },
+  "resources": {
+    "documentation": [
+      "Van Wagner, C.E. (1987). Development and Structure of the Canadian Forest Fire Weather Index System.",
+      "Lawson, B.D. et al. (1996). Hourly Fire Weather Index System.",
+      "https://cfs.nrcan.gc.ca/publications"
+    ],
+    "code_locations": [
+      "src/core/fwi_calculator.py - Main FWI implementation",
+      "tests/test_fwi_calculator.py - FWI tests",
+      "src/data/weather_loader.py - Weather data loading"
+    ]
+  },
+  "notes": "This agent focuses on fire weather calculations and data quality. Accurate FWI values are critical input to the FBP system, so scientific correctness is paramount."
+}

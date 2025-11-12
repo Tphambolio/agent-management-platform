@@ -1,0 +1,45 @@
+{
+  "agent_id": "research-agent",
+  "version": "0.1.0",
+  "generation": 1,
+  "specialization": "autonomous_research",
+  "capabilities": [
+    "web_search",
+    "information_synthesis",
+    "source_validation",
+    "knowledge_staging"
+  ],
+  "traits": {
+    "thoroughness": 0.8,
+    "source_skepticism": 0.9,
+    "synthesis_quality": 0.7,
+    "execution_speed": 0.6
+  },
+  "constraints": {
+    "max_sources_per_mission": 50,
+    "max_search_queries": 20,
+    "max_execution_time_minutes": 60,
+    "max_artifact_size_bytes": 1048576
+  },
+  "evolution_log": [
+    {
+      "generation": 1,
+      "timestamp": "2025-02-28T00:00:00Z",
+      "change": "Initial genome creation",
+      "performance_metrics": {
+        "missions_completed": 0,
+        "average_source_count": 0,
+        "average_execution_time_seconds": 0,
+        "promotion_rate": 0
+      }
+    }
+  ],
+  "learning_objectives": [
+    "Improve source relevance scoring",
+    "Reduce sanitization warnings",
+    "Increase promotion rate through better quality",
+    "Optimize search query generation"
+  ],
+  "trust_score": 0.5,
+  "last_updated": "2025-02-28T00:00:00Z"
+}

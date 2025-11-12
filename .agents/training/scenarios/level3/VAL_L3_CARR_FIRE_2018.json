@@ -1,0 +1,42 @@
+{
+  "scenario_id": "VAL_L3_CARR_FIRE_2018",
+  "level": 3,
+  "difficulty": "validation",
+  "generated": "2025-10-29T04:25:20.288058",
+  "is_validation": true,
+  "real_fire_event": {
+    "name": "Carr Fire 2018 (Firestorm Day)",
+    "location": "California, USA",
+    "date": "2018-07-26"
+  },
+  "fire_weather": {
+    "ffmc": 95,
+    "dmc": 130,
+    "dc": 600,
+    "wind_speed": 80,
+    "wind_direction": 270,
+    "temperature": 43,
+    "relative_humidity": 8,
+    "fuel_type": "C3"
+  },
+  "terrain": {
+    "slope": 35
+  },
+  "simulation": {
+    "max_iterations": 350,
+    "spotting_enabled": true
+  },
+  "validation": {
+    "actual_area_ha": 45000,
+    "actual_fire_type": "active_crown",
+    "notes": "Fire tornado generated, extreme behavior"
+  },
+  "expected_behavior": {
+    "fire_danger_index": 3.0,
+    "expected_behavior": "extreme",
+    "expected_ros_range": {
+      "min": 50,
+      "max": 200
+    }
+  }
+}

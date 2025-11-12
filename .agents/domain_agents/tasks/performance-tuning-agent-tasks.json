@@ -1,0 +1,47 @@
+{
+  "agent": "performance-tuning-agent",
+  "version": "1.0",
+  "tasks": [
+    {
+      "task_id": "perf-001",
+      "priority": "high",
+      "status": "pending",
+      "objective": "Profile and optimize fire spread simulation",
+      "scope": {"files": ["src/simulation/fire_spread.py"]},
+      "success_criteria": [
+        "Profiling results identify top 5 bottlenecks",
+        "Numba JIT applied to hot-path functions",
+        "Vectorization opportunities exploited",
+        "Benchmark shows >20% improvement",
+        "No loss of scientific accuracy"
+      ]
+    },
+    {
+      "task_id": "perf-002",
+      "priority": "high",
+      "status": "pending",
+      "objective": "Optimize Monte Carlo simulation parallelization",
+      "scope": {"files": ["src/simulation/monte_carlo.py"]},
+      "success_criteria": [
+        "Parallel processing implemented (multiprocessing/joblib)",
+        "Load balancing strategy evaluated",
+        "Memory overhead minimized",
+        "Speedup scales with CPU cores",
+        "Reproducibility maintained"
+      ]
+    },
+    {
+      "task_id": "perf-003",
+      "priority": "medium",
+      "status": "pending",
+      "objective": "Memory optimization for large simulations",
+      "scope": {"files": ["src/simulation/*.py"]},
+      "success_criteria": [
+        "Memory profiling completed",
+        "Chunked processing for large arrays",
+        "In-place operations where possible",
+        "Memory usage reduced by >30%"
+      ]
+    }
+  ]
+}

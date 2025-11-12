@@ -1,0 +1,42 @@
+{
+  "scenario_id": "VAL_L2_CAMP_FIRE_2018",
+  "level": 2,
+  "difficulty": "validation",
+  "generated": "2025-10-29T03:43:13.620389",
+  "is_validation": true,
+  "real_fire_event": {
+    "name": "Camp Fire 2018 (First 24h)",
+    "location": "California, USA",
+    "date": "2018-11-08"
+  },
+  "fire_weather": {
+    "ffmc": 97,
+    "dmc": 120,
+    "dc": 550,
+    "wind_speed": 65,
+    "wind_direction": 45,
+    "temperature": 22,
+    "relative_humidity": 10,
+    "fuel_type": "C3"
+  },
+  "terrain": {
+    "slope": 25
+  },
+  "simulation": {
+    "max_iterations": 250,
+    "spotting_enabled": true
+  },
+  "validation": {
+    "actual_area_ha": 28328,
+    "actual_fire_type": "active_crown",
+    "notes": "Extreme fire behavior, rapid spread, 85 fatalities"
+  },
+  "expected_behavior": {
+    "fire_danger_index": 3.0,
+    "expected_behavior": "extreme",
+    "expected_ros_range": {
+      "min": 50,
+      "max": 200
+    }
+  }
+}

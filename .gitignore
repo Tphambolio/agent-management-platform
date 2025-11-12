@@ -1,0 +1,33 @@
+# Secrets and API keys
+*.env
+*.env.local
+*.env.production
+**/reports/*api-key*
+**/reports/*security*
+**/*TROUBLESHOOTING*
+.agents/development_team/reports/
+
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Build outputs
+dist/
+build/
+*.egg-info/

@@ -1,0 +1,42 @@
+{
+  "id": "c86f7449-aa9c-42ed-b3b1-fc1770f22faa",
+  "agent_id": "pm-orchestrator",
+  "project_id": null,
+  "title": "Test task - Code quality review",
+  "description": "This is a test task to verify the agent execution pipeline works correctly.",
+  "status": "completed",
+  "priority": "medium",
+  "context": {
+    "test": true,
+    "repository": "/test/repo"
+  },
+  "created_at": "2025-11-08T15:42:04.690181",
+  "started_at": "2025-11-08T15:42:04.690811",
+  "completed_at": "2025-11-08T15:42:06.692934",
+  "result": {
+    "status": "success",
+    "output": {
+      "summary": "Completed Test task - Code quality review for Pm Orchestrator",
+      "findings": [
+        "Code structure follows best practices",
+        "Found 3 minor optimization opportunities",
+        "Documentation is comprehensive"
+      ],
+      "recommendations": [
+        "Consider adding type hints to improve code clarity",
+        "Implement caching for frequently accessed data",
+        "Add more unit tests for edge cases"
+      ],
+      "metrics": {
+        "files_analyzed": 12,
+        "issues_found": 3,
+        "severity": "low"
+      },
+      "status": "completed",
+      "execution_note": "Mock execution - for demonstration purposes"
+    },
+    "execution_method": "mock",
+    "note": "This is mock data. Set ANTHROPIC_API_KEY to use real LLM execution."
+  },
+  "error": null
+}

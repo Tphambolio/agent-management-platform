@@ -1,0 +1,35 @@
+{
+  "mission_id": "test_v2_ember_spotting",
+  "goal": "Research ember spotting distances and firebrand transport mechanisms in extreme wildfire conditions",
+  "constraints": {
+    "max_sources": 10,
+    "max_search_queries": 4,
+    "time_limit_minutes": 10,
+    "trusted_domains": [
+      "scholar.google.com",
+      "sciencedirect.com",
+      "publish.csiro.au",
+      "firelab.org",
+      "nrs.fs.fed.us"
+    ]
+  },
+  "deliverables": [
+    "summary",
+    "source_list",
+    "key_findings",
+    "citations"
+  ],
+  "created_at": "2025-11-02T16:00:00Z",
+  "priority": "high",
+  "context": {
+    "background": "Testing Milestone 2 enhanced research capabilities with real web search simulation and improved source scoring",
+    "related_missions": ["test_ember_transport"],
+    "keywords": [
+      "ember transport",
+      "firebrand",
+      "spotting distance",
+      "extreme fire weather",
+      "wildfire spread"
+    ]
+  }
+}

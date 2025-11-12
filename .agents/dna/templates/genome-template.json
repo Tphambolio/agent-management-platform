@@ -1,0 +1,26 @@
+{
+  "agent_metadata": {
+    "agent_id": "",
+    "role": "",
+    "created_date": "",
+    "total_sessions": 0
+  },
+  "skills": {
+    "technical": {},
+    "domain": {}
+  },
+  "experience_bank": {
+    "patterns_known": [],
+    "techniques_mastered": [],
+    "pitfalls_remembered": []
+  },
+  "session_memory": {
+    "last_session_summary": "",
+    "next_priorities": []
+  },
+  "evolution_metrics": {
+    "tasks_completed": 0,
+    "patterns_created": 0,
+    "learning_velocity": "developing"
+  }
+}

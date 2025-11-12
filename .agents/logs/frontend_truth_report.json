@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-10-28T21:02:36.963076",
+  "results": [
+    {
+      "name": "OSM_TILES",
+      "url": "https://tile.openstreetmap.org/0/0/0.png",
+      "status": true
+    },
+    {
+      "name": "MRDEM",
+      "url": "https://portal.opentopography.org/API/globaldem?demtype=SRTMGL1",
+      "status": true,
+      "skipped": true
+    },
+    {
+      "name": "FIRE_BACKEND_HEALTH",
+      "url": "http://localhost:8080/health",
+      "status": true,
+      "warning": true
+    }
+  ]
+}

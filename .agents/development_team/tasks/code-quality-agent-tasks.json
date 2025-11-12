@@ -1,0 +1,291 @@
+{
+  "agent": "code-quality-agent",
+  "priority": "P2 - MEDIUM",
+  "assigned_date": "2025-10-27",
+  "estimated_effort_days": 3,
+  "dependencies": [],
+  "tasks": [
+    {
+      "id": "QUALITY-001",
+      "title": "Code Quality Baseline Assessment",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Establish code quality metrics and identify improvement areas",
+      "acceptance_criteria": [
+        "Run pylint on all Python files (score per file)",
+        "Run flake8 for style violations",
+        "Run ESLint on frontend code",
+        "Count lines of code per module (identify bloated files)",
+        "Identify functions >50 LOC (refactoring candidates)",
+        "Document code complexity metrics (cyclomatic complexity)",
+        "List all TODO/FIXME comments"
+      ],
+      "tools": ["pylint", "flake8", "radon", "ESLint"],
+      "deliverable": ".agents/reports/code-quality-baseline.json"
+    },
+    {
+      "id": "QUALITY-002",
+      "title": "Add Type Hints to Backend",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Add complete type hints to all Python functions",
+      "acceptance_criteria": [
+        "Add type hints to all function signatures in app.py",
+        "Add type hints to forms.py, mapping.py, infrastructure.py, weather.py",
+        "Use typing.List, Dict, Optional, Union where appropriate",
+        "Run mypy static type checker (target: 0 errors)",
+        "Document any type: ignore exceptions with justification",
+        "Update docstrings with parameter types (Google style)"
+      ],
+      "files_to_modify": [
+        "app.py",
+        "forms.py",
+        "mapping.py",
+        "infrastructure.py",
+        "weather.py",
+        "pdf_utils.py",
+        "parcels.py",
+        "presentation.py"
+      ],
+      "deliverable": "Type-hinted code + mypy report"
+    },
+    {
+      "id": "QUALITY-003",
+      "title": "Refactor Long Functions",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Break down functions exceeding 50 lines into smaller units",
+      "acceptance_criteria": [
+        "Identify all functions >50 LOC (radon cc --show-complexity)",
+        "Refactor app.py:_prepare_submission (137 LOC) into smaller helpers",
+        "Refactor app.py:build_prompt (38 LOC, acceptable but can be improved)",
+        "Refactor forms.py long rendering functions (extract common patterns)",
+        "Ensure refactored functions have single responsibility",
+        "Add docstrings to all new helper functions",
+        "All tests still passing after refactoring"
+      ],
+      "target_functions": [
+        "app.py:_prepare_submission (Lines 447-584)",
+        "app.py:retrieve_chunks (Lines 701-752)",
+        "forms.py:_render_ics201, _render_ics203 (check LOC)"
+      ],
+      "deliverable": "Refactored code + complexity report"
+    },
+    {
+      "id": "QUALITY-004",
+      "title": "Add Docstrings to All Functions",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Document all functions with Google-style docstrings",
+      "acceptance_criteria": [
+        "Add docstrings to all public functions in app.py",
+        "Add docstrings to all rendering functions in forms.py",
+        "Add docstrings to mapping.py, infrastructure.py, weather.py",
+        "Use Google docstring format (Args, Returns, Raises)",
+        "Include usage examples in critical functions",
+        "Run pydocstyle to verify compliance"
+      ],
+      "example_format": "Google style: https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings",
+      "deliverable": "Fully documented code + pydocstyle report"
+    },
+    {
+      "id": "QUALITY-005",
+      "title": "Frontend Code Linting Setup",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Setup and enforce ESLint + Prettier for frontend",
+      "acceptance_criteria": [
+        "Add ESLint config with Next.js recommended rules",
+        "Add Prettier for code formatting",
+        "Configure VSCode settings.json for auto-format",
+        "Run eslint --fix on all JS files",
+        "Run prettier --write on all JS files",
+        "Add pre-commit hook for linting (husky + lint-staged)",
+        "Document linting setup in README"
+      ],
+      "files_to_create": [
+        "frontend/.eslintrc.json",
+        "frontend/.prettierrc",
+        "frontend/.husky/pre-commit"
+      ],
+      "deliverable": "Linting config + formatted code"
+    },
+    {
+      "id": "QUALITY-006",
+      "title": "Remove Code Duplication",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Identify and eliminate duplicate code patterns",
+      "acceptance_criteria": [
+        "Run jscpd (copy-paste detector) on Python and JS code",
+        "Identify duplicate blocks >10 lines",
+        "Extract common form rendering patterns into helpers (forms.py)",
+        "Extract common API call patterns into utils (frontend)",
+        "Reduce duplication by 30%+",
+        "Document refactoring decisions"
+      ],
+      "tools": ["jscpd", "pylint --reports=y"],
+      "deliverable": ".agents/reports/code-quality-duplication-report.json"
+    },
+    {
+      "id": "QUALITY-007",
+      "title": "Error Handling Standardization",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Standardize error handling across backend and frontend",
+      "acceptance_criteria": [
+        "Create custom exception classes (ValidationError, APIError, etc.)",
+        "Replace generic Exception with specific exception types",
+        "Add error logging with structured context (user_id, request_id)",
+        "Frontend: Create error boundary component",
+        "Frontend: Add toast notifications for errors",
+        "Document error handling patterns in CONTRIBUTING.md"
+      ],
+      "files_to_create": [
+        "exceptions.py (custom exception classes)",
+        "frontend/app/components/ErrorBoundary.js"
+      ],
+      "deliverable": "Standardized error handling + documentation"
+    },
+    {
+      "id": "QUALITY-008",
+      "title": "Configuration Management Refactor",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Centralize configuration into config module",
+      "acceptance_criteria": [
+        "Create config/ directory with environment-specific configs",
+        "Move hardcoded values to config files (CORS origins, API keys, etc.)",
+        "Add DEPLOYMENT_TARGET env var (local, railway, vercel)",
+        "Implement config loader (config/loader.py)",
+        "Remove .env from git history (BFG or git-filter-repo)",
+        "Document config management in README"
+      ],
+      "files_to_create": [
+        "config/base.py",
+        "config/local.py",
+        "config/railway.py",
+        "config/vercel.py",
+        "config/loader.py"
+      ],
+      "deliverable": "Centralized config + migration guide"
+    },
+    {
+      "id": "QUALITY-009",
+      "title": "Add Logging Framework",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Implement structured logging across application",
+      "acceptance_criteria": [
+        "Add Python logging configuration (JSON format)",
+        "Add log levels (DEBUG, INFO, WARNING, ERROR, CRITICAL)",
+        "Log all API requests/responses with timing",
+        "Log external API calls (OpenAI, Open-Meteo, Overpass)",
+        "Add correlation IDs for request tracing",
+        "Configure log rotation (100MB files, 10 files max)",
+        "Document logging configuration"
+      ],
+      "files_to_create": [
+        "logging_config.py",
+        "middleware/logging_middleware.py"
+      ],
+      "deliverable": "Logging implementation + configuration guide"
+    },
+    {
+      "id": "QUALITY-010",
+      "title": "Dead Code Removal",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Identify and remove unused code",
+      "acceptance_criteria": [
+        "Run vulture to find unused functions/variables",
+        "Check for unused imports (autoflake)",
+        "Identify backup files (intake.backup.1760223502/)",
+        "Check for commented-out code blocks",
+        "Remove or document why code is preserved",
+        "Archive legacy code to separate branch if needed"
+      ],
+      "tools": ["vulture", "autoflake"],
+      "deliverable": ".agents/reports/code-quality-dead-code-report.md"
+    },
+    {
+      "id": "QUALITY-011",
+      "title": "API Documentation Generation",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Generate comprehensive API documentation",
+      "acceptance_criteria": [
+        "Verify OpenAPI spec is auto-generated by FastAPI",
+        "Add descriptions to all endpoints (summary, tags)",
+        "Add example request/response bodies",
+        "Add error response documentation (400, 404, 422, 500)",
+        "Generate Redoc or Swagger UI documentation",
+        "Host docs at /docs and /redoc endpoints",
+        "Export OpenAPI spec to openapi.json"
+      ],
+      "files_to_modify": [
+        "app.py (add endpoint descriptions)"
+      ],
+      "deliverable": "Enhanced API docs + openapi.json"
+    },
+    {
+      "id": "QUALITY-012",
+      "title": "Code Review Checklist",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Create code review checklist and contributing guidelines",
+      "acceptance_criteria": [
+        "Create CONTRIBUTING.md with coding standards",
+        "Define pull request template",
+        "Create code review checklist (security, tests, docs, etc.)",
+        "Document Git workflow (branching, commit messages)",
+        "Add examples of good/bad code patterns",
+        "Document when to use various Python features (dataclasses, enums, etc.)"
+      ],
+      "files_to_create": [
+        "CONTRIBUTING.md",
+        ".github/PULL_REQUEST_TEMPLATE.md",
+        ".github/CODE_REVIEW_CHECKLIST.md"
+      ],
+      "deliverable": "Contributing guidelines + templates"
+    }
+  ],
+  "overall_objectives": [
+    "Improve code maintainability through refactoring and documentation",
+    "Enforce code quality standards with linting and type checking",
+    "Reduce technical debt (long functions, duplication, dead code)",
+    "Standardize error handling and logging",
+    "Document APIs and coding standards"
+  ],
+  "success_metrics": {
+    "pylint_score": 8.0,
+    "mypy_errors": 0,
+    "functions_over_50_loc": 5,
+    "code_duplication_percentage": 5,
+    "docstring_coverage_percentage": 90,
+    "eslint_errors": 0
+  },
+  "code_quality_tools": {
+    "python": [
+      "pylint (linting)",
+      "flake8 (style)",
+      "mypy (type checking)",
+      "radon (complexity)",
+      "pydocstyle (docstrings)",
+      "vulture (dead code)",
+      "autoflake (unused imports)",
+      "jscpd (duplication)"
+    ],
+    "javascript": [
+      "ESLint (linting)",
+      "Prettier (formatting)",
+      "jscpd (duplication)"
+    ]
+  },
+  "report_format": {
+    "summary": ".agents/reports/code-quality-agent-report.json",
+    "baseline_metrics": ".agents/reports/code-quality-baseline.json",
+    "refactoring_log": ".agents/reports/code-quality-refactoring-log.md",
+    "final_metrics": ".agents/reports/code-quality-final-metrics.json"
+  }
+}

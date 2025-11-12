@@ -1,0 +1,28 @@
+{
+  "prompt": "batch_learning",
+  "response": {
+    "success_factors": [
+      {
+        "factor": "C3 fuel type",
+        "confidence": "medium",
+        "evidence": "15 scenarios"
+      },
+      {
+        "factor": "C2 fuel type",
+        "confidence": "medium",
+        "evidence": "18 scenarios"
+      },
+      {
+        "factor": "C7 fuel type",
+        "confidence": "medium",
+        "evidence": "17 scenarios"
+      }
+    ],
+    "failure_modes": [],
+    "improvements": [],
+    "confidence_map": {},
+    "analyzed_scenarios": 50
+  },
+  "context": "{\"total_scenarios\": 50, \"fuel_types\": {\"C3\": 15, \"C2\": 18, \"C7\": 17}, \"wind_ranges\": {\"low\": 34, \"medium\": 16}, \"performance_stats\": {}, \"pattern_highlights\": [{\"type\": \"fuel_behavior\", \"count\": 3}, {\"type\": \"wind_effects\", \"count\": 2}, {\"type\": \"moisture_effects\", \"count\": 2}, {\"type\": \"slope_effects\", \"count\": 2}]}",
+  "cached_at": "2025-10-29T03:36:15.467335"
+}

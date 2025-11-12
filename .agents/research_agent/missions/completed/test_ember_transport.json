@@ -1,0 +1,34 @@
+{
+  "mission_id": "test_ember_transport",
+  "goal": "Research maximum ember transport distances in eucalyptus forests during extreme fire weather conditions",
+  "constraints": {
+    "max_sources": 8,
+    "max_search_queries": 5,
+    "time_limit_minutes": 10,
+    "trusted_domains": [
+      "scholar.google.com",
+      "sciencedirect.com",
+      "publish.csiro.au",
+      "firelab.org"
+    ]
+  },
+  "deliverables": [
+    "summary",
+    "source_list",
+    "key_findings",
+    "citations"
+  ],
+  "created_at": "2025-02-28T14:30:00Z",
+  "priority": "high",
+  "context": {
+    "background": "Needed to improve spotting model accuracy for Australian fuel types in the wildfire simulator. Current model may underestimate ember transport in eucalyptus forests.",
+    "related_missions": [],
+    "keywords": [
+      "ember transport",
+      "eucalyptus",
+      "spotting distance",
+      "extreme fire weather",
+      "firebrand lofting"
+    ]
+  }
+}

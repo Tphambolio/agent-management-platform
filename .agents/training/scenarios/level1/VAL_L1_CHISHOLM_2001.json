@@ -1,0 +1,42 @@
+{
+  "scenario_id": "VAL_L1_CHISHOLM_2001",
+  "level": 1,
+  "difficulty": "validation",
+  "generated": "2025-10-29T03:45:32.859824",
+  "is_validation": true,
+  "real_fire_event": {
+    "name": "Chisholm Fire 2001 (Day 1)",
+    "location": "Alberta, Canada",
+    "date": "2001-05-23"
+  },
+  "fire_weather": {
+    "ffmc": 89,
+    "dmc": 55,
+    "dc": 380,
+    "wind_speed": 35,
+    "wind_direction": 270,
+    "temperature": 24,
+    "relative_humidity": 18,
+    "fuel_type": "C2"
+  },
+  "terrain": {
+    "slope": 8
+  },
+  "simulation": {
+    "max_iterations": 180,
+    "spotting_enabled": false
+  },
+  "validation": {
+    "actual_area_ha": 18000,
+    "actual_fire_type": "active_crown",
+    "notes": "Very active crown fire"
+  },
+  "expected_behavior": {
+    "fire_danger_index": 3.0,
+    "expected_behavior": "extreme",
+    "expected_ros_range": {
+      "min": 50,
+      "max": 200
+    }
+  }
+}

@@ -1,0 +1,286 @@
+{
+  "agent": "performance-agent",
+  "priority": "P2 - MEDIUM",
+  "assigned_date": "2025-10-27",
+  "estimated_effort_days": 4,
+  "dependencies": ["testing-agent:TEST-001"],
+  "tasks": [
+    {
+      "id": "PERF-001",
+      "title": "Performance Baseline Measurement",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Establish performance baselines for all critical operations",
+      "acceptance_criteria": [
+        "Measure /submissions endpoint response time (target: <200ms)",
+        "Measure /generate-plan response time (target: <30s with OpenAI)",
+        "Measure /forms generation time (target: <2s for single form)",
+        "Measure /infrastructure/suggest response time (target: <3s)",
+        "Measure map snapshot generation time (target: <1s)",
+        "Test with varying data sizes (small, medium, large submissions)",
+        "Document baseline metrics in report"
+      ],
+      "tools": ["pytest-benchmark", "locust", "curl"],
+      "deliverable": ".agents/reports/performance-baseline-metrics.json"
+    },
+    {
+      "id": "PERF-002",
+      "title": "Database Query Optimization",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Analyze and optimize SQLite query performance",
+      "acceptance_criteria": [
+        "Add EXPLAIN QUERY PLAN analysis for all SELECT queries",
+        "Identify missing indices (submissions.id, maps.map_type, chunks metadata)",
+        "Add indices on frequently queried columns",
+        "Measure query time before/after indexing",
+        "Document index creation SQL statements",
+        "Test impact on insertion performance"
+      ],
+      "files_to_analyze": [
+        "app.py (all database queries)",
+        "mapping.py (map retrieval queries)",
+        "load_kb_to_db.py (chunk queries)"
+      ],
+      "deliverable": ".agents/reports/performance-database-optimization.md"
+    },
+    {
+      "id": "PERF-003",
+      "title": "Caching Strategy Implementation",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Implement intelligent caching for expensive operations",
+      "acceptance_criteria": [
+        "Add Redis or in-memory caching layer (optional)",
+        "Cache weather forecasts (24-hour TTL)",
+        "Cache infrastructure lookups (15-min TTL already implemented, verify)",
+        "Cache knowledge base chunks in memory on startup",
+        "Add cache hit rate monitoring",
+        "Document cache invalidation strategy"
+      ],
+      "files_to_modify": [
+        "app.py (add caching middleware)",
+        "weather.py (add cache decorator)",
+        "infrastructure.py (verify existing cache)",
+        "Create: utils/cache.py"
+      ],
+      "deliverable": "Code changes + cache performance report"
+    },
+    {
+      "id": "PERF-004",
+      "title": "Map Rendering Optimization",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Optimize MapLibre GL rendering for large feature sets",
+      "acceptance_criteria": [
+        "Test map performance with 10, 50, 100, 500 features",
+        "Identify feature count threshold where lag begins (likely 100+)",
+        "Implement feature virtualization or clustering for 100+ features",
+        "Add map loading spinner for slow renders",
+        "Measure render time improvement",
+        "Document recommended feature limits"
+      ],
+      "files_to_modify": [
+        "frontend/app/components/MapEditor.js"
+      ],
+      "deliverable": ".agents/reports/performance-map-optimization.md"
+    },
+    {
+      "id": "PERF-005",
+      "title": "Frontend Bundle Size Optimization",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Reduce frontend JavaScript bundle size",
+      "acceptance_criteria": [
+        "Analyze current bundle size with next build && next analyze",
+        "Identify large dependencies (maplibre-gl, mapbox-gl)",
+        "Implement code splitting for MapEditor (lazy load)",
+        "Split intake steps into separate chunks",
+        "Measure bundle size reduction (target: 20% reduction)",
+        "Test page load times before/after"
+      ],
+      "tools": ["@next/bundle-analyzer"],
+      "files_to_modify": [
+        "frontend/next.config.mjs (add bundle analyzer)",
+        "frontend/app/components/MapEditor.js (dynamic import)",
+        "frontend/app/intake/step*/page.js (lazy load)"
+      ],
+      "deliverable": "Bundle analysis report + code changes"
+    },
+    {
+      "id": "PERF-006",
+      "title": "API Response Compression",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Enable gzip/brotli compression for API responses",
+      "acceptance_criteria": [
+        "Add gzip middleware to FastAPI",
+        "Test compression on large plan HTML (>100KB)",
+        "Measure response size reduction (target: 60-80% for HTML)",
+        "Verify browser decompression works correctly",
+        "Document compression configuration"
+      ],
+      "files_to_modify": [
+        "app.py (add GZipMiddleware)"
+      ],
+      "deliverable": "Code changes + compression metrics"
+    },
+    {
+      "id": "PERF-007",
+      "title": "OpenAI API Optimization",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Optimize OpenAI API usage to reduce latency and cost",
+      "acceptance_criteria": [
+        "Measure current prompt token usage (submission + KB chunks)",
+        "Test with smaller max_tokens (currently default ~2000)",
+        "Experiment with streaming responses for real-time feedback",
+        "Add timeout configuration (30s default)",
+        "Document cost per submission (currently ~$0.05)",
+        "Add retry logic with exponential backoff"
+      ],
+      "files_to_modify": [
+        "app.py:983-1027 (OpenAI integration)"
+      ],
+      "deliverable": ".agents/reports/performance-openai-optimization.md"
+    },
+    {
+      "id": "PERF-008",
+      "title": "Concurrent Request Load Testing",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Test system behavior under concurrent load",
+      "acceptance_criteria": [
+        "Use locust to simulate 10, 25, 50 concurrent users",
+        "Test submission creation, plan generation, form rendering",
+        "Identify SQLite lock contention points",
+        "Document concurrent request limits (SQLite)",
+        "Provide recommendations for PostgreSQL migration",
+        "Measure system resource usage (CPU, memory, disk I/O)"
+      ],
+      "tools": ["locust", "htop", "iotop"],
+      "deliverable": ".agents/reports/performance-load-testing-results.json"
+    },
+    {
+      "id": "PERF-009",
+      "title": "Database Connection Pooling",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Implement database connection pooling for better concurrency",
+      "acceptance_criteria": [
+        "Replace sqlite3 with SQLAlchemy (supports pooling)",
+        "Configure connection pool (min/max connections)",
+        "Test connection reuse across requests",
+        "Measure improvement in concurrent request handling",
+        "Document pooling configuration"
+      ],
+      "files_to_modify": [
+        "app.py (migrate to SQLAlchemy)",
+        "Create: database.py (SQLAlchemy setup)"
+      ],
+      "deliverable": "Code changes + performance comparison"
+    },
+    {
+      "id": "PERF-010",
+      "title": "Image Optimization - Map Snapshots",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Optimize map snapshot SVG generation",
+      "acceptance_criteria": [
+        "Measure current SVG size for various feature counts",
+        "Test SVG minification (remove whitespace, optimize paths)",
+        "Evaluate PNG export as alternative (smaller for complex maps)",
+        "Implement adaptive format selection (SVG for simple, PNG for complex)",
+        "Measure rendering time and file size improvements"
+      ],
+      "files_to_modify": [
+        "mapping.py (generate_map_snapshot)"
+      ],
+      "deliverable": "Code changes + size/performance comparison"
+    },
+    {
+      "id": "PERF-011",
+      "title": "Frontend Lazy Loading Strategy",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Implement lazy loading for non-critical components",
+      "acceptance_criteria": [
+        "Lazy load MapEditor (only when needed in steps 4-6)",
+        "Lazy load GeoSearchInput component",
+        "Use React.lazy() and Suspense for code splitting",
+        "Add loading skeletons for lazy-loaded components",
+        "Measure initial page load time improvement"
+      ],
+      "files_to_modify": [
+        "frontend/app/intake/step4/page.js",
+        "frontend/app/intake/step6/page.js"
+      ],
+      "deliverable": "Code changes + load time metrics"
+    },
+    {
+      "id": "PERF-012",
+      "title": "Performance Monitoring Setup",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Add performance monitoring and alerting",
+      "acceptance_criteria": [
+        "Add performance middleware to log request durations",
+        "Track slow queries (>1s) and slow API calls (>5s)",
+        "Add /metrics endpoint for Prometheus scraping (optional)",
+        "Document performance SLOs (Service Level Objectives)",
+        "Create performance dashboard template (Grafana)"
+      ],
+      "files_to_create": [
+        "middleware/performance.py",
+        "Create: prometheus.yml (optional)"
+      ],
+      "deliverable": ".agents/reports/performance-monitoring-setup.md"
+    }
+  ],
+  "overall_objectives": [
+    "Establish performance baselines for all critical operations",
+    "Optimize database queries with proper indexing",
+    "Implement caching for expensive operations (weather, KB, infrastructure)",
+    "Reduce frontend bundle size and implement lazy loading",
+    "Test and document concurrent load limits (SQLite)",
+    "Provide optimization recommendations for PostgreSQL migration"
+  ],
+  "success_metrics": {
+    "submission_response_time_ms": 200,
+    "plan_generation_time_s": 30,
+    "form_generation_time_s": 2,
+    "map_snapshot_generation_time_s": 1,
+    "bundle_size_reduction_percentage": 20,
+    "cache_hit_rate_percentage": 60,
+    "concurrent_users_supported": 25
+  },
+  "known_bottlenecks": [
+    "SQLite single-writer limitation (affects concurrent writes)",
+    "OpenAI API latency (5-30s per plan generation)",
+    "MapLibre GL Draw with 100+ features (frontend lag)",
+    "Large plan HTML rendering in browser (iframe performance)",
+    "Map snapshot SVG generation with PIL (CPU-intensive)"
+  ],
+  "optimization_priorities": {
+    "high_impact_low_effort": [
+      "Add database indices (PERF-002)",
+      "Enable gzip compression (PERF-006)",
+      "Cache weather forecasts (PERF-003)"
+    ],
+    "high_impact_high_effort": [
+      "Migrate to PostgreSQL (out of scope, document in report)",
+      "Implement map feature clustering (PERF-004)",
+      "Frontend code splitting (PERF-005)"
+    ],
+    "low_impact_low_effort": [
+      "Add performance logging (PERF-012)",
+      "Document performance SLOs (PERF-012)"
+    ]
+  },
+  "report_format": {
+    "summary": ".agents/reports/performance-agent-report.json",
+    "baseline_metrics": ".agents/reports/performance-baseline-metrics.json",
+    "optimization_results": ".agents/reports/performance-optimization-results.md",
+    "load_testing_results": ".agents/reports/performance-load-testing-results.json"
+  }
+}

@@ -1,0 +1,82 @@
+=== Agent: security-agent ===
+Start time: Tue 28 Oct 2025 04:23:02 PM MDT
+Prompt file: /home/rpas/wildfire-simulator-v2/.agents/development_team/security-agent.txt
+
+## Security Audit Complete - Critical Vulnerabilities Found
+
+I've completed a comprehensive security audit of the wildfire-simulator-v2 project. Here are the key findings:
+
+### Summary
+- **Critical:** 3 findings
+- **High:** 4 findings  
+- **Medium:** 3 findings
+- **Low:** 2 findings
+- **Total:** 12 security vulnerabilities
+
+### Critical Vulnerabilities (Immediate Action Required)
+
+**CRIT-001: Path Traversal in File Download**
+- **File:** `dashboard_v2/backend/app.py:61`
+- **Impact:** Attackers can read ANY file on the server using `../` sequences
+- **Attack:** `GET /api/download/../../etc/passwd` or `GET /api/download/../../.env`
+- **Fix:** Validate paths stay within OUTPUTS_DIR using `.resolve().is_relative_to()`
+
+**CRIT-002: Path Traversal in OutputsAPI**
+- **File:** `dashboard_v2/backend/api/outputs.py:71`
+- **Impact:** Similar path traversal via `/api/outputs/` endpoint
+- **Attack:** `GET /api/outputs/../../.env`
+- **Fix:** Add boundary checking before file access
+
+**CRIT-003: Unrestricted CORS**
+- **File:** `dashboard_v2/backend/app.py:23`
+- **Impact:** ANY website can make requests to your API (CSRF attacks possible)
+- **Current:** `CORS(app)` - allows all origins
+- **Fix:** `CORS(app, origins=['http://localhost:5173'])` for dev, specific domain for production
+
+### High Severity Issues
+
+**HIGH-001: No Input Validation on Config Updates**
+- `/api/config` POST endpoint accepts arbitrary JSON without validation
+- Attackers can inject malicious configuration values
+- Need Pydantic schemas with field validators
+
+**HIGH-002: Unsafe Scenario Parameter**
+- `/api/statistics?scenario=` parameter allows path traversal
+- Need to validate against allowlist or regex: `^[a-zA-Z0-9_-]+$`
+
+**HIGH-003: Verbose Error Messages**
+- Line 182: `return jsonify({"error": str(e)})` exposes stack traces
+- Line 40: Health endpoint reveals full filesystem paths
+- Need generic error messages for production
+
+**HIGH-004: No Rate Limiting**
+- Endpoints loading large numpy arrays can be DoS'd
+- Need flask-limiter: `@limiter.limit("5 per minute")`
+
+### Medium/Low Issues
+
+- Missing security headers (HSTS, CSP, X-Frame-Options)
+- Debug mode hardcoded to `True` (line 218)
+- Outdated dependencies (Flask 3.0.0, numpy 1.24.3)
+- No request size limits (need `MAX_CONTENT_LENGTH`)
+- MapBox token exposed in git history (needs rotation)
+
+### Immediate Action Items
+
+1. **Fix path traversal vulnerabilities** (CRIT-001, CRIT-002)
+2. **Restrict CORS** to specific origins (CRIT-003)
+3. **Add input validation** to all POST endpoints (HIGH-001, HIGH-002)
+4. **Implement rate limiting** (HIGH-004)
+5. **Disable debug mode** and add security headers (MED-001, MED-003)
+
+The detailed JSON report has been generated with:
+- Specific code locations and line numbers
+- Attack vectors and exploitation methods
+- CVE/CWE classifications
+- Step-by-step remediation instructions
+- CVSS scores for each finding
+
+Would you like me to proceed with creating proof-of-concept exploits for testing, or would you prefer I start implementing the fixes?
+
+End time: Tue 28 Oct 2025 04:26:40 PM MDT
+Exit code: 0

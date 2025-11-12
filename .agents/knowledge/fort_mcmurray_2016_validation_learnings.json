@@ -1,0 +1,139 @@
+{
+  "validation_event": "fort_mcmurray_2016_horse_river",
+  "timestamp": "2025-10-28T20:35:00Z",
+  "scientific_findings": {
+    "what_works": [
+      {
+        "component": "FBP_fire_behavior_prediction",
+        "finding": "Correctly identified active crown fire for C3 fuel under extreme conditions",
+        "evidence": "FFMC=94, Wind=40km/h → ROS=95.65 m/min, Intensity=66,002 kW/m",
+        "status": "VALIDATED",
+        "confidence": "high"
+      },
+      {
+        "component": "crown_fire_initiation",
+        "finding": "CFB calculation correctly identified 100% crown fraction burned",
+        "evidence": "Active crown fire classification matches observed behavior",
+        "status": "VALIDATED",
+        "confidence": "high"
+      },
+      {
+        "component": "rate_of_spread_calculation",
+        "finding": "ROS values match expected range for C3 mature pine",
+        "evidence": "Surface ROS: 68.32 m/min, Final ROS: 95.65 m/min",
+        "status": "VALIDATED",
+        "confidence": "high"
+      }
+    ],
+    "what_needs_improvement": [
+      {
+        "component": "spatial_spread_mechanism",
+        "finding": "Severe underprediction of fire area",
+        "evidence": "Predicted 2,333 ha vs Actual 85,000 ha (97% error)",
+        "impact": "CRITICAL",
+        "priority": "P0",
+        "root_cause": "Cellular automaton spread algorithm too conservative for extreme fires"
+      },
+      {
+        "component": "simulation_duration",
+        "finding": "80 iterations insufficient for 30-hour fire event",
+        "evidence": "Model captured only 2.7% of observed spread",
+        "impact": "HIGH",
+        "priority": "P1",
+        "root_cause": "Fixed iteration count doesn't scale with ROS and duration"
+      },
+      {
+        "component": "spotting_frequency",
+        "finding": "Spotting may be underrepresented in extreme crown fires",
+        "evidence": "Fragmented pattern suggests insufficient long-range ignitions",
+        "impact": "HIGH",
+        "priority": "P1",
+        "root_cause": "Spotting probability too low for active crown fire conditions"
+      }
+    ]
+  },
+  "documented_conditions": {
+    "event_name": "Fort McMurray Horse River Fire",
+    "date": "2016-05-01",
+    "location": [56.7267, -111.3790],
+    "weather": {
+      "ffmc": 94,
+      "dmc": 85,
+      "dc": 550,
+      "wind_speed_kmh": 40,
+      "wind_direction": 270,
+      "temperature_c": 32,
+      "relative_humidity_pct": 12
+    },
+    "fuel_type": "C3_mature_jack_pine",
+    "observed_growth": {
+      "30_hours": 85000,
+      "final": 590000,
+      "units": "hectares"
+    }
+  },
+  "improvement_recommendations": [
+    {
+      "recommendation_id": "SPREAD_001",
+      "title": "Implement physics-based elliptical fire spread",
+      "description": "Replace simple cellular automaton with elliptical wave propagation model that accounts for wind-driven elongation",
+      "rationale": "Extreme fires (ROS >80 m/min) show elongated elliptical growth, not circular cell-by-cell spread",
+      "expected_improvement": "Reduce area prediction error from 97% to <50%",
+      "effort": "medium",
+      "references": ["Anderson 1983", "Richards 1995"]
+    },
+    {
+      "recommendation_id": "SPREAD_002",
+      "title": "Scale iterations dynamically based on ROS",
+      "description": "Calculate required iterations as function of ROS, simulation duration, and domain size",
+      "rationale": "Fixed 80 iterations inadequate when ROS=95 m/min for 30 hours",
+      "expected_improvement": "Ensure fire has time to reach observed extent",
+      "effort": "low",
+      "formula": "iterations = (duration_hours * 60 * ROS) / (cell_size * spread_factor)"
+    },
+    {
+      "recommendation_id": "SPOT_001",
+      "title": "Increase spotting frequency for crown fires",
+      "description": "When CFB >0.9, increase spotting probability from 0.05 to 0.15-0.25 per iteration",
+      "rationale": "Active crown fires produce abundant firebrands, creating numerous spot fires",
+      "expected_improvement": "Better capture long-range fire propagation",
+      "effort": "low",
+      "references": ["Albini 1979", "Koo 2010"]
+    },
+    {
+      "recommendation_id": "VALID_001",
+      "title": "Add Fort McMurray 2016 to continuous validation suite",
+      "description": "Run Fort McMurray scenario in every evolution cycle to track improvement",
+      "rationale": "Need continuous validation against extreme fire to prevent regression",
+      "expected_improvement": "Ensure changes improve real-world predictions",
+      "effort": "low"
+    }
+  ],
+  "lessons_learned": [
+    {
+      "lesson": "FBP physics are sound, spatial propagation needs work",
+      "category": "model_architecture",
+      "actionable": true
+    },
+    {
+      "lesson": "Extreme fires (ROS >80 m/min) require different spread algorithms than moderate fires",
+      "category": "fire_behavior",
+      "actionable": true
+    },
+    {
+      "lesson": "Fixed iteration counts fail for variable fire intensities",
+      "category": "simulation_design",
+      "actionable": true
+    },
+    {
+      "lesson": "Validation against historical fires reveals issues aesthetic review misses",
+      "category": "validation_methodology",
+      "actionable": false
+    }
+  ],
+  "next_validation_targets": [
+    "Slave Lake 2011 (even more extreme)",
+    "Jasper 2024 (recent, well-documented)",
+    "Multiple moderate fires to ensure algorithm doesn't overpredict"
+  ]
+}

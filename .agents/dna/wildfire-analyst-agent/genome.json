@@ -1,0 +1,122 @@
+{
+  "agent_metadata": {
+    "agent_id": "wildfire-analyst-agent",
+    "role": "Wildfire Analyst",
+    "created_date": "2025-10-27",
+    "total_sessions": 4,
+    "last_active": "2025-10-28T22:46:50.961761"
+  },
+  "skills": {
+    "technical": {},
+    "domain": {
+      "fbp-fire-behavior": {
+        "version": "1.0.0",
+        "description": "Calculate fire behavior using the Canadian Forest Fire Behavior Prediction (FBP) System.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fwi-weather-processing": {
+        "version": "1.0.0",
+        "description": "Process meteorological data into Fire Weather Index (FWI) System components.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "monte-carlo-workflow": {
+        "version": "1.0.0",
+        "description": "Set up and run Monte Carlo fire simulations with proper parallelization.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "simulation-reporting": {
+        "version": "1.0.0",
+        "description": "Generate comprehensive reports with statistics, visualizations, and interpretation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      }
+    }
+  },
+  "experience_bank": {
+    "patterns_known": [],
+    "techniques_mastered": [],
+    "pitfalls_remembered": []
+  },
+  "session_memory": {
+    "last_session_summary": "",
+    "next_priorities": []
+  },
+  "evolution_metrics": {
+    "tasks_completed": 0,
+    "patterns_created": 0,
+    "learning_velocity": "developing"
+  },
+  "historical_fires": [
+    {
+      "event_name": "Fort McMurray Horse River Fire",
+      "date": "2016-05-01",
+      "conditions": {
+        "ffmc": 94,
+        "dmc": 85,
+        "dc": 550,
+        "wind_speed_kmh": 40,
+        "wind_direction": 270,
+        "temperature_c": 32,
+        "relative_humidity_pct": 12
+      },
+      "observed_behavior": {
+        "30_hours": 85000,
+        "final": 590000,
+        "units": "hectares"
+      },
+      "model_performance": {
+        "components_validated": 3,
+        "issues_found": 3
+      },
+      "timestamp": "2025-10-28T20:45:36.549960"
+    },
+    {
+      "event_name": "Palisades Fire 2025",
+      "date": "2025-01-07",
+      "location": "Pacific Palisades, Los Angeles, California",
+      "conditions": {
+        "ffmc": 97,
+        "dmc": 75,
+        "dc": 360,
+        "wind_speed": 130,
+        "wind_direction": 45,
+        "temperature": 22,
+        "relative_humidity": 12,
+        "isi": 30,
+        "fwi": 60,
+        "special_conditions": "Santa Ana winds, gusts 160 km/h, driest 9-month period on record"
+      },
+      "observed_behavior": {
+        "24_hours": 6879
+      },
+      "fuel_type": "California chaparral (shrubland)",
+      "significance": "3rd most destructive California wildfire on record",
+      "model_performance": {
+        "error_pct": 109.0,
+        "status": "FAILED",
+        "reason": "Fuel type mismatch - California chaparral not in FBP"
+      },
+      "ecosystem": "california_chaparral",
+      "timestamp": "2025-10-28T22:23:31.144627"
+    }
+  ],
+  "ecosystems_analyzed": [
+    {
+      "name": "california_chaparral",
+      "characteristics": "Dense shrublands, high fire intensity, Santa Ana wind-driven",
+      "fuel_types": [
+        "chaparral",
+        "shrubland"
+      ],
+      "model_performance": "POOR - FBP not designed for this ecosystem",
+      "timestamp": "2025-10-28T22:23:31.144636"
+    }
+  ]
+}

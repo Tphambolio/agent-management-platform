@@ -1,0 +1,26 @@
+{
+  "mission_id": "test_ember_transport",
+  "queries": [
+    {
+      "query": "research",
+      "results_count": 2
+    },
+    {
+      "query": "maximum",
+      "results_count": 2
+    },
+    {
+      "query": "ember",
+      "results_count": 2
+    },
+    {
+      "query": "transport",
+      "results_count": 2
+    },
+    {
+      "query": "distances",
+      "results_count": 2
+    }
+  ],
+  "total_results": 5
+}

@@ -1,0 +1,89 @@
+{
+  "agent": "refactoring-agent",
+  "tasks": [
+    {
+      "task_id": "refactor-001",
+      "priority": "high",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Break down large monolithic files into smaller modules",
+      "scope": {
+        "files": ["app.py", "tools/*.py"],
+        "directories": [],
+        "exclusions": []
+      },
+      "success_criteria": [
+        "No file exceeds 500 lines",
+        "Each module has single responsibility",
+        "Import structure clean and logical",
+        "All tests pass after refactoring"
+      ],
+      "dependencies": [],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Focus on files over 500 lines first. Check app.py and large agent files."
+    },
+    {
+      "task_id": "refactor-002",
+      "priority": "high",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Extract duplicate code into reusable functions",
+      "scope": {
+        "files": ["*.py"],
+        "directories": ["tools", "tests"],
+        "exclusions": ["venv"]
+      },
+      "success_criteria": [
+        "Duplicate code blocks identified and extracted",
+        "New utility functions created in appropriate modules",
+        "Code reuse improved by at least 20%",
+        "Tests updated and passing"
+      ],
+      "dependencies": ["refactor-001"],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Look for repeated patterns in agent files"
+    },
+    {
+      "task_id": "refactor-003",
+      "priority": "medium",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Reduce cyclomatic complexity of complex functions",
+      "scope": {
+        "files": ["*.py"],
+        "directories": ["tools"],
+        "exclusions": []
+      },
+      "success_criteria": [
+        "No function has complexity > 10",
+        "Complex conditionals simplified",
+        "Guard clauses used appropriately",
+        "Code more readable and maintainable"
+      ],
+      "dependencies": [],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Use radon or similar tool to measure complexity"
+    },
+    {
+      "task_id": "refactor-004",
+      "priority": "medium",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Improve naming conventions and code clarity",
+      "scope": {
+        "files": ["*.py"],
+        "directories": ["tools", "tests"],
+        "exclusions": []
+      },
+      "success_criteria": [
+        "All functions and variables have descriptive names",
+        "Abbreviations expanded where unclear",
+        "Consistent naming patterns used",
+        "Code self-documenting"
+      ],
+      "dependencies": ["refactor-002"],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Focus on unclear variable names like 'x', 'tmp', 'data'"
+    }
+  ]
+}

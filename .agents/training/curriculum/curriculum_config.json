@@ -1,0 +1,53 @@
+{
+  "level_1": {
+    "name": "Basic Fire Behavior",
+    "scenarios": 200,
+    "difficulty": "basic",
+    "pass_threshold": 0.70,
+    "focus": ["single_fuel_type", "moderate_conditions", "flat_terrain"],
+    "fuel_types": ["C2", "C3", "C7"],
+    "wind_range": [10, 40],
+    "ffmc_range": [85, 92]
+  },
+  "level_2": {
+    "name": "Variable Conditions",
+    "scenarios": 250,
+    "difficulty": "intermediate",
+    "pass_threshold": 0.65,
+    "focus": ["multiple_fuel_types", "variable_wind", "moderate_slopes"],
+    "fuel_types": ["C2", "C3", "C4", "C7", "O1a"],
+    "wind_range": [5, 60],
+    "ffmc_range": [80, 95]
+  },
+  "level_3": {
+    "name": "Extreme Conditions",
+    "scenarios": 300,
+    "difficulty": "advanced",
+    "pass_threshold": 0.60,
+    "focus": ["extreme_weather", "steep_slopes", "spotting"],
+    "fuel_types": ["C2", "C3", "C4", "C5", "C7", "O1a"],
+    "wind_range": [40, 100],
+    "ffmc_range": [90, 97]
+  },
+  "level_4": {
+    "name": "Complex Scenarios",
+    "scenarios": 250,
+    "difficulty": "expert",
+    "pass_threshold": 0.55,
+    "focus": ["mixed_fuels", "variable_terrain", "multi_day"],
+    "fuel_types": ["C2", "C3", "C4", "C5", "C6", "C7", "O1a", "O1b"],
+    "wind_range": [0, 120],
+    "ffmc_range": [75, 97]
+  },
+  "level_5": {
+    "name": "Edge Cases & Mega-Fires",
+    "scenarios": 200,
+    "difficulty": "master",
+    "pass_threshold": 0.50,
+    "focus": ["mega_fires", "extreme_outliers", "rare_conditions"],
+    "fuel_types": ["all"],
+    "wind_range": [0, 160],
+    "ffmc_range": [70, 97],
+    "special": ["santa_ana", "downslope_winds", "record_drought"]
+  }
+}

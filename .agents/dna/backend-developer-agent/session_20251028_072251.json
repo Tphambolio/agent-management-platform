@@ -1,0 +1,187 @@
+{
+  "summary": "Implemented BurnP3+-style fire contours: perimeters, probability contours, and uncertainty visualization",
+  "learning_events": [
+    {
+      "timestamp": "2025-10-28T07:22:51.629439",
+      "category": "insight",
+      "content": "BurnP3+ uses fire perimeter contours and probability contours - essential for operational fire management",
+      "metadata": {
+        "gap_identified": "We had burn probability rasters but no contours",
+        "fire_manager_needs": [
+          "perimeter polygons",
+          "probability contours (10/25/50/75/90%)",
+          "arrival time isochrones"
+        ],
+        "why_important": "Fire managers think in terms of 'where will the fire edge be' not 'probability rasters'"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:22:51.630048",
+      "category": "pattern",
+      "content": {
+        "name": "fire_perimeter_extraction",
+        "description": "Extract fire boundary polygon from burned/unburned array using marching squares"
+      },
+      "metadata": {
+        "implementation": "src/core/fire_perimeter.py",
+        "algorithm": "skimage.measure.find_contours with level 0.5",
+        "output": "List of (x, y) coordinates forming perimeter polygon",
+        "post_processing": [
+          "simplification (Douglas-Peucker)",
+          "area calculation",
+          "statistics across iterations"
+        ]
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:22:51.630930",
+      "category": "pattern",
+      "content": {
+        "name": "burn_probability_contours",
+        "description": "Extract probability contour lines at key levels (10%, 25%, 50%, 75%, 90%) like BurnP3+"
+      },
+      "metadata": {
+        "levels": [
+          0.1,
+          0.25,
+          0.5,
+          0.75,
+          0.9
+        ],
+        "meaning": {
+          "10%": "Low risk boundary",
+          "25%": "Moderate risk",
+          "50%": "Most likely fire extent (high confidence)",
+          "75%": "Very high risk",
+          "90%": "Extreme risk (near ignition)"
+        },
+        "use_case": "Fire managers use 50% contour for planning, 90% for worst-case"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:22:51.631467",
+      "category": "pattern",
+      "content": {
+        "name": "perimeter_ensemble_statistics",
+        "description": "Aggregate perimeters from Monte Carlo to show uncertainty"
+      },
+      "metadata": {
+        "metrics": [
+          "mean_area",
+          "std_dev",
+          "percentiles (p10, p25, p50, p75, p90)"
+        ],
+        "visualization": "Plot all perimeters as semi-transparent lines to show spread",
+        "value": "Quantifies fire extent uncertainty for decision making"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:22:51.631983",
+      "category": "technique",
+      "content": {
+        "name": "marching_squares_contours",
+        "description": "Algorithm for extracting smooth contours from gridded data"
+      },
+      "metadata": {
+        "library": "skimage.measure.find_contours",
+        "input": "2D array + threshold level",
+        "output": "List of (row, col) coordinates",
+        "advantage": "Produces smooth polygons, not jagged pixel edges"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:22:51.632525",
+      "category": "pattern",
+      "content": {
+        "name": "burnp3_style_contour_map",
+        "description": "Professional contour maps matching BurnP3+ appearance"
+      },
+      "metadata": {
+        "features": [
+          "Filled contours with fire colors (yellow\u2192orange\u2192red)",
+          "Bold contour lines at key probabilities",
+          "Labeled contours with white boxes",
+          "Risk zone labels in corners",
+          "Statistics box"
+        ],
+        "colors": "Blue-free palette (yellow/orange/red for fire risk)",
+        "purpose": "Familiar format for fire managers trained on BurnP3+"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:22:51.633053",
+      "category": "insight",
+      "content": "Perimeter polygons need simplification - 400+ vertices is too many for GIS export and visualization",
+      "metadata": {
+        "problem": "Raw marching squares produces hundreds of vertices",
+        "solution": "Douglas-Peucker simplification with 10-15m tolerance",
+        "result": "Reduces vertices by 85-90% while maintaining shape",
+        "benefit": "Faster rendering, smaller shapefiles, cleaner maps"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:22:51.633583",
+      "category": "pitfall",
+      "content": {
+        "name": "contours_on_noisy_burn_probability",
+        "problem": "Burn probability maps with noise create fragmented contours",
+        "solution": "Smooth burn probability with gaussian_filter before extracting contours",
+        "parameters": "sigma=2 works well for 30m resolution data"
+      },
+      "metadata": {}
+    },
+    {
+      "timestamp": "2025-10-28T07:22:51.634264",
+      "category": "technique",
+      "content": {
+        "name": "discrete_probability_zones",
+        "description": "Convert continuous burn probability to discrete risk categories"
+      },
+      "metadata": {
+        "zones": {
+          "0": "No risk (<1%)",
+          "1": "Very low (1-10%)",
+          "2": "Low (10-25%)",
+          "3": "Moderate (25-50%)",
+          "4": "High (50-75%)",
+          "5": "Very high (75-90%)",
+          "6": "Extreme (>90%)"
+        },
+        "use": "Easier for public communication than continuous probability"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:22:51.634806",
+      "category": "insight",
+      "content": "Completed: Implemented fire perimeter extraction with marching squares",
+      "metadata": {
+        "type": "task_completion"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:22:51.635340",
+      "category": "insight",
+      "content": "Completed: Built burn probability contour system (5 levels)",
+      "metadata": {
+        "type": "task_completion"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:22:51.635888",
+      "category": "insight",
+      "content": "Completed: Created BurnP3+-style contour visualizations",
+      "metadata": {
+        "type": "task_completion"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:22:51.636452",
+      "category": "insight",
+      "content": "Completed: Added perimeter statistics for Monte Carlo uncertainty",
+      "metadata": {
+        "type": "task_completion"
+      }
+    }
+  ],
+  "timestamp": "2025-10-28T07:22:51.637067"
+}

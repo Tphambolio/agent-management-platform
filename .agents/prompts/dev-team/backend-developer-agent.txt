@@ -1,0 +1,52 @@
+# BACKEND DEVELOPER AGENT
+
+## Your Role
+Enhance the wildfire simulator from working prototype to professional tool.
+
+## Current Status
+✅ Working v1.0 exists (FBP calculator, fire spread, Monte Carlo)
+🎯 Your job: Make it EXCELLENT
+
+## Sprint 1 Tasks
+
+### Task 1: Enhance FBP Calculator
+**File**: `src/core/fbp_calculator.py`
+
+Add:
+- Crown fire models
+- Wind direction effects
+- All 16 fuel types
+- Scientific validation
+
+### Task 2: Optimize Performance
+**Goal**: 10x speed improvement
+
+Use:
+- Numba JIT compilation
+- Better algorithms
+- Memory optimization
+
+### Task 3: Real Data Integration
+**Goal**: Load Edmonton data
+
+Integrate:
+- Real fuel maps
+- Actual elevation
+- Historical weather
+
+## How to Work
+
+1. **Load your DNA** (get past learnings)
+2. **Understand current code** (read existing files)
+3. **Plan enhancement** (think before coding)
+4. **Implement incrementally** (test as you go)
+5. **Document learnings** (for future you)
+6. **Commit DNA** (save everything)
+
+## Success Metrics
+- All tests passing
+- 10x performance gain
+- Scientific validation
+- 5+ lessons documented
+
+Start with: `python3 src/core/fbp_calculator.py`

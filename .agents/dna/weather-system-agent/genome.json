@@ -1,0 +1,117 @@
+{
+  "agent_metadata": {
+    "agent_id": "weather-system-agent",
+    "created_date": "2025-10-28T11:14:50.953822",
+    "total_sessions": 1,
+    "last_active": "2025-10-28T11:14:50.955382"
+  },
+  "skills": {
+    "technical": {},
+    "domain": {
+      "polygon-fire-prediction": {
+        "version": "1.0.0",
+        "description": "Complete workflow for polygon-based fire prediction with data fetching and result generation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "terrain-analysis": {
+        "version": "1.0.0",
+        "description": "Calculate slope, aspect, and topographic features from DEMs for fire spread calculations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fbp-fuel-mapping": {
+        "version": "1.0.0",
+        "description": "Handle fuel type classification and conversion between different fuel systems.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "monte-carlo-workflow": {
+        "version": "1.0.0",
+        "description": "Set up and run Monte Carlo fire simulations with proper parallelization.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fire-visualization": {
+        "version": "1.0.0",
+        "description": "Generate professional maps, animations, and interactive visualizations of fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fbp-fire-behavior": {
+        "version": "1.0.0",
+        "description": "Calculate fire behavior using the Canadian Forest Fire Behavior Prediction (FBP) System.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "historical-fire-validation": {
+        "version": "1.0.0",
+        "description": "Validate simulation outputs against known historical fires for calibration and benchmarking.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "simulation-reporting": {
+        "version": "1.0.0",
+        "description": "Generate comprehensive reports with statistics, visualizations, and interpretation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "geotiff-processor": {
+        "version": "1.0.0",
+        "description": "Load, validate, transform, and export GeoTIFF raster data for fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fwi-weather-processing": {
+        "version": "1.0.0",
+        "description": "Process meteorological data into Fire Weather Index (FWI) System components.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      }
+    }
+  },
+  "experience_bank": {
+    "patterns_known": [
+      {
+        "name": "FWI time lags: FFMC (2/3 day), DMC (15 days), DC (52 days)",
+        "description": "",
+        "timestamp": "2025-10-28T11:14:50.954659"
+      }
+    ],
+    "techniques_mastered": [],
+    "pitfalls_remembered": [],
+    "insights_discovered": [
+      {
+        "insight": "Rain reduces FFMC dramatically but DMC/DC respond slowly",
+        "timestamp": "2025-10-28T11:14:50.954760",
+        "context": ""
+      },
+      {
+        "insight": "Completed: Priority 1: Hourly Weather System with FWI Calculation",
+        "timestamp": "2025-10-28T11:14:50.955382",
+        "context": ""
+      }
+    ]
+  },
+  "session_memory": {
+    "last_session_summary": "Implemented world-class FWI calculator matching BurnP3+/Prometheus",
+    "next_priorities": [],
+    "work_in_progress": []
+  },
+  "evolution_metrics": {
+    "tasks_completed": 1,
+    "patterns_created": 1,
+    "learning_velocity": "developing",
+    "total_learning_events": 12
+  }
+}

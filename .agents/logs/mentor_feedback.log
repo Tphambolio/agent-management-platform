@@ -1,0 +1,150 @@
+
+======================================================================
+🤖 AUTOMATED REVIEW @ 2025-10-28T19:51:31.008802
+======================================================================
+Score: 65/100
+Assessment: ⚠️ NEEDS ATTENTION - Multiple issues detected
+
+ISSUES DETECTED:
+  ⚠️ Almost no fire spread detected (0.09% of area)
+  ⚠️ Fire pattern is fragmented (101 disconnected patches)
+
+SUGGESTIONS:
+  💡 Check ignition points and fuel conditions
+  💡 Fire spread should be spatially continuous - check model physics
+
+2025-10-28T19:51:31.011022 | [AUTO-REVIEW] Score: 65/100 | Issues: 2 | ⚠️ NEEDS ATTENTION - Multiple issues detected
+
+======================================================================
+🤖 AUTOMATED REVIEW @ 2025-10-28T19:58:23.435054
+======================================================================
+Score: 65/100
+Assessment: ⚠️ NEEDS ATTENTION - Multiple issues detected
+
+ISSUES DETECTED:
+  ⚠️ Almost no fire spread detected (0.08% of area)
+  ⚠️ Fire pattern is fragmented (101 disconnected patches)
+
+SUGGESTIONS:
+  💡 Check ignition points and fuel conditions
+  💡 Fire spread should be spatially continuous - check model physics
+
+2025-10-28T19:58:23.437144 | [AUTO-REVIEW] Score: 65/100 | Issues: 2 | ⚠️ NEEDS ATTENTION - Multiple issues detected
+
+======================================================================
+🤖 AUTOMATED REVIEW @ 2025-10-28T20:01:37.518030
+======================================================================
+Score: 65/100
+Assessment: ⚠️ NEEDS ATTENTION - Multiple issues detected
+
+ISSUES DETECTED:
+  ⚠️ Almost no fire spread detected (0.08% of area)
+  ⚠️ Fire pattern is fragmented (102 disconnected patches)
+
+SUGGESTIONS:
+  💡 Check ignition points and fuel conditions
+  💡 Fire spread should be spatially continuous - check model physics
+
+2025-10-28T20:01:37.520320 | [AUTO-REVIEW] Score: 65/100 | Issues: 2 | ⚠️ NEEDS ATTENTION - Multiple issues detected
+
+======================================================================
+🤖 AUTOMATED REVIEW @ 2025-10-28T20:03:37.694653
+======================================================================
+Score: 85/100
+Assessment: ✅ GOOD - Minor issues
+
+ISSUES DETECTED:
+  ⚠️ Fire pattern is fragmented (316 disconnected patches)
+
+SUGGESTIONS:
+  💡 Fire spread should be spatially continuous - check model physics
+
+2025-10-28T20:03:37.696720 | [AUTO-REVIEW] Score: 85/100 | Issues: 1 | ✅ GOOD - Minor issues
+
+======================================================================
+🤖 AUTOMATED REVIEW @ 2025-10-28T20:06:17.254293
+======================================================================
+Score: 85/100
+Assessment: ✅ GOOD - Minor issues
+
+ISSUES DETECTED:
+  ⚠️ Fire pattern is fragmented (308 disconnected patches)
+
+SUGGESTIONS:
+  💡 Fire spread should be spatially continuous - check model physics
+
+2025-10-28T20:06:17.256345 | [AUTO-REVIEW] Score: 85/100 | Issues: 1 | ✅ GOOD - Minor issues
+
+======================================================================
+🔬 SCIENTIFIC REVIEW @ 2025-10-28T20:16:04.063088
+======================================================================
+Score: 50/100
+Assessment: ⚠️ QUESTIONABLE - Significant deviations from physical reality
+
+VALIDATIONS PASSED:
+  ✓ FFMC 92.0 consistent with extreme fire conditions
+  ✓ All fire values are non-negative
+  ✓ Values are within valid probability range (max: 1.000)
+
+ISSUES DETECTED:
+  ⚠️ Wind speed 60.0 km/h deviates 50% from Jasper 2024 observed 40 km/h
+  ❌ FBP calculation failed: get_fire_behavior() got an unexpected keyword argument 'aspect'
+
+WARNINGS:
+  ⚠️ Predicted 8291 ha vs Jasper actual 5000 ha (66% error)
+
+REFERENCE: Jasper 2024 Fire
+  Actual: 5000 ha after 24h
+  Conditions: FFMC=94, Wind=40 km/h
+
+2025-10-28T20:16:04.065399 | [SCIENCE-REVIEW] Score: 50/100 | ⚠️ QUESTIONABLE - Significant deviations from physical reality
+
+======================================================================
+🔬 SCIENTIFIC REVIEW @ 2025-10-28T20:16:31.488075
+======================================================================
+Score: 60/100
+Assessment: ⚠️ QUESTIONABLE - Significant deviations from physical reality
+
+VALIDATIONS PASSED:
+  ✓ FFMC 92.0 consistent with extreme fire conditions
+  ✓ Fire intensity 0 kW/m is physically plausible
+  ✓ Crown fire conditions correctly identified
+  ✓ All fire values are non-negative
+  ✓ Values are within valid probability range (max: 1.000)
+
+ISSUES DETECTED:
+  ⚠️ Wind speed 60.0 km/h deviates 50% from Jasper 2024 observed 40 km/h
+  ⚠️ ROS 0.0 m/min is outside expected range for C2 under these conditions
+
+WARNINGS:
+  ⚠️ Predicted 8291 ha vs Jasper actual 5000 ha (66% error)
+
+REFERENCE: Jasper 2024 Fire
+  Actual: 5000 ha after 24h
+  Conditions: FFMC=94, Wind=40 km/h
+
+2025-10-28T20:16:31.490386 | [SCIENCE-REVIEW] Score: 60/100 | ⚠️ QUESTIONABLE - Significant deviations from physical reality
+
+======================================================================
+🔬 SCIENTIFIC REVIEW @ 2025-10-28T20:54:23.817728
+======================================================================
+Score: 85/100
+Assessment: ⚠️ ACCEPTABLE - Minor deviations from observations
+
+VALIDATIONS PASSED:
+  ✓ Wind speed 40 km/h matches observed conditions
+  ✓ FFMC 94.0 consistent with extreme fire conditions
+  ✓ Fire intensity 0 kW/m is physically plausible
+  ✓ Crown fire conditions correctly identified
+  ✓ All fire values are non-negative
+  ✓ Values are within valid probability range (max: 1.000)
+
+WARNINGS:
+  ⚠️ Predicted 8154 ha vs Jasper actual 5000 ha (63% error)
+
+REFERENCE: Jasper 2024 Fire
+  Actual: 5000 ha after 24h
+  Conditions: FFMC=94, Wind=40 km/h
+
+2025-10-28T20:54:23.820505 | [SCIENCE-REVIEW] Score: 85/100 | ⚠️ ACCEPTABLE - Minor deviations from observations
+2025-11-02T16:02:29.237420 | 

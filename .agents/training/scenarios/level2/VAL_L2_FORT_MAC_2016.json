@@ -1,0 +1,42 @@
+{
+  "scenario_id": "VAL_L2_FORT_MAC_2016",
+  "level": 2,
+  "difficulty": "validation",
+  "generated": "2025-10-29T03:43:13.620535",
+  "is_validation": true,
+  "real_fire_event": {
+    "name": "Fort McMurray Fire 2016 (Peak Day)",
+    "location": "Alberta, Canada",
+    "date": "2016-05-04"
+  },
+  "fire_weather": {
+    "ffmc": 92,
+    "dmc": 75,
+    "dc": 450,
+    "wind_speed": 50,
+    "wind_direction": 225,
+    "temperature": 31,
+    "relative_humidity": 12,
+    "fuel_type": "C2"
+  },
+  "terrain": {
+    "slope": 10
+  },
+  "simulation": {
+    "max_iterations": 300,
+    "spotting_enabled": true
+  },
+  "validation": {
+    "actual_area_ha": 35000,
+    "actual_fire_type": "active_crown",
+    "notes": "Urban interface fire, 88,000 evacuated"
+  },
+  "expected_behavior": {
+    "fire_danger_index": 3.0,
+    "expected_behavior": "extreme",
+    "expected_ros_range": {
+      "min": 50,
+      "max": 200
+    }
+  }
+}

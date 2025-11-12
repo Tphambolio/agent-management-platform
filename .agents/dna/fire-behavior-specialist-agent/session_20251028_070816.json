@@ -1,0 +1,491 @@
+{
+  "summary": "Researched ember transport physics, Albini spotting model, implementation approaches, and Slave Lake case study. Ready to implement spotting for extreme wind-driven fires.",
+  "learning_events": [
+    {
+      "timestamp": "2025-10-28T07:08:16.414292",
+      "category": "insight",
+      "content": "Ember transport (spotting/firebrand transport) is CRITICAL for extreme wind-driven fires - can increase spread by order of magnitude",
+      "metadata": {
+        "evidence": "Slave Lake 2011: 100 km/h winds carried embers up to 15 km ahead of main fire",
+        "impact": "Caused fire to jump firebreaks, destroyed 1/3 of town in 30 minutes",
+        "importance": "Model underpredicts extreme fires without spotting"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.414402",
+      "category": "insight",
+      "content": "Spotting occurs ONLY during crown fire (active or passive) - not during surface fire",
+      "metadata": {
+        "condition": "Crown fire initiation required",
+        "threshold": "Surface intensity must exceed critical crown fire intensity",
+        "fuel_types": "Conifer fuels (C1-C7) in FBP system",
+        "fire_types": "Surface fire: NO spotting | Torching/Passive crown: YES spotting | Active crown: MAX spotting"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.414529",
+      "category": "insight",
+      "content": "Spotting distance increases dramatically with wind speed and fire intensity - non-linear relationship",
+      "metadata": {
+        "slave_lake_case": "80-100 km/h winds -> 15 km spotting distance observed",
+        "typical_range": "Most embers land within 1-5 km under extreme conditions",
+        "extreme_cases": "Up to 30-37 km documented in scientific literature",
+        "distribution": "Exponential - most spots near source, few at maximum distance"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.414999",
+      "category": "pattern",
+      "content": {
+        "name": "albini_spotting_model",
+        "description": "Frank Albini's physics-based spotting model - industry standard since 1979, implemented in FARSITE/FlamMap/BehavePlus"
+      },
+      "metadata": {
+        "model_type": "Deterministic maximum spotting distance",
+        "approach": "Coupled sub-models for plume, lofting, trajectory, and burning",
+        "sub_models": [
+          "1. Steady flame structure within canopy",
+          "2. Buoyant plume structure above canopy",
+          "3. Firebrand burning rate (cylindrical particles)",
+          "4. Lofting into plume by convection",
+          "5. Wind profile (logarithmic) carrying firebrands",
+          "6. Ballistic trajectories with burning and descent"
+        ],
+        "key_insight": "Maximum spotting distance = where firebrand completely consumed when it reaches ground",
+        "operational_use": "Implemented in all major US wildfire systems"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.415133",
+      "category": "pattern",
+      "content": {
+        "name": "albini_required_inputs",
+        "description": "Inputs required for Albini spotting distance calculation"
+      },
+      "metadata": {
+        "fire_characteristics": {
+          "flame_height": "Height above canopy top (typically 2-3x stand height)",
+          "fire_intensity": "Surface or crown fire intensity (kW/m)",
+          "crown_fraction_burned": "CFB - determines torching vs active crown"
+        },
+        "wind_data": {
+          "wind_speed_10m": "Open 10-m wind speed (km/h)",
+          "wind_speed_canopy": "Wind at canopy top = 10m_speed / 1.5",
+          "wind_profile": "Logarithmic variation with height"
+        },
+        "terrain": {
+          "elevation_profile": "Ground elevation from source to landing",
+          "ridge_jump": "Firebrands can jump ridges if lofted high enough"
+        },
+        "firebrand_properties": {
+          "size_classes": "16 classes: 1/16 inch to 1 inch diameter cylinders",
+          "wood_type": "Species affects burning rate and density",
+          "burning_duration": "Function of size, wind, temperature",
+          "terminal_velocity": "Function of size, shape, drag coefficient"
+        }
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.415262",
+      "category": "pattern",
+      "content": {
+        "name": "firebrand_size_distribution",
+        "description": "Embers come in range of sizes - each behaves differently"
+      },
+      "metadata": {
+        "size_range": "1/16 inch (1.6 mm) to 1 inch (25 mm) diameter",
+        "size_classes": 16,
+        "trade_offs": {
+          "small_firebrands": "Loft higher, carried farther by wind, BUT burn out faster",
+          "large_firebrands": "Don't loft as high, fall faster, BUT burn longer and more likely to ignite"
+        },
+        "optimal_size": "Mid-range (3-8 mm) often travels farthest - balances lofting and burnout",
+        "implementation": "Track 16 size classes, use stochastic sampling"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.415395",
+      "category": "pattern",
+      "content": {
+        "name": "maximum_spotting_distance_formula",
+        "description": "Simplified relationship for estimating max spotting distance"
+      },
+      "metadata": {
+        "primary_factors": "f(flame_height, wind_speed, firebrand_diameter)",
+        "approximate_relation": "Distance increases with: higher flames, stronger winds, optimal firebrand size",
+        "crown_fire_formula": "Distance = f(flame_height_above_canopy, wind_at_canopy, firebrand_size)",
+        "flame_height_rule": "Crown fire flame = 2-3x stand height",
+        "wind_conversion": "Wind_canopy = Wind_10m / 1.5",
+        "complete_model": "Requires iterative descent calculation through wind profile"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.415518",
+      "category": "pattern",
+      "content": {
+        "name": "spotting_distance_exponential_distribution",
+        "description": "Most embers land near source, few reach maximum distance"
+      },
+      "metadata": {
+        "distribution": "Exponential decay: distance = -log(r) * max_distance / 5",
+        "where_r": "Random number 0-1",
+        "interpretation": "90% of spots within first 40% of max distance",
+        "implementation": "For each ember: sample random distance using exponential distribution",
+        "ignition_probability": "Not all landed embers ignite - depends on fuel moisture, type"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.415654",
+      "category": "insight",
+      "content": "Spotting increases spread rate non-linearly - can cause order of magnitude increase in fire area",
+      "metadata": {
+        "mechanism": "Long-distance spots create new ignition points ahead of main fire",
+        "extreme_winds": "100 km/h winds + crown fire -> 10-15 km spotting -> fire jumps barriers",
+        "area_impact": "Single spot 5 km ahead = 2+ hours of spread time advantage",
+        "slave_lake": "Fire crossed highway barrier in 30 min due to spotting"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.415856",
+      "category": "pattern",
+      "content": {
+        "name": "spotting_cellular_automaton_integration",
+        "description": "How to integrate Albini spotting into cellular automaton fire spread model"
+      },
+      "metadata": {
+        "detection": "Check each burning cell for crown fire conditions",
+        "condition": "IF crown_fire_initiated AND (CFB > 0.1) THEN spotting possible",
+        "calculation_per_cell": {
+          "1_check_crown": "Is this cell experiencing crown fire? (from crown_fire.py)",
+          "2_get_flame_height": "Estimate from fire intensity and fuel type",
+          "3_calculate_max_distance": "Use Albini model with wind, terrain, flame height",
+          "4_sample_embers": "Generate N embers (e.g., 5-10 per burning crown cell)",
+          "5_distribute_distances": "Use exponential distribution: -log(r) * max_dist / 5",
+          "6_determine_landing": "Apply wind direction, add angular spread (\u00b130 degrees)",
+          "7_attempt_ignition": "Check fuel at landing point, apply ignition probability"
+        },
+        "computational_efficiency": "Only process crown fire cells, limit embers per cell",
+        "time_step": "Process spotting once per time step or every N time steps"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.415996",
+      "category": "pattern",
+      "content": {
+        "name": "deterministic_vs_stochastic_spotting",
+        "description": "Two approaches to implementing spotting in simulations"
+      },
+      "metadata": {
+        "deterministic": {
+          "approach": "Calculate maximum spotting distance, modify spread rate/shape",
+          "pros": "Fast, reproducible, stable",
+          "cons": "Doesn't capture stochastic nature, no discrete spot fires",
+          "use_case": "Quick assessments, average behavior"
+        },
+        "stochastic": {
+          "approach": "Explicitly generate and track individual firebrands",
+          "pros": "Realistic spot fire patterns, captures randomness, better for extreme events",
+          "cons": "Slower, requires Monte Carlo runs",
+          "use_case": "High-fidelity simulations, risk assessment, extreme events"
+        },
+        "recommendation": "Stochastic for our cellular automaton - already probabilistic framework"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.416140",
+      "category": "pattern",
+      "content": {
+        "name": "spotting_implementation_parameters",
+        "description": "Key parameters needed to implement spotting model"
+      },
+      "metadata": {
+        "required_from_existing_model": {
+          "crown_fire_status": "from crown_fire.py: crown_fire_initiated, CFB, fire_type",
+          "fire_intensity": "from fbp_calculator.py: fire intensity (kW/m)",
+          "wind_speed_10m": "Already have in simulation",
+          "wind_direction": "Already have in simulation",
+          "fuel_type": "Already have in fuel_map",
+          "elevation": "Already have in elevation array"
+        },
+        "new_parameters_needed": {
+          "canopy_height": "Stand height by fuel type (meters) - add to fuel params",
+          "flame_height_factor": "Multiplier for crown fire (default 2.5x stand height)",
+          "firebrand_size_classes": "16 classes: 1/16 to 1 inch",
+          "embers_per_cell": "5-20 embers per burning crown cell per timestep",
+          "ignition_probability": "Base probability 0.1-0.5, modified by fuel moisture",
+          "spotting_angular_spread": "\u00b130 degrees from wind direction"
+        },
+        "data_structures": {
+          "ember_class": "Store: position, size, burning_time, velocity, consumed_fraction",
+          "spot_fires": "Array of new ignition points to add next timestep"
+        }
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.416296",
+      "category": "insight",
+      "content": "Spotting becomes CRITICAL above wind speed threshold of ~40 km/h with crown fire",
+      "metadata": {
+        "low_wind": "<20 km/h: Spotting minimal, <500m typical",
+        "moderate_wind": "20-40 km/h: Spotting 500m-2km, important for barriers",
+        "high_wind": "40-70 km/h: Spotting 2-8 km, CRITICAL for fire growth",
+        "extreme_wind": ">70 km/h: Spotting 8-20+ km, DOMINANT spread mechanism",
+        "slave_lake": "80-100 km/h -> 15 km spotting -> 1/3 town destroyed in 30 min"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.416439",
+      "category": "insight",
+      "content": "Spotting changes fire behavior qualitatively - not just quantitative increase",
+      "metadata": {
+        "without_spotting": "Fire spreads continuously, predictable elliptical shape",
+        "with_spotting": "Multiple ignition points, complex merged perimeters, unpredictable",
+        "barrier_jumping": "Firebreaks ineffective - embers sail over rivers, roads, cleared areas",
+        "urban_impact": "Individual embers ignite buildings ahead of main fire",
+        "cascade_effect": "Each spot fire becomes new source -> exponential growth potential"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.416586",
+      "category": "pattern",
+      "content": {
+        "name": "spotting_criticality_thresholds",
+        "description": "When to include/ignore spotting in simulations"
+      },
+      "metadata": {
+        "ignore_spotting": {
+          "conditions": "Surface fire only, wind <20 km/h, low intensity",
+          "impact": "<5% error in spread area"
+        },
+        "consider_spotting": {
+          "conditions": "Passive crown fire, wind 20-40 km/h",
+          "impact": "10-30% increase in spread area"
+        },
+        "critical_spotting": {
+          "conditions": "Active crown fire, wind >40 km/h",
+          "impact": "50-500% increase in spread area, qualitative behavior change"
+        },
+        "dominant_spotting": {
+          "conditions": "Active crown fire, wind >70 km/h (Slave Lake scenario)",
+          "impact": "Order of magnitude increase, spotting IS the spread mechanism"
+        }
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.416741",
+      "category": "insight",
+      "content": "Slave Lake 2011 is THE canonical case for extreme wind-driven spotting",
+      "metadata": {
+        "date": "May 14-16, 2011",
+        "location": "Slave Lake, Alberta, Canada",
+        "damage": "374 structures destroyed, 52 damaged, 1/3 of town burned",
+        "wind_speeds": "Sustained 55 km/h, gusts 80-89 km/h, peak ~100 km/h",
+        "spotting_distance": "Up to 15 kilometers observed",
+        "spread_rate": "Fire crossed highway and destroyed town in 30 minutes",
+        "mechanism": "Embers carried overhead, landed on buildings, multiple simultaneous ignitions",
+        "lesson": "Traditional firebreaks useless against extreme spotting"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.416930",
+      "category": "pattern",
+      "content": {
+        "name": "slave_lake_spotting_prediction",
+        "description": "Expected spotting behavior for Slave Lake conditions"
+      },
+      "metadata": {
+        "inputs": {
+          "wind_speed": "80-100 km/h (sustained 55, gusts to 100)",
+          "fuel_type": "C2/C3 Boreal spruce/pine",
+          "fire_type": "Active crown fire (extreme intensity)",
+          "stand_height": "15-20 meters",
+          "flame_height": "40-60 meters (2.5-3x stand height)"
+        },
+        "albini_prediction": {
+          "max_distance_small_embers": "5-8 km (burn out in flight)",
+          "max_distance_medium_embers": "10-15 km (optimal size)",
+          "max_distance_large_embers": "8-12 km (fall faster, burn longer)",
+          "90th_percentile": "6-10 km",
+          "observed_max": "15 km - matches upper end of model"
+        },
+        "validation": "Albini model predicts observed behavior well for Slave Lake",
+        "model_accuracy": "Our simulator WITHOUT spotting would underpredict by >10x for Slave Lake"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.417088",
+      "category": "insight",
+      "content": "2024 research shows atmospheric waves can increase spotting by 10x beyond classical Albini model",
+      "metadata": {
+        "phenomenon": "Atmospheric traveling waves during extreme fire events",
+        "mechanism": "Firebrands synchronize with wave motion like surfing",
+        "impact": "Spotting distances >30 km possible in extreme cases",
+        "applicability": "Rare extreme events, not typical fires",
+        "recommendation": "Start with classical Albini, consider wave effects for future research"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.417250",
+      "category": "pattern",
+      "content": {
+        "name": "modern_spotting_models_2024",
+        "description": "Recent advances beyond Albini (2020-2024)"
+      },
+      "metadata": {
+        "fast_physically_based": "Kepert et al. 2024 - fast plume model for operational use",
+        "coupled_atmosphere": "Simplified models for WRF-Fire integration",
+        "ember_kinematics": "Detailed lofting physics (Oct 2024)",
+        "extreme_transport": "Atmospheric wave effects (Nov 2024)",
+        "recommendation": "Albini (1979/1981) still foundation - proven, validated, operational",
+        "future_enhancement": "Consider modern plume models for better lofting estimates"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.417417",
+      "category": "pitfall",
+      "content": {
+        "name": "spotting_computational_cost",
+        "problem": "Tracking thousands of embers per timestep can be computationally expensive",
+        "solution": "Limit embers per cell (5-20), process only crown fire cells, use efficient data structures",
+        "trade_off": "Balance realism vs performance - stochastic requires multiple runs"
+      },
+      "metadata": {}
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.417580",
+      "category": "pitfall",
+      "content": {
+        "name": "spotting_requires_crown_fire",
+        "problem": "Spotting only occurs during crown fire - must have crown fire model working first",
+        "solution": "Our crown_fire.py already implemented - integrate with that",
+        "dependency": "Crown fire detection is prerequisite for spotting"
+      },
+      "metadata": {}
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.417739",
+      "category": "pitfall",
+      "content": {
+        "name": "spotting_ignition_probability_uncertain",
+        "problem": "Not all embers that land cause ignition - probability depends on many factors",
+        "solution": "Use conservative base probability (0.1-0.3), modify by fuel moisture/type",
+        "calibration": "Tune using real fires like Slave Lake to match observed spot density"
+      },
+      "metadata": {}
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.417894",
+      "category": "pitfall",
+      "content": {
+        "name": "terrain_effects_on_spotting",
+        "problem": "Complex terrain affects both lofting and landing - ridges create updrafts",
+        "solution": "Albini model includes elevation changes in trajectory calculation",
+        "limitation": "Doesn't capture updrafts/downdrafts - acceptable first approximation"
+      },
+      "metadata": {}
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.418056",
+      "category": "pitfall",
+      "content": {
+        "name": "albini_assumes_steady_state",
+        "problem": "Model assumes steady plume and wind - reality is turbulent and time-varying",
+        "solution": "Accept as limitation for now - stochastic sampling adds some variability",
+        "impact": "Predictions are ensemble average - need Monte Carlo for risk bounds"
+      },
+      "metadata": {}
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.418221",
+      "category": "pattern",
+      "content": {
+        "name": "spotting_implementation_roadmap",
+        "description": "Phased approach to adding spotting to our simulator"
+      },
+      "metadata": {
+        "phase_1_foundation": {
+          "tasks": [
+            "Add stand height to fuel type parameters",
+            "Create ember class/data structure",
+            "Implement flame height estimation from fire intensity"
+          ],
+          "outcome": "Data structures ready"
+        },
+        "phase_2_albini_core": {
+          "tasks": [
+            "Implement maximum spotting distance calculation",
+            "Add exponential distance distribution",
+            "Apply wind direction and angular spread"
+          ],
+          "outcome": "Basic spotting mechanics"
+        },
+        "phase_3_integration": {
+          "tasks": [
+            "Detect crown fire cells in fire_spread.py",
+            "Generate embers from crown fire cells",
+            "Track embers and determine landing points",
+            "Attempt ignition at landing points"
+          ],
+          "outcome": "Working spotting in simulation"
+        },
+        "phase_4_calibration": {
+          "tasks": [
+            "Validate against Slave Lake 2011",
+            "Tune ignition probability",
+            "Optimize ember count vs accuracy"
+          ],
+          "outcome": "Calibrated model"
+        },
+        "phase_5_refinement": {
+          "tasks": [
+            "Add terrain effects on trajectories",
+            "Optimize performance",
+            "Add visualization of spot fires"
+          ],
+          "outcome": "Production-ready spotting model"
+        }
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.418386",
+      "category": "pattern",
+      "content": {
+        "name": "spotting_key_equations",
+        "description": "Essential equations for implementing spotting model"
+      },
+      "metadata": {
+        "flame_height": "H_flame = \u03b1 * H_stand, where \u03b1 = 2.0-3.0 for crown fire",
+        "wind_at_canopy": "U_canopy = U_10m / 1.5",
+        "terminal_velocity": "V_t = f(diameter, density, drag) - from Albini/Tarifa empirical data",
+        "burning_duration": "t_burn = f(diameter, wind, temperature) - empirical",
+        "lofting_height": "H_max = f(flame_height, convection_velocity) - complex plume model",
+        "horizontal_distance": "Integrate trajectory: dx/dt = U(z), dz/dt = V_t - w(z)",
+        "spot_distance_distribution": "d = -ln(r) * d_max / 5, where r ~ Uniform(0,1)",
+        "ignition_probability": "P_ignite = P_base * f(fuel_moisture, fuel_type)",
+        "albini_maximum": "d_max = Albini(H_flame, U_canopy, d_ember, terrain_profile)",
+        "implementation_note": "Full Albini requires iterative descent - simplified versions exist"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.418560",
+      "category": "insight",
+      "content": "Ember transport is the missing piece for modeling extreme wind-driven fires like Slave Lake and Jasper",
+      "metadata": {
+        "current_gap": "Model underpredicts by >10x for extreme events without spotting",
+        "solution": "Implement Albini (1979) spotting model integrated with crown fire",
+        "priority": "CRITICAL for world-class simulator targeting extreme Canadian wildfires",
+        "effort": "Moderate - ~5-7 days implementation + validation",
+        "benefit": "Order of magnitude improvement in extreme fire predictions"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T07:08:16.418742",
+      "category": "insight",
+      "content": "Completed: Comprehensive ember transport and spotting modeling research",
+      "metadata": {
+        "type": "task_completion"
+      }
+    }
+  ],
+  "timestamp": "2025-10-28T07:08:16.418971"
+}

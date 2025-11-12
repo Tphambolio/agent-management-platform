@@ -1,0 +1,43 @@
+{
+  "task_id": "task_001",
+  "task": {
+    "task_id": "task_001",
+    "created": "2025-10-28T22:11:59.751505",
+    "experiment_type": "max_iterations_test",
+    "parameters": {
+      "fire_weather": {
+        "ffmc": 97,
+        "dmc": 85,
+        "dc": 410,
+        "wind_speed": 65,
+        "wind_direction": 45,
+        "temperature": 18,
+        "relative_humidity": 20,
+        "fuel_type": "C7"
+      },
+      "max_iterations": 750,
+      "spotting_enabled": true,
+      "validation_target": {
+        "event": "camp_fire_2018",
+        "actual_area_ha": 28328,
+        "timepoint": "nov_8_24hours"
+      },
+      "spread_factor": 4.0,
+      "embers_per_source": 8,
+      "spotting_check_interval": 3,
+      "fuel_type": "C3",
+      "wind_speed": 50
+    },
+    "reasoning": "Fire may not have reached full extent.",
+    "expected_improvement": 0.03,
+    "output_dir": "outputs/experiments/task_001"
+  },
+  "completed": "2025-10-28T22:12:12.090431",
+  "success": true,
+  "metrics": {
+    "iou": 0.64479637151652,
+    "dice": 0.8382352829714761
+  },
+  "runtime_seconds": 5.0,
+  "demo_mode": true
+}

@@ -1,0 +1,45 @@
+{
+  "agent": "spatial-analysis-agent",
+  "version": "1.0",
+  "tasks": [
+    {
+      "task_id": "spatial-001",
+      "priority": "high",
+      "status": "pending",
+      "objective": "Audit fuel map loading and validation",
+      "scope": {"files": ["src/data/fuel_loader.py", "data/fuel_maps/"]},
+      "success_criteria": [
+        "Fuel map loading verified for all formats (GeoTIFF, shapefile)",
+        "Fuel type classification validated (18 FBP types)",
+        "Missing/invalid data handling tested",
+        "Coordinate system consistency checked"
+      ]
+    },
+    {
+      "task_id": "spatial-002",
+      "priority": "high",
+      "status": "pending",
+      "objective": "Validate DEM processing for slope/aspect",
+      "scope": {"files": ["src/data/elevation_processor.py"]},
+      "success_criteria": [
+        "Slope calculation algorithm verified",
+        "Aspect calculation tested (0-360°)",
+        "Edge effects handled properly",
+        "Integration with FBP slope adjustments tested"
+      ]
+    },
+    {
+      "task_id": "spatial-003",
+      "priority": "medium",
+      "status": "pending",
+      "objective": "Optimize raster operations",
+      "scope": {"files": ["src/data/*.py"]},
+      "success_criteria": [
+        "Chunked processing implemented for large rasters",
+        "Memory-efficient operations identified",
+        "Numba-compatible spatial operations",
+        "Performance benchmarks show improvement"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,213 @@
+{
+  "summary": "Analyzed 5 Edmonton extreme FWI scenarios - identified primary threats and operational thresholds",
+  "learning_events": [
+    {
+      "timestamp": "2025-10-28T01:43:46.561720",
+      "category": "insight",
+      "content": "severe: C2 fuel at FWI 28.0 spreads 4.87 km in 24 hours",
+      "metadata": {
+        "scenario": "severe",
+        "fuel_type": "C2",
+        "fwi": 28.0,
+        "ros": 3.3830216378216305,
+        "spread_24hr_km": 4.871551158463148,
+        "fire_intensity_kw_m": 1623.8503861543827
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.562460",
+      "category": "insight",
+      "content": "FWI 28.0 requires resource pre-positioning - prepare for rapid deployment",
+      "metadata": {
+        "operational_phase": "resource_positioning",
+        "fwi": 28.0
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.563520",
+      "category": "insight",
+      "content": "2023_historical: C2 fuel at FWI 35.0 spreads 1.82 km in 24 hours",
+      "metadata": {
+        "scenario": "2023_historical",
+        "fuel_type": "C2",
+        "fwi": 35.0,
+        "ros": 1.2609252182445734,
+        "spread_24hr_km": 1.8157323142721857,
+        "fire_intensity_kw_m": 605.2441047573952
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.564009",
+      "category": "pattern",
+      "content": {
+        "name": "catastrophic_fwi_threshold",
+        "description": "FWI 35.0 exceeds suppression capability - evacuation-only scenario"
+      },
+      "metadata": {
+        "threshold": 30,
+        "scenario": "2023_historical",
+        "implications": "Fire suppression impossible, focus on evacuation"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.564485",
+      "category": "insight",
+      "content": "FWI 35.0 exceeds suppression capability - focus on evacuation only",
+      "metadata": {
+        "operational_phase": "evacuation_only",
+        "fwi": 35.0
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.564918",
+      "category": "insight",
+      "content": "urban_interface: D1 fuel at FWI 38.0 spreads 14.19 km in 24 hours",
+      "metadata": {
+        "scenario": "urban_interface",
+        "fuel_type": "D1",
+        "fwi": 38.0,
+        "ros": 9.85113697980651,
+        "spread_24hr_km": 14.185637250921374,
+        "fire_intensity_kw_m": 1034.3693828796836
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.565338",
+      "category": "pattern",
+      "content": {
+        "name": "catastrophic_fwi_threshold",
+        "description": "FWI 38.0 exceeds suppression capability - evacuation-only scenario"
+      },
+      "metadata": {
+        "threshold": 30,
+        "scenario": "urban_interface",
+        "implications": "Fire suppression impossible, focus on evacuation"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.565739",
+      "category": "pattern",
+      "content": {
+        "name": "aspen_rapid_spread",
+        "description": "D1 aspen/grass fuel spreads rapidly under high FWI conditions"
+      },
+      "metadata": {
+        "fuel": "D1",
+        "ros": 9.85113697980651,
+        "threat": "urban_interface"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.566170",
+      "category": "insight",
+      "content": "FWI 38.0 exceeds suppression capability - focus on evacuation only",
+      "metadata": {
+        "operational_phase": "evacuation_only",
+        "fwi": 38.0
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.566609",
+      "category": "insight",
+      "content": "extreme_winds: C4 fuel at FWI 50.0 spreads 0.24 km in 24 hours",
+      "metadata": {
+        "scenario": "extreme_winds",
+        "fuel_type": "C4",
+        "fwi": 50.0,
+        "ros": 0.16696479274474765,
+        "spread_24hr_km": 0.2404293015524366,
+        "fire_intensity_kw_m": 120.21465077621832
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.567145",
+      "category": "pattern",
+      "content": {
+        "name": "catastrophic_fwi_threshold",
+        "description": "FWI 50.0 exceeds suppression capability - evacuation-only scenario"
+      },
+      "metadata": {
+        "threshold": 30,
+        "scenario": "extreme_winds",
+        "implications": "Fire suppression impossible, focus on evacuation"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.567671",
+      "category": "insight",
+      "content": "FWI 50.0 exceeds suppression capability - focus on evacuation only",
+      "metadata": {
+        "operational_phase": "evacuation_only",
+        "fwi": 50.0
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.568239",
+      "category": "insight",
+      "content": "extreme_drought: C2 fuel at FWI 48.0 spreads 0.03 km in 24 hours",
+      "metadata": {
+        "scenario": "extreme_drought",
+        "fuel_type": "C2",
+        "fwi": 48.0,
+        "ros": 0.02204657225577176,
+        "spread_24hr_km": 0.03174706404831133,
+        "fire_intensity_kw_m": 10.582353580019676
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.568695",
+      "category": "pattern",
+      "content": {
+        "name": "catastrophic_fwi_threshold",
+        "description": "FWI 48.0 exceeds suppression capability - evacuation-only scenario"
+      },
+      "metadata": {
+        "threshold": 30,
+        "scenario": "extreme_drought",
+        "implications": "Fire suppression impossible, focus on evacuation"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.569125",
+      "category": "insight",
+      "content": "FWI 48.0 exceeds suppression capability - focus on evacuation only",
+      "metadata": {
+        "operational_phase": "evacuation_only",
+        "fwi": 48.0
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.569546",
+      "category": "pattern",
+      "content": {
+        "name": "edmonton_primary_threat_identified",
+        "description": "urban_interface poses greatest spread threat with 14.19 km/24hr potential"
+      },
+      "metadata": {
+        "threat_type": "spread_rate",
+        "scenario": "urban_interface",
+        "spread_km_24hr": 14.185637250921374,
+        "implications": "Primary focus for emergency response planning"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.569965",
+      "category": "insight",
+      "content": "Spread threat (urban_interface) differs from intensity threat (severe) - requires dual-strategy response",
+      "metadata": {
+        "spread_scenario": "urban_interface",
+        "intensity_scenario": "severe",
+        "strategy": "dual_focus"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T01:43:46.570438",
+      "category": "insight",
+      "content": "Completed: Edmonton extreme FWI modeling with 5 scenarios analyzed",
+      "metadata": {
+        "type": "task_completion"
+      }
+    }
+  ],
+  "timestamp": "2025-10-28T01:43:46.571078"
+}

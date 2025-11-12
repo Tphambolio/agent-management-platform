@@ -1,0 +1,93 @@
+{
+  "mission_id": "test_v2_ember_spotting",
+  "steps": [
+    {
+      "step_number": 1,
+      "thought": "Analyzing research goal: Research ember spotting distances and firebrand transport mechanisms in extreme wildfire conditions",
+      "action": {
+        "type": "analyze",
+        "parameters": {
+          "goal": "Research ember spotting distances and firebrand transport mechanisms in extreme wildfire conditions"
+        }
+      },
+      "result": "Goal understood. Formulating search strategy.",
+      "timestamp": "2025-11-02T15:57:07.182393Z"
+    },
+    {
+      "step_number": 2,
+      "thought": "Generated 3 targeted search queries",
+      "action": {
+        "type": "plan",
+        "parameters": {
+          "queries": [
+            "Research ember spotting distances and firebrand transport mechanisms in extreme wildfire conditions",
+            "ember transport wildfire research",
+            "ember transport wildfire spotting distance"
+          ]
+        }
+      },
+      "result": "Will execute 3 searches to gather comprehensive data",
+      "timestamp": "2025-11-02T15:57:07.182410Z"
+    },
+    {
+      "step_number": 3,
+      "thought": "Executing search query 1/3: 'Research ember spotting distances and firebrand transport mechanisms in extreme wildfire conditions'",
+      "action": {
+        "type": "search",
+        "parameters": {
+          "query": "Research ember spotting distances and firebrand transport mechanisms in extreme wildfire conditions"
+        }
+      },
+      "result": "Found 3 relevant sources",
+      "timestamp": "2025-11-02T15:57:07.182413Z"
+    },
+    {
+      "step_number": 4,
+      "thought": "Executing search query 2/3: 'ember transport wildfire research'",
+      "action": {
+        "type": "search",
+        "parameters": {
+          "query": "ember transport wildfire research"
+        }
+      },
+      "result": "Found 3 relevant sources",
+      "timestamp": "2025-11-02T15:57:07.182424Z"
+    },
+    {
+      "step_number": 5,
+      "thought": "Executing search query 3/3: 'ember transport wildfire spotting distance'",
+      "action": {
+        "type": "search",
+        "parameters": {
+          "query": "ember transport wildfire spotting distance"
+        }
+      },
+      "result": "Found 3 relevant sources",
+      "timestamp": "2025-11-02T15:57:09.184495Z"
+    },
+    {
+      "step_number": 6,
+      "thought": "Analyzing 9 sources for relevance",
+      "action": {
+        "type": "analyze",
+        "parameters": {
+          "source_count": 9
+        }
+      },
+      "result": "Scoring sources by relevance to mission goal",
+      "timestamp": "2025-11-02T15:57:11.186582Z"
+    },
+    {
+      "step_number": 7,
+      "thought": "Synthesizing findings from top 9 sources",
+      "action": {
+        "type": "synthesize",
+        "parameters": {
+          "source_count": 9
+        }
+      },
+      "result": "Generating key findings with source attribution",
+      "timestamp": "2025-11-02T15:57:11.186796Z"
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "summary": "Test session for self-audit",
+  "learning_events": [
+    {
+      "timestamp": "2025-10-28T08:22:26.581726",
+      "category": "insight",
+      "content": "FBP system has 16 fuel types",
+      "metadata": {}
+    },
+    {
+      "timestamp": "2025-10-28T08:22:26.581876",
+      "category": "insight",
+      "content": "Conifer fuels burn faster than deciduous",
+      "metadata": {}
+    },
+    {
+      "timestamp": "2025-10-28T08:22:26.582055",
+      "category": "insight",
+      "content": "Spotting can cause fires to jump ahead",
+      "metadata": {}
+    },
+    {
+      "timestamp": "2025-10-28T08:22:26.582179",
+      "category": "pattern",
+      "content": "ROS increases exponentially with wind speed",
+      "metadata": {}
+    },
+    {
+      "timestamp": "2025-10-28T08:22:26.582299",
+      "category": "pattern",
+      "content": "BUI affects deep fuel moisture",
+      "metadata": {}
+    },
+    {
+      "timestamp": "2025-10-28T08:22:26.582434",
+      "category": "technique",
+      "content": "Calculate ISI from FFMC and wind speed",
+      "metadata": {}
+    },
+    {
+      "timestamp": "2025-10-28T08:22:26.582552",
+      "category": "technique",
+      "content": "Use marching squares for contour extraction",
+      "metadata": {}
+    },
+    {
+      "timestamp": "2025-10-28T08:22:26.582670",
+      "category": "skill",
+      "content": "fbp_system",
+      "metadata": {
+        "level": 3,
+        "evidence": "Implemented 16 fuel types"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:22:26.582789",
+      "category": "skill",
+      "content": "gis_visualization",
+      "metadata": {
+        "level": 2,
+        "evidence": "Created QGIS integration"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:22:26.582910",
+      "category": "insight",
+      "content": "Completed: FBP fuel type database",
+      "metadata": {
+        "type": "task_completion"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:22:26.583031",
+      "category": "insight",
+      "content": "Completed: ROS calculator",
+      "metadata": {
+        "type": "task_completion"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:22:26.583153",
+      "category": "insight",
+      "content": "Completed: QGIS project generator",
+      "metadata": {
+        "type": "task_completion"
+      }
+    }
+  ],
+  "timestamp": "2025-10-28T08:22:26.583355"
+}

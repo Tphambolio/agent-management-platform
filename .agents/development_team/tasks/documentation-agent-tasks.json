@@ -1,0 +1,110 @@
+{
+  "agent": "documentation-agent",
+  "tasks": [
+    {
+      "task_id": "docs-001",
+      "priority": "high",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Add docstrings to all public functions and classes",
+      "scope": {
+        "files": ["*.py", "tools/*.py"],
+        "directories": ["models", "routes", "utils"],
+        "exclusions": ["venv", "tests"]
+      },
+      "success_criteria": [
+        "All public functions have docstrings",
+        "All classes have docstrings",
+        "Docstrings follow Google or NumPy style",
+        "Parameters and return values documented"
+      ],
+      "dependencies": [],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Focus on API endpoints and core business logic first"
+    },
+    {
+      "task_id": "docs-002",
+      "priority": "high",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Create/update main README with setup instructions",
+      "scope": {
+        "files": ["README.md"],
+        "directories": [],
+        "exclusions": []
+      },
+      "success_criteria": [
+        "Installation instructions clear and complete",
+        "Environment setup documented",
+        "API endpoints documented",
+        "Example usage provided"
+      ],
+      "dependencies": [],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Include prerequisites, dependencies, and quick start guide"
+    },
+    {
+      "task_id": "docs-003",
+      "priority": "medium",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Document agent system architecture and workflow",
+      "scope": {
+        "files": [".agents/README.md", ".agents/ARCHITECTURE.md"],
+        "directories": [".agents"],
+        "exclusions": []
+      },
+      "success_criteria": [
+        "Agent roles and responsibilities documented",
+        "Workflow and coordination protocol explained",
+        "DNA system and evolution process documented",
+        "Diagrams or flowcharts included"
+      ],
+      "dependencies": [],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Help future developers understand the agent system"
+    },
+    {
+      "task_id": "docs-004",
+      "priority": "medium",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Add inline comments for complex algorithms",
+      "scope": {
+        "files": ["tools/fire_model_agent.py", "tools/*_agent.py"],
+        "directories": ["tools"],
+        "exclusions": []
+      },
+      "success_criteria": [
+        "Complex algorithms have explanatory comments",
+        "Non-obvious logic is commented",
+        "Mathematical formulas explained",
+        "Code intent is clear"
+      ],
+      "dependencies": ["docs-001"],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Focus on fire simulation algorithms and AI logic"
+    },
+    {
+      "task_id": "docs-005",
+      "priority": "low",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Create API documentation for endpoints",
+      "scope": {
+        "files": ["docs/API.md"],
+        "directories": ["routes"],
+        "exclusions": []
+      },
+      "success_criteria": [
+        "All endpoints documented with request/response examples",
+        "Authentication requirements specified",
+        "Error codes and meanings listed",
+        "OpenAPI/Swagger spec generated"
+      ],
+      "dependencies": ["docs-002"],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Consider using FastAPI auto-documentation if available"
+    }
+  ]
+}

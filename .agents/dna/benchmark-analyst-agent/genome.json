@@ -1,0 +1,177 @@
+{
+  "agent_metadata": {
+    "agent_id": "benchmark-analyst-agent",
+    "created_date": "2025-10-28T08:22:36.883388",
+    "total_sessions": 1,
+    "last_active": "2025-10-28T08:22:36.966673"
+  },
+  "skills": {
+    "technical": {},
+    "domain": {
+      "polygon-fire-prediction": {
+        "version": "1.0.0",
+        "description": "Complete workflow for polygon-based fire prediction with data fetching and result generation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "terrain-analysis": {
+        "version": "1.0.0",
+        "description": "Calculate slope, aspect, and topographic features from DEMs for fire spread calculations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fbp-fuel-mapping": {
+        "version": "1.0.0",
+        "description": "Handle fuel type classification and conversion between different fuel systems.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "monte-carlo-workflow": {
+        "version": "1.0.0",
+        "description": "Set up and run Monte Carlo fire simulations with proper parallelization.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fire-visualization": {
+        "version": "1.0.0",
+        "description": "Generate professional maps, animations, and interactive visualizations of fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fbp-fire-behavior": {
+        "version": "1.0.0",
+        "description": "Calculate fire behavior using the Canadian Forest Fire Behavior Prediction (FBP) System.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "historical-fire-validation": {
+        "version": "1.0.0",
+        "description": "Validate simulation outputs against known historical fires for calibration and benchmarking.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "simulation-reporting": {
+        "version": "1.0.0",
+        "description": "Generate comprehensive reports with statistics, visualizations, and interpretation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "geotiff-processor": {
+        "version": "1.0.0",
+        "description": "Load, validate, transform, and export GeoTIFF raster data for fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fwi-weather-processing": {
+        "version": "1.0.0",
+        "description": "Process meteorological data into Fire Weather Index (FWI) System components.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      }
+    }
+  },
+  "experience_bank": {
+    "patterns_known": [
+      {
+        "name": "Fire spread: exponential with ISI, modified by BUI and slope",
+        "description": "",
+        "timestamp": "2025-10-28T08:22:36.884404"
+      },
+      {
+        "name": "Hourly weather updates critical for diurnal fire behavior",
+        "description": "",
+        "timestamp": "2025-10-28T08:22:36.911440"
+      },
+      {
+        "name": "Minimum travel time algorithm for efficient fire spread calculation",
+        "description": "",
+        "timestamp": "2025-10-28T08:22:36.937339"
+      },
+      {
+        "name": "Prometheus uses Huygens wavelets - better than simple ellipse",
+        "description": "",
+        "timestamp": "2025-10-28T08:22:36.966220"
+      },
+      {
+        "name": "All top models use: hourly weather, spotting, crown fire, validation",
+        "description": "",
+        "timestamp": "2025-10-28T08:22:36.966374"
+      }
+    ],
+    "techniques_mastered": [],
+    "pitfalls_remembered": [],
+    "insights_discovered": [
+      {
+        "insight": "FBP system: 16 fuel types, each with unique ROS equation",
+        "timestamp": "2025-10-28T08:22:36.884117",
+        "context": ""
+      },
+      {
+        "insight": "Critical thresholds: CSI for crown fire, intensity for suppression",
+        "timestamp": "2025-10-28T08:22:36.884517",
+        "context": ""
+      },
+      {
+        "insight": "Prometheus uses Huygens wavelet propagation - more accurate than simple ellipse",
+        "timestamp": "2025-10-28T08:22:36.910806",
+        "context": ""
+      },
+      {
+        "insight": "Spotting model: statistical-empirical, max distance 1-4km",
+        "timestamp": "2025-10-28T08:22:36.911558",
+        "context": ""
+      },
+      {
+        "insight": "FARSITE uses Rothermel (physics-based) vs FBP (empirical)",
+        "timestamp": "2025-10-28T08:22:36.937165",
+        "context": ""
+      },
+      {
+        "insight": "Crown fire requires: CSI threshold AND active crown fire propagation",
+        "timestamp": "2025-10-28T08:22:36.937946",
+        "context": ""
+      },
+      {
+        "insight": "Our FBP implementation matches BurnP3+ - using correct Canadian system",
+        "timestamp": "2025-10-28T08:22:36.965376",
+        "context": ""
+      },
+      {
+        "insight": "CRITICAL GAP: No hourly weather system - need FWI calculation from met data",
+        "timestamp": "2025-10-28T08:22:36.965560",
+        "context": ""
+      },
+      {
+        "insight": "CRITICAL GAP: No spotting model - Fort Mac spread due to spotting",
+        "timestamp": "2025-10-28T08:22:36.966058",
+        "context": ""
+      },
+      {
+        "insight": "Completed: Cross-validation against BurnP3+, Prometheus, FARSITE",
+        "timestamp": "2025-10-28T08:22:36.966673",
+        "context": ""
+      }
+    ]
+  },
+  "session_memory": {
+    "last_session_summary": "Comprehensive benchmarking: identified path to world-class",
+    "next_priorities": [],
+    "work_in_progress": []
+  },
+  "evolution_metrics": {
+    "tasks_completed": 1,
+    "patterns_created": 5,
+    "learning_velocity": "developing",
+    "total_learning_events": 24
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "scenario_id": "VAL_L2_FORT_MAC_2016",
+  "scenario": {
+    "scenario_id": "VAL_L2_FORT_MAC_2016",
+    "level": 2,
+    "difficulty": "validation",
+    "generated": "2025-10-29T03:43:13.620535",
+    "is_validation": true,
+    "real_fire_event": {
+      "name": "Fort McMurray Fire 2016 (Peak Day)",
+      "location": "Alberta, Canada",
+      "date": "2016-05-04"
+    },
+    "fire_weather": {
+      "ffmc": 92,
+      "dmc": 75,
+      "dc": 450,
+      "wind_speed": 50,
+      "wind_direction": 225,
+      "temperature": 31,
+      "relative_humidity": 12,
+      "fuel_type": "C2"
+    },
+    "terrain": {
+      "slope": 10
+    },
+    "simulation": {
+      "max_iterations": 300,
+      "spotting_enabled": true
+    },
+    "validation": {
+      "actual_area_ha": 35000,
+      "actual_fire_type": "active_crown",
+      "notes": "Urban interface fire, 88,000 evacuated",
+      "error": 635.39,
+      "predicted_area_ha": 257386.73
+    },
+    "expected_behavior": {
+      "fire_danger_index": 3.0,
+      "expected_behavior": "extreme",
+      "expected_ros_range": {
+        "min": 50,
+        "max": 200
+      }
+    }
+  },
+  "fbp_result": {
+    "fuel_type": "C2",
+    "ffmc": 92,
+    "dmc": 75,
+    "dc": 450,
+    "isi": 70.81124748468427,
+    "bui": 105.88235294117646,
+    "ros_surface": 254.02991638154663,
+    "ros_final": 584.2688076775572,
+    "cfb": 1.0,
+    "sfi": 60967.17993157119,
+    "fi": 280449.0276852275,
+    "rso": 0.05196152422706632,
+    "fire_type": "active_crown",
+    "crown_initiated": true
+  },
+  "metrics": {
+    "burned_area_ha": 257386.73,
+    "max_ros_m_min": 584.27,
+    "max_intensity_kw_m": 280449.03,
+    "crown_fraction_burned": 1.0,
+    "fire_type": "active_crown",
+    "duration_iterations": 300
+  },
+  "validation": {
+    "actual_area_ha": 35000,
+    "actual_fire_type": "active_crown",
+    "notes": "Urban interface fire, 88,000 evacuated",
+    "error": 635.39,
+    "predicted_area_ha": 257386.73
+  },
+  "execution": {
+    "timestamp": "2025-10-29T04:27:36.186670",
+    "execution_time_seconds": 0.1,
+    "cache_hit": false
+  }
+}

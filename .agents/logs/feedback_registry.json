@@ -1,0 +1,384 @@
+{
+  "feedback_items": [
+    {
+      "id": "intelligent_reviewer_fire_model_agent_2025-10-28T19:58:23.437757",
+      "timestamp": "2025-10-28T19:58:23.437757",
+      "source": "intelligent_reviewer",
+      "target": "fire_model_agent",
+      "type": "parameter_adjustment",
+      "priority": "medium",
+      "status": "consumed",
+      "message": "\u26a0\ufe0f NEEDS ATTENTION - Multiple issues detected - 5 adjustments recommended",
+      "actionable_items": [
+        {
+          "action": "increase_fire_intensity",
+          "parameter": "fire_weather.ffmc",
+          "current_value": "unknown",
+          "suggested_value": ">90.0",
+          "reason": "Only 0.08% burned - fire conditions may be too mild"
+        },
+        {
+          "action": "increase_simulation_duration",
+          "parameter": "max_iterations",
+          "current_value": "unknown",
+          "suggested_value": 100,
+          "reason": "Fire may need more time to spread"
+        },
+        {
+          "action": "enable_spotting",
+          "parameter": "spotting_enabled",
+          "current_value": false,
+          "suggested_value": true,
+          "reason": "Fire is fragmented into 101 patches - spotting can create realistic distant ignitions"
+        },
+        {
+          "action": "increase_fire_spread_iterations",
+          "parameter": "max_iterations",
+          "current_value": 50,
+          "suggested_value": 150,
+          "reason": "More iterations allow fire to connect fragmented patches"
+        },
+        {
+          "action": "increase_wind_speed",
+          "parameter": "fire_weather.wind_speed",
+          "current_value": "unknown",
+          "suggested_value": 60.0,
+          "reason": "Higher wind speed increases fire spread connectivity"
+        }
+      ],
+      "metadata": {
+        "review_score": 65,
+        "num_issues": 2,
+        "timestamp": "2025-10-28T19:58:23.435054"
+      },
+      "consumed_at": "2025-10-28T19:59:28.746843",
+      "result": {
+        "applied": true,
+        "changes": [
+          {
+            "parameter": "max_iterations",
+            "new_value": 100,
+            "reason": "Fire may need more time to spread"
+          },
+          {
+            "parameter": "spotting_enabled",
+            "new_value": true,
+            "reason": "Fire is fragmented into 101 patches - spotting can create realistic distant ignitions"
+          },
+          {
+            "parameter": "max_iterations",
+            "new_value": 150,
+            "reason": "More iterations allow fire to connect fragmented patches"
+          },
+          {
+            "parameter": "fire_weather.wind_speed",
+            "new_value": 60.0,
+            "reason": "Higher wind speed increases fire spread connectivity"
+          }
+        ]
+      }
+    },
+    {
+      "id": "intelligent_reviewer_fire_model_agent_2025-10-28T20:01:37.521016",
+      "timestamp": "2025-10-28T20:01:37.521016",
+      "source": "intelligent_reviewer",
+      "target": "fire_model_agent",
+      "type": "parameter_adjustment",
+      "priority": "medium",
+      "status": "consumed",
+      "message": "\u26a0\ufe0f NEEDS ATTENTION - Multiple issues detected - 5 adjustments recommended",
+      "actionable_items": [
+        {
+          "action": "increase_fire_intensity",
+          "parameter": "fire_weather.ffmc",
+          "current_value": "unknown",
+          "suggested_value": ">90.0",
+          "reason": "Only 0.08% burned - fire conditions may be too mild"
+        },
+        {
+          "action": "increase_simulation_duration",
+          "parameter": "max_iterations",
+          "current_value": "unknown",
+          "suggested_value": 100,
+          "reason": "Fire may need more time to spread"
+        },
+        {
+          "action": "enable_spotting",
+          "parameter": "spotting_enabled",
+          "current_value": false,
+          "suggested_value": true,
+          "reason": "Fire is fragmented into 102 patches - spotting can create realistic distant ignitions"
+        },
+        {
+          "action": "increase_fire_spread_iterations",
+          "parameter": "max_iterations",
+          "current_value": 50,
+          "suggested_value": 150,
+          "reason": "More iterations allow fire to connect fragmented patches"
+        },
+        {
+          "action": "increase_wind_speed",
+          "parameter": "fire_weather.wind_speed",
+          "current_value": "unknown",
+          "suggested_value": 60.0,
+          "reason": "Higher wind speed increases fire spread connectivity"
+        }
+      ],
+      "metadata": {
+        "review_score": 65,
+        "num_issues": 2,
+        "timestamp": "2025-10-28T20:01:37.518030"
+      },
+      "consumed_at": "2025-10-28T20:01:43.043244",
+      "result": {
+        "applied": true,
+        "changes": [
+          {
+            "parameter": "max_iterations",
+            "new_value": 100,
+            "reason": "Fire may need more time to spread"
+          },
+          {
+            "parameter": "spotting_enabled",
+            "new_value": true,
+            "reason": "Fire is fragmented into 102 patches - spotting can create realistic distant ignitions"
+          },
+          {
+            "parameter": "max_iterations",
+            "new_value": 150,
+            "reason": "More iterations allow fire to connect fragmented patches"
+          },
+          {
+            "parameter": "fire_weather.wind_speed",
+            "new_value": 60.0,
+            "reason": "Higher wind speed increases fire spread connectivity"
+          }
+        ]
+      }
+    },
+    {
+      "id": "intelligent_reviewer_fire_model_agent_2025-10-28T20:03:37.697317",
+      "timestamp": "2025-10-28T20:03:37.697317",
+      "source": "intelligent_reviewer",
+      "target": "fire_model_agent",
+      "type": "parameter_adjustment",
+      "priority": "low",
+      "status": "consumed",
+      "message": "\u2705 GOOD - Minor issues - 3 adjustments recommended",
+      "actionable_items": [
+        {
+          "action": "enable_spotting",
+          "parameter": "spotting_enabled",
+          "current_value": false,
+          "suggested_value": true,
+          "reason": "Fire is fragmented into 316 patches - spotting can create realistic distant ignitions"
+        },
+        {
+          "action": "increase_fire_spread_iterations",
+          "parameter": "max_iterations",
+          "current_value": 50,
+          "suggested_value": 150,
+          "reason": "More iterations allow fire to connect fragmented patches"
+        },
+        {
+          "action": "increase_wind_speed",
+          "parameter": "fire_weather.wind_speed",
+          "current_value": "unknown",
+          "suggested_value": 60.0,
+          "reason": "Higher wind speed increases fire spread connectivity"
+        }
+      ],
+      "metadata": {
+        "review_score": 85,
+        "num_issues": 1,
+        "timestamp": "2025-10-28T20:03:37.694653"
+      },
+      "consumed_at": "2025-10-28T20:05:54.880519",
+      "result": {
+        "applied": true,
+        "changes": [
+          {
+            "parameter": "spotting_enabled",
+            "new_value": true,
+            "reason": "Fire is fragmented into 316 patches - spotting can create realistic distant ignitions"
+          },
+          {
+            "parameter": "max_iterations",
+            "new_value": 150,
+            "reason": "More iterations allow fire to connect fragmented patches"
+          },
+          {
+            "parameter": "fire_weather.wind_speed",
+            "new_value": 60.0,
+            "reason": "Higher wind speed increases fire spread connectivity"
+          }
+        ]
+      }
+    },
+    {
+      "id": "intelligent_reviewer_fire_model_agent_2025-10-28T20:06:17.256976",
+      "timestamp": "2025-10-28T20:06:17.256976",
+      "source": "intelligent_reviewer",
+      "target": "fire_model_agent",
+      "type": "parameter_adjustment",
+      "priority": "low",
+      "status": "consumed",
+      "message": "\u2705 GOOD - Minor issues - 3 adjustments recommended",
+      "actionable_items": [
+        {
+          "action": "enable_spotting",
+          "parameter": "spotting_enabled",
+          "current_value": false,
+          "suggested_value": true,
+          "reason": "Fire is fragmented into 308 patches - spotting can create realistic distant ignitions"
+        },
+        {
+          "action": "increase_fire_spread_iterations",
+          "parameter": "max_iterations",
+          "current_value": 50,
+          "suggested_value": 150,
+          "reason": "More iterations allow fire to connect fragmented patches"
+        },
+        {
+          "action": "increase_wind_speed",
+          "parameter": "fire_weather.wind_speed",
+          "current_value": "unknown",
+          "suggested_value": 60.0,
+          "reason": "Higher wind speed increases fire spread connectivity"
+        }
+      ],
+      "metadata": {
+        "review_score": 85,
+        "num_issues": 1,
+        "timestamp": "2025-10-28T20:06:17.254293"
+      },
+      "consumed_at": "2025-10-28T20:54:09.355439",
+      "result": {
+        "applied": true,
+        "changes": [
+          {
+            "parameter": "spotting_enabled",
+            "new_value": true,
+            "reason": "Fire is fragmented into 308 patches - spotting can create realistic distant ignitions"
+          },
+          {
+            "parameter": "max_iterations",
+            "new_value": 150,
+            "reason": "More iterations allow fire to connect fragmented patches"
+          },
+          {
+            "parameter": "fire_weather.wind_speed",
+            "new_value": 60.0,
+            "reason": "Higher wind speed increases fire spread connectivity"
+          }
+        ]
+      }
+    },
+    {
+      "id": "scientific_reviewer_fire_model_agent_2025-10-28T20:16:04.066049",
+      "timestamp": "2025-10-28T20:16:04.066049",
+      "source": "scientific_reviewer",
+      "target": "fire_model_agent",
+      "type": "scientific_correction",
+      "priority": "medium",
+      "status": "consumed",
+      "message": "\u26a0\ufe0f QUESTIONABLE - Significant deviations from physical reality - 1 corrections needed",
+      "actionable_items": [
+        {
+          "action": "correct_wind_speed",
+          "parameter": "fire_weather.wind_speed",
+          "current_value": 60.0,
+          "suggested_value": 40,
+          "reason": "Jasper 2024 documented wind was 40 km/h during extreme fire behavior"
+        }
+      ],
+      "metadata": {
+        "scientific_score": 50,
+        "reference_fire": "Jasper 2024",
+        "timestamp": "2025-10-28T20:16:04.063088"
+      },
+      "consumed_at": "2025-10-28T20:54:09.356659",
+      "result": {
+        "applied": true,
+        "changes": [
+          {
+            "parameter": "spotting_enabled",
+            "new_value": true,
+            "reason": "Fire is fragmented into 308 patches - spotting can create realistic distant ignitions"
+          },
+          {
+            "parameter": "max_iterations",
+            "new_value": 150,
+            "reason": "More iterations allow fire to connect fragmented patches"
+          },
+          {
+            "parameter": "fire_weather.wind_speed",
+            "new_value": 60.0,
+            "reason": "Higher wind speed increases fire spread connectivity"
+          },
+          {
+            "parameter": "fire_weather.wind_speed",
+            "new_value": 40,
+            "reason": "Jasper 2024 documented wind was 40 km/h during extreme fire behavior"
+          },
+          {
+            "parameter": "fire_weather.wind_speed",
+            "new_value": 40,
+            "reason": "Jasper 2024 documented wind was 40 km/h during extreme fire behavior"
+          }
+        ]
+      }
+    },
+    {
+      "id": "scientific_reviewer_fire_model_agent_2025-10-28T20:16:31.490989",
+      "timestamp": "2025-10-28T20:16:31.490989",
+      "source": "scientific_reviewer",
+      "target": "fire_model_agent",
+      "type": "scientific_correction",
+      "priority": "medium",
+      "status": "consumed",
+      "message": "\u26a0\ufe0f QUESTIONABLE - Significant deviations from physical reality - 1 corrections needed",
+      "actionable_items": [
+        {
+          "action": "correct_wind_speed",
+          "parameter": "fire_weather.wind_speed",
+          "current_value": 60.0,
+          "suggested_value": 40,
+          "reason": "Jasper 2024 documented wind was 40 km/h during extreme fire behavior"
+        }
+      ],
+      "metadata": {
+        "scientific_score": 60,
+        "reference_fire": "Jasper 2024",
+        "timestamp": "2025-10-28T20:16:31.488075"
+      },
+      "consumed_at": "2025-10-28T20:54:09.355919",
+      "result": {
+        "applied": true,
+        "changes": [
+          {
+            "parameter": "spotting_enabled",
+            "new_value": true,
+            "reason": "Fire is fragmented into 308 patches - spotting can create realistic distant ignitions"
+          },
+          {
+            "parameter": "max_iterations",
+            "new_value": 150,
+            "reason": "More iterations allow fire to connect fragmented patches"
+          },
+          {
+            "parameter": "fire_weather.wind_speed",
+            "new_value": 60.0,
+            "reason": "Higher wind speed increases fire spread connectivity"
+          },
+          {
+            "parameter": "fire_weather.wind_speed",
+            "new_value": 40,
+            "reason": "Jasper 2024 documented wind was 40 km/h during extreme fire behavior"
+          }
+        ]
+      }
+    }
+  ],
+  "last_updated": "2025-10-28T20:16:31.490989"
+}

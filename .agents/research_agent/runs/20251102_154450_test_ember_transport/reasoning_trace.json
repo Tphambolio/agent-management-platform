@@ -1,0 +1,65 @@
+{
+  "mission_id": "test_ember_transport",
+  "steps": [
+    {
+      "step_number": 1,
+      "thought": "I need to research: Research maximum ember transport distances in eucalyptus forests during extreme fire weather conditions",
+      "action": {
+        "type": "analyze",
+        "parameters": {
+          "goal": "Research maximum ember transport distances in eucalyptus forests during extreme fire weather conditions"
+        }
+      },
+      "result": "Goal understood. Will search for relevant academic sources and reports.",
+      "timestamp": "2025-11-02T15:44:50.685153Z"
+    },
+    {
+      "step_number": 2,
+      "thought": "Key search terms identified: research, maximum, ember, transport, distances",
+      "action": {
+        "type": "search",
+        "parameters": {
+          "keywords": [
+            "research",
+            "maximum",
+            "ember",
+            "transport",
+            "distances"
+          ]
+        }
+      },
+      "result": "Planned 5 search queries",
+      "timestamp": "2025-11-02T15:44:51.185314Z"
+    },
+    {
+      "step_number": 3,
+      "thought": "Executing searches across 5 queries",
+      "action": {
+        "type": "search",
+        "parameters": {
+          "queries": [
+            "research",
+            "maximum",
+            "ember",
+            "transport",
+            "distances"
+          ]
+        }
+      },
+      "result": "Found 5 relevant sources",
+      "timestamp": "2025-11-02T15:44:51.686103Z"
+    },
+    {
+      "step_number": 4,
+      "thought": "Synthesizing key findings from sources",
+      "action": {
+        "type": "synthesize",
+        "parameters": {
+          "source_count": 5
+        }
+      },
+      "result": "Identified 3 key findings",
+      "timestamp": "2025-11-02T15:44:52.687162Z"
+    }
+  ]
+}

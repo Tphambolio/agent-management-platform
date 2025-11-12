@@ -1,0 +1,106 @@
+{
+  "report_metadata": {
+    "agent": "spotting-model-specialist-agent",
+    "version": "1.0.0",
+    "timestamp": "2025-10-28T21:30:00Z",
+    "report_type": "comprehensive_spotting_model_validation",
+    "status": "complete"
+  },
+  "executive_summary": {
+    "overall_assessment": "CRITICAL PHYSICS ISSUES - IMMEDIATE ACTION REQUIRED",
+    "validation_score": 45,
+    "key_findings": [
+      "Spotting model implementation is structurally sound with proper physics framework",
+      "CRITICAL: Spotting distances underestimated by 20-80x (48m vs 1-4km observed)",
+      "All 8 unit tests passing but validate incorrect physics parameters",
+      "Lofting height formula too conservative (120-140m vs 300-500m expected)",
+      "Initial vertical velocity incorrectly set to zero - embers should start with upward momentum",
+      "Ignition probability model is well-designed and properly calibrated",
+      "Grid integration works correctly but has minimal impact due to short distances"
+    ]
+  },
+  "physics_validation": {
+    "reference": "Albini (1979, 1983) - USDA Forest Service INT-56, INT-309",
+    "lofting_height": {
+      "status": "NEEDS_CALIBRATION",
+      "score": 40
+    },
+    "terminal_velocity": {
+      "status": "CORRECT_PHYSICS",
+      "score": 85
+    },
+    "trajectory_physics": {
+      "status": "MAJOR_BUG",
+      "score": 30,
+      "critical_issue": "Initial vertical velocity = 0 at line 251"
+    },
+    "ember_burnout": {
+      "status": "TOO_AGGRESSIVE",
+      "score": 60
+    },
+    "ignition_probability": {
+      "status": "WELL_DESIGNED",
+      "score": 90
+    }
+  },
+  "historical_event_validation": {
+    "fort_mcmurray_2016": {
+      "observed_spotting_distance": "1-4 km",
+      "model_prediction": "48 m",
+      "error_factor": "20-80x underestimation",
+      "validation_status": "FAILED"
+    },
+    "jasper_2024": {
+      "observed_spotting_distance": ">1 km",
+      "model_prediction": "50 m",
+      "error_factor": "20+ underestimation",
+      "validation_status": "FAILED"
+    }
+  },
+  "critical_issues": [
+    {
+      "id": "SPOT-001",
+      "severity": "CRITICAL",
+      "title": "Spotting distance 20-80x too short",
+      "priority": 1
+    },
+    {
+      "id": "SPOT-002",
+      "severity": "HIGH",
+      "title": "Initial vertical velocity bug",
+      "file": "src/fire/spotting_model.py:251",
+      "priority": 2
+    },
+    {
+      "id": "SPOT-003",
+      "severity": "HIGH",
+      "title": "Lofting height underestimation",
+      "file": "src/fire/spotting_model.py:109-121",
+      "priority": 3
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "URGENT",
+      "action": "Fix initial vertical velocity to w_plume",
+      "expected_impact": "2-5x increase",
+      "timeline": "1 day"
+    },
+    {
+      "priority": "URGENT",
+      "action": "Increase lofting height for extreme fires by 2.5-3x",
+      "expected_impact": "2-3x increase",
+      "timeline": "1 day"
+    },
+    {
+      "priority": "HIGH",
+      "action": "Increase drag coefficient to 0.9",
+      "expected_impact": "10-20% more distance",
+      "timeline": "1 day"
+    }
+  ],
+  "overall_assessment": {
+    "fitness_for_purpose": "NOT READY - Critical physics issues prevent operational use",
+    "timeline_to_operational": "2-4 weeks with focused effort"
+  }
+}

@@ -1,0 +1,49 @@
+{"agent": "validation_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T20:46:38.200510"}
+{"agent": "validation_agent", "stage": "permissions_denied", "bad_read": ["src/secret_data.py"], "bad_write": [], "needs_net": false, "timestamp": "2025-10-28T20:46:38.352262"}
+{"agent": "frontend_truth_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T20:46:38.505442"}
+{"agent": "validation_agent", "stage": "permissions_denied", "bad_read": [], "bad_write": [], "needs_net": true, "timestamp": "2025-10-28T20:46:38.657255"}
+{"agent": "fire_model_agent", "stage": "permissions_ok", "params": {"wind_speed_kmh": 50, "fuel_moisture": 0.1}, "timestamp": "2025-10-28T20:46:50.462342"}
+{"agent": "fire_model_agent", "stage": "safety_warning", "warnings": ["wind_speed_kmh exceeds configured max", "fuel_moisture below minimum", "iterations above max"], "params": {"wind_speed_kmh": 150, "fuel_moisture": 0.02, "iterations": 10000}, "timestamp": "2025-10-28T20:46:50.600374"}
+{"agent": "fire_model_agent", "stage": "permissions_ok", "params": {"wind_speed_kmh": 150, "fuel_moisture": 0.02, "iterations": 10000}, "timestamp": "2025-10-28T20:46:50.600441"}
+{"agent": "truth_guardian", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T20:48:46.511005"}
+{"agent": "frontend_truth_agent", "stage": "permissions_denied", "bad_read": [""], "bad_write": [], "needs_net": true, "timestamp": "2025-10-28T20:48:46.563886"}
+{"agent": "truth_guardian", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T20:48:54.234468"}
+{"agent": "frontend_truth_agent", "stage": "permissions_denied", "bad_read": [""], "bad_write": [], "needs_net": true, "timestamp": "2025-10-28T20:48:54.285371"}
+{"agent": "truth_guardian", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T20:50:43.092944"}
+{"agent": "frontend_truth_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T20:50:43.150435"}
+{"agent": "validation_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T20:50:44.026407"}
+{"agent": "memory_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T20:50:51.429856"}
+{"agent": "mentor_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T20:50:51.486456"}
+{"agent": "dashboard_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T20:50:51.540711"}
+{"agent": "validation_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T20:55:29.316860"}
+{"agent": "validation_agent", "stage": "permissions_denied", "bad_read": ["src/private_code.py"], "bad_write": [], "needs_net": false, "timestamp": "2025-10-28T20:55:29.491745"}
+{"agent": "fire_model_agent", "stage": "safety_warning", "warnings": ["wind_speed_kmh exceeds configured max", "iterations above max"], "params": {"wind_speed_kmh": 200, "iterations": 20000}, "timestamp": "2025-10-28T20:55:29.646573"}
+{"agent": "fire_model_agent", "stage": "permissions_ok", "params": {"wind_speed_kmh": 200, "iterations": 20000}, "timestamp": "2025-10-28T20:55:29.646645"}
+{"agent": "truth_guardian", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T21:02:36.012751"}
+{"agent": "frontend_truth_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T21:02:36.068576"}
+{"agent": "validation_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T21:02:37.011358"}
+{"agent": "memory_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T21:02:50.931762"}
+{"agent": "mentor_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T21:02:50.986917"}
+{"agent": "dashboard_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T21:02:51.042138"}
+{"agent": "fire_model_agent", "stage": "permissions_denied", "bad_read": [".agents/config/*"], "bad_write": [], "needs_net": false, "timestamp": "2025-10-28T21:08:20.705436"}
+{"agent": "fire_model_agent", "stage": "permissions_ok", "params": {"wind_speed_kmh": 45, "fuel_moisture": 0.06, "iterations": 300}, "timestamp": "2025-10-28T21:08:28.874509"}
+{"agent": "fire_model_agent", "stage": "permissions_ok", "params": {"wind_speed_kmh": 50, "fuel_moisture": 0.06, "iterations": 500}, "timestamp": "2025-10-28T22:10:36.403148"}
+{"agent": "research_professor_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-10-28T22:40:47.712673"}
+{"agent": "truth_guardian", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:01:58.535996"}
+{"agent": "frontend_truth_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:01:58.589113"}
+{"agent": "validation_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:02:33.578439"}
+{"agent": "memory_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:05:52.781715"}
+{"agent": "mentor_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:05:52.835503"}
+{"agent": "dashboard_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:05:52.890442"}
+{"agent": "truth_guardian", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:21:21.708668"}
+{"agent": "frontend_truth_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:21:21.763276"}
+{"agent": "validation_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:21:54.652552"}
+{"agent": "truth_guardian", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:24:40.704020"}
+{"agent": "frontend_truth_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:24:40.758157"}
+{"agent": "validation_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:25:16.017885"}
+{"agent": "memory_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:25:21.792341"}
+{"agent": "mentor_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:25:21.848786"}
+{"agent": "dashboard_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:25:21.902858"}
+{"agent": "memory_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:28:39.758739"}
+{"agent": "mentor_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:28:39.816106"}
+{"agent": "dashboard_agent", "stage": "permissions_ok", "params": {}, "timestamp": "2025-11-02T16:28:39.872129"}

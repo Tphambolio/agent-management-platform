@@ -1,0 +1,68 @@
+{
+  "scenario_id": "L3_S0069_20251029",
+  "scenario": {
+    "scenario_id": "L3_S0069_20251029",
+    "level": 3,
+    "difficulty": "advanced",
+    "generated": "2025-10-29T04:27:54.728240",
+    "fire_weather": {
+      "ffmc": 96.1,
+      "dmc": 89.0,
+      "dc": 277.6,
+      "wind_speed": 65.3,
+      "wind_direction": 135,
+      "temperature": 30.5,
+      "relative_humidity": 20.5,
+      "fuel_type": "C7"
+    },
+    "terrain": {
+      "slope": 47.9
+    },
+    "simulation": {
+      "max_iterations": 162,
+      "spotting_enabled": false
+    },
+    "special_conditions": {},
+    "expected_behavior": {
+      "fire_danger_index": 1.86,
+      "expected_behavior": "high",
+      "expected_ros_range": {
+        "min": 18.3,
+        "max": 34.0
+      }
+    }
+  },
+  "fbp_result": {
+    "fuel_type": "C7",
+    "ffmc": 96.1,
+    "dmc": 89.0,
+    "dc": 277.6,
+    "isi": 270.03288665683056,
+    "bui": 98.80583883223356,
+    "ros_surface": 445.72045128395655,
+    "ros_final": 534.8645415407478,
+    "cfb": 1.0,
+    "sfi": 66858.06769259348,
+    "fi": 160459.36246222435,
+    "rso": 0.31622776601683794,
+    "fire_type": "active_crown",
+    "crown_initiated": true
+  },
+  "metrics": {
+    "burned_area_ha": 57076.1,
+    "max_ros_m_min": 534.86,
+    "max_intensity_kw_m": 160459.36,
+    "crown_fraction_burned": 1.0,
+    "fire_type": "active_crown",
+    "duration_iterations": 162
+  },
+  "validation": {
+    "actual_area_ha": null,
+    "error": null
+  },
+  "execution": {
+    "timestamp": "2025-10-29T04:28:30.687791",
+    "execution_time_seconds": 0.1,
+    "cache_hit": false
+  }
+}

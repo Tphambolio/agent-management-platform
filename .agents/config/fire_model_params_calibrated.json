@@ -1,0 +1,23 @@
+{
+  "fire_weather": {
+    "wind_speed": 50.0,
+    "wind_direction": 45,
+    "ffmc": 94.0,
+    "dmc": 85.0,
+    "dc": 550.0,
+    "fuel_type": "C3",
+    "ignition_x": null,
+    "ignition_y": null
+  },
+  "max_iterations": 500,
+  "spotting_enabled": true,
+  "spread_factor": 1.0,
+  "crown_fire_boost": true,
+  "weather_modifiers": true,
+  "directional_spread": true,
+  "enhanced_spotting": false,
+  "elliptical_validation": true,
+  "spotting_check_interval": 5,
+  "embers_per_source": 5,
+  "tuning_notes": "Calibrated configuration: spread_factor=1.0 (no artificial boost), reduced spotting aggressiveness (embers_per_source=5, check_interval=5), disabled enhanced_spotting. Use FBP system values directly with slope correction applied. Expected to reduce overprediction from 63-131% to <20%."
+}

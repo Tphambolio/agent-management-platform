@@ -1,0 +1,32 @@
+{
+  "scenario_id": "L2_S0151_20251029",
+  "level": 2,
+  "difficulty": "intermediate",
+  "generated": "2025-10-29T03:43:43.371444",
+  "fire_weather": {
+    "ffmc": 80.0,
+    "dmc": 65.9,
+    "dc": 414.1,
+    "wind_speed": 21.0,
+    "wind_direction": 45,
+    "temperature": 19.9,
+    "relative_humidity": 30.0,
+    "fuel_type": "C3"
+  },
+  "terrain": {
+    "slope": 15.7
+  },
+  "simulation": {
+    "max_iterations": 96,
+    "spotting_enabled": false
+  },
+  "special_conditions": {},
+  "expected_behavior": {
+    "fire_danger_index": 0.39,
+    "expected_behavior": "low",
+    "expected_ros_range": {
+      "min": 9.8,
+      "max": 18.2
+    }
+  }
+}

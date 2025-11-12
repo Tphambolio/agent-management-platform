@@ -1,0 +1,46 @@
+{
+  "agent": "spotting-model-agent",
+  "version": "1.0",
+  "tasks": [
+    {
+      "task_id": "spot-001",
+      "priority": "high",
+      "status": "pending",
+      "objective": "Validate spotting model physics",
+      "scope": {"files": ["src/fire/spotting_model.py", "tests/test_spotting_model.py"]},
+      "success_criteria": [
+        "Lofting height equations verified against literature",
+        "Terminal velocity calculations validated",
+        "Trajectory physics matches Albini (1979) or similar",
+        "Edge cases tested (extreme conditions)",
+        "All tests pass"
+      ]
+    },
+    {
+      "task_id": "spot-002",
+      "priority": "high",
+      "status": "pending",
+      "objective": "Validate against historical spotting events",
+      "scope": {"files": ["src/fire/spotting_model.py"]},
+      "success_criteria": [
+        "Fort McMurray 2016 spotting distances matched",
+        "Jasper 2024 long-distance spotting validated",
+        "Ignition probability calibrated to observations",
+        "Model performance documented"
+      ]
+    },
+    {
+      "task_id": "spot-003",
+      "priority": "medium",
+      "status": "pending",
+      "objective": "Optimize spotting calculations for Monte Carlo",
+      "scope": {"files": ["src/fire/spotting_model.py"]},
+      "success_criteria": [
+        "Vectorized spotting calculations implemented",
+        "Computational cost reduced",
+        "Integration with grid system efficient",
+        "No accuracy loss"
+      ]
+    }
+  ]
+}

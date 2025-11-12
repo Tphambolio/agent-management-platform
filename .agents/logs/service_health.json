@@ -1,0 +1,18 @@
+{
+  "fuel_wms": {
+    "status": "\u2705",
+    "bytes": 2112019
+  },
+  "elev_wms": {
+    "status": "\u2705",
+    "bytes": 3490
+  },
+  "weather_wms": {
+    "status": "\u2705",
+    "bytes": 43581651
+  },
+  "weather_wcs": {
+    "status": "\u2705",
+    "bytes": 1286026
+  }
+}

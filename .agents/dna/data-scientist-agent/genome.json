@@ -1,0 +1,88 @@
+{
+  "agent_metadata": {
+    "agent_id": "data-scientist-agent",
+    "role": "Data Scientist",
+    "created_date": "2025-10-27",
+    "total_sessions": 1,
+    "last_active": "2025-10-28T01:36:02.347338"
+  },
+  "skills": {
+    "technical": {},
+    "domain": {
+      "monte-carlo-workflow": {
+        "version": "1.0.0",
+        "description": "Set up and run Monte Carlo fire simulations with proper parallelization.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "simulation-reporting": {
+        "version": "1.0.0",
+        "description": "Generate comprehensive reports with statistics, visualizations, and interpretation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "geotiff-processor": {
+        "version": "1.0.0",
+        "description": "Load, validate, transform, and export GeoTIFF raster data for fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      }
+    }
+  },
+  "experience_bank": {
+    "patterns_known": [
+      {
+        "name": "edmonton_grassland_dominance",
+        "description": "",
+        "timestamp": "2025-10-28T01:36:02.346908"
+      },
+      {
+        "name": "model_validation_success",
+        "description": "",
+        "timestamp": "2025-10-28T01:36:02.347184"
+      }
+    ],
+    "techniques_mastered": [],
+    "pitfalls_remembered": [],
+    "insights_discovered": [
+      {
+        "insight": "Loaded Edmonton fuel map: 500x438 cells",
+        "timestamp": "2025-10-28T01:36:02.341651",
+        "context": ""
+      },
+      {
+        "insight": "Fuel code 11 covers 13.4% of Edmonton landscape",
+        "timestamp": "2025-10-28T01:36:02.346568",
+        "context": ""
+      },
+      {
+        "insight": "Fuel code 31 covers 71.9% of Edmonton landscape",
+        "timestamp": "2025-10-28T01:36:02.346751",
+        "context": ""
+      },
+      {
+        "insight": "Grassland fires spread 10x faster than forest fires - rapid response critical",
+        "timestamp": "2025-10-28T01:36:02.347046",
+        "context": ""
+      },
+      {
+        "insight": "Completed: Edmonton fuel distribution analysis with real data",
+        "timestamp": "2025-10-28T01:36:02.347338",
+        "context": ""
+      }
+    ]
+  },
+  "session_memory": {
+    "last_session_summary": "Loaded and analyzed real Edmonton fuel data - discovered 72% grassland dominance",
+    "next_priorities": []
+  },
+  "evolution_metrics": {
+    "tasks_completed": 1,
+    "patterns_created": 2,
+    "learning_velocity": "developing",
+    "total_learning_events": 7
+  }
+}

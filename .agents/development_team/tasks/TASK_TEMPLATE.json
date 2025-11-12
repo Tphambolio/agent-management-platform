@@ -1,0 +1,20 @@
+{
+  "agent": "agent-name",
+  "task_id": "unique-id",
+  "priority": "high|medium|low",
+  "status": "pending|in-progress|blocked|complete",
+  "assigned_by": "pm-agent",
+  "objective": "Clear description of what needs to be done",
+  "scope": {
+    "files": ["list", "of", "files"],
+    "directories": ["list", "of", "dirs"],
+    "exclusions": ["what", "to", "skip"]
+  },
+  "success_criteria": [
+    "Measurable outcome 1",
+    "Measurable outcome 2"
+  ],
+  "dependencies": ["other-task-ids"],
+  "output_location": ".agents/reports/",
+  "notes": "Additional context"
+}

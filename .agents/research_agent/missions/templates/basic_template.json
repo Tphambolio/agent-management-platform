@@ -1,0 +1,27 @@
+{
+  "mission_id": "REPLACE_WITH_UNIQUE_ID",
+  "goal": "Clear research objective in one sentence (10-500 characters)",
+  "constraints": {
+    "max_sources": 10,
+    "max_search_queries": 5,
+    "time_limit_minutes": 15,
+    "trusted_domains": [
+      "scholar.google.com",
+      "arxiv.org",
+      "sciencedirect.com",
+      "onlinelibrary.wiley.com"
+    ]
+  },
+  "deliverables": [
+    "summary",
+    "source_list",
+    "key_findings"
+  ],
+  "created_at": "REPLACE_WITH_ISO8601_TIMESTAMP",
+  "priority": "medium",
+  "context": {
+    "background": "Why this research is needed",
+    "related_missions": [],
+    "keywords": ["keyword1", "keyword2", "keyword3"]
+  }
+}

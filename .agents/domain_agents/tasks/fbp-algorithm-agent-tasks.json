@@ -1,0 +1,146 @@
+{
+  "agent": "fbp-algorithm-agent",
+  "version": "1.0",
+  "last_updated": "2025-10-28",
+  "tasks": [
+    {
+      "task_id": "fbp-001",
+      "priority": "critical",
+      "status": "pending",
+      "objective": "Audit extreme BUI handling (BUI > 150)",
+      "description": "The system shows unexpected behavior at BUI=160 (Jasper 2024 conditions). Review the BUI effect equation and extreme multiplier logic.",
+      "scope": {
+        "files": ["src/core/fbp_calculator.py"],
+        "functions": ["calculate_buildup_index", "get_fire_behavior"],
+        "focus_area": "BUI effect calculation and extreme condition handling"
+      },
+      "success_criteria": [
+        "BUI effect equation verified against official FBP documentation",
+        "Extreme BUI multiplier logic reviewed",
+        "Test cases created for BUI 150-200 range",
+        "Recommendations provided for handling BUI > 150",
+        "Scientific justification documented"
+      ],
+      "context": {
+        "issue": "tests/test_extreme_bui.py shows ROS suppression at high BUI",
+        "expected": "Fire should accelerate at extreme BUI, not slow down",
+        "reference": "Forestry Canada (1992) calibration valid for BUI 50-150"
+      }
+    },
+    {
+      "task_id": "fbp-002",
+      "priority": "high",
+      "status": "pending",
+      "objective": "Verify all 18 fuel type implementations",
+      "description": "Systematic audit of all fuel type equations, parameters, and calculations.",
+      "scope": {
+        "files": ["src/core/fbp_calculator.py"],
+        "fuel_types": ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "D1", "D2", "M1", "M2", "M3", "M4", "O1a", "O1b", "S1", "S2", "S3"],
+        "parameters": ["a", "b", "c", "q", "bui0", "cbh", "cfl"]
+      },
+      "success_criteria": [
+        "All fuel type parameters verified against FBP documentation",
+        "ROS equations checked for correctness",
+        "Units verified (m/min for ROS, kW/m for intensity)",
+        "Special cases documented (e.g., D1 no BUI effect)",
+        "Validation tests created for each fuel type"
+      ]
+    },
+    {
+      "task_id": "fbp-003",
+      "priority": "high",
+      "status": "pending",
+      "objective": "Validate crown fire behavior calculations",
+      "description": "Review crown fire initiation (RSO), crown spread index (CSI), and crown fraction burned (CFB) calculations.",
+      "scope": {
+        "files": ["src/core/fbp_calculator.py"],
+        "functions": ["calculate_crown_fire_behavior"],
+        "focus_area": "Crown fire threshold and propagation"
+      },
+      "success_criteria": [
+        "RSO calculation verified: RSO = 0.010 * CBH^1.5",
+        "CSI calculation checked for each fuel type",
+        "CFB logic validated (0 to 1 range)",
+        "Crown fire thresholds tested against benchmarks",
+        "Edge cases handled (zero CBH, extreme ISI)"
+      ]
+    },
+    {
+      "task_id": "fbp-004",
+      "priority": "medium",
+      "status": "pending",
+      "objective": "Optimize FBP calculation performance",
+      "description": "Identify and implement performance improvements while maintaining scientific accuracy.",
+      "scope": {
+        "files": ["src/core/fbp_calculator.py"],
+        "focus_area": "Computational efficiency and Numba compatibility"
+      },
+      "success_criteria": [
+        "Numba JIT compatibility verified for hot-path functions",
+        "Vectorization opportunities identified",
+        "Caching strategy recommended for repeated calculations",
+        "Performance benchmarks show improvement",
+        "No loss of scientific accuracy"
+      ]
+    },
+    {
+      "task_id": "fbp-005",
+      "priority": "medium",
+      "status": "pending",
+      "objective": "Create comprehensive FBP validation test suite",
+      "description": "Expand test coverage with official benchmarks and edge cases.",
+      "scope": {
+        "files": ["tests/test_fbp_validation.py"],
+        "new_tests": "Additional benchmark comparisons"
+      },
+      "success_criteria": [
+        "Test cases for all 18 fuel types",
+        "Benchmark comparisons against Forestry Canada examples",
+        "Edge case tests (extreme weather, high BUI, steep slopes)",
+        "Integration tests with FWI calculations",
+        "Test coverage > 95% for FBP module"
+      ]
+    },
+    {
+      "task_id": "fbp-006",
+      "priority": "low",
+      "status": "pending",
+      "objective": "Document FBP equations with scientific references",
+      "description": "Create comprehensive documentation of all FBP equations with citations.",
+      "scope": {
+        "files": ["src/core/fbp_calculator.py", "docs/fbp_equations.md"],
+        "output": "Scientific documentation"
+      },
+      "success_criteria": [
+        "All equations documented with LaTeX or clear text format",
+        "Citations to Forestry Canada (1992) and other sources",
+        "Assumptions and limitations clearly stated",
+        "Valid ranges documented for each equation",
+        "Examples provided for each fuel type"
+      ]
+    }
+  ],
+  "dependencies": {
+    "requires": [
+      "src/core/fbp_calculator.py must exist",
+      "Python environment with numpy, numba"
+    ],
+    "coordinates_with": [
+      "scientific-validation-agent",
+      "performance-tuning-agent",
+      "weather-data-agent"
+    ]
+  },
+  "resources": {
+    "documentation": [
+      "Forestry Canada Fire Danger Group (1992). Development and Structure of the Canadian Forest Fire Behavior Prediction System.",
+      "https://cfs.nrcan.gc.ca/publications?id=10068"
+    ],
+    "code_locations": [
+      "src/core/fbp_calculator.py - Main FBP implementation",
+      "tests/test_fbp_validation.py - Validation tests",
+      "tests/test_extreme_bui*.py - BUI analysis"
+    ]
+  },
+  "notes": "This agent focuses exclusively on FBP system accuracy and performance. Scientific correctness is paramount - do not compromise accuracy for performance without explicit justification."
+}

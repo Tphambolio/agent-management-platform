@@ -1,0 +1,20 @@
+{
+  "mission_id": "test_v2_ember_spotting",
+  "queries": [
+    {
+      "query": "Research ember spotting distances and firebrand transport mechanisms in extreme wildfire conditions",
+      "results_count": 3,
+      "status": "success"
+    },
+    {
+      "query": "ember transport wildfire research",
+      "results_count": 3,
+      "status": "success"
+    },
+    {
+      "query": "ember transport wildfire spotting distance",
+      "results_count": 3,
+      "status": "success"
+    }
+  ]
+}

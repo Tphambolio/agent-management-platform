@@ -1,0 +1,97 @@
+{
+  "agent_metadata": {
+    "agent_id": "software-architect-agent",
+    "role": "Software Architect",
+    "created_date": "2025-10-27",
+    "total_sessions": 0
+  },
+  "skills": {
+    "technical": {},
+    "domain": {
+      "polygon-fire-prediction": {
+        "version": "1.0.0",
+        "description": "Complete workflow for polygon-based fire prediction with data fetching and result generation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "terrain-analysis": {
+        "version": "1.0.0",
+        "description": "Calculate slope, aspect, and topographic features from DEMs for fire spread calculations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fbp-fuel-mapping": {
+        "version": "1.0.0",
+        "description": "Handle fuel type classification and conversion between different fuel systems.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "monte-carlo-workflow": {
+        "version": "1.0.0",
+        "description": "Set up and run Monte Carlo fire simulations with proper parallelization.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fire-visualization": {
+        "version": "1.0.0",
+        "description": "Generate professional maps, animations, and interactive visualizations of fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fbp-fire-behavior": {
+        "version": "1.0.0",
+        "description": "Calculate fire behavior using the Canadian Forest Fire Behavior Prediction (FBP) System.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "historical-fire-validation": {
+        "version": "1.0.0",
+        "description": "Validate simulation outputs against known historical fires for calibration and benchmarking.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "simulation-reporting": {
+        "version": "1.0.0",
+        "description": "Generate comprehensive reports with statistics, visualizations, and interpretation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "geotiff-processor": {
+        "version": "1.0.0",
+        "description": "Load, validate, transform, and export GeoTIFF raster data for fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fwi-weather-processing": {
+        "version": "1.0.0",
+        "description": "Process meteorological data into Fire Weather Index (FWI) System components.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      }
+    }
+  },
+  "experience_bank": {
+    "patterns_known": [],
+    "techniques_mastered": [],
+    "pitfalls_remembered": []
+  },
+  "session_memory": {
+    "last_session_summary": "",
+    "next_priorities": []
+  },
+  "evolution_metrics": {
+    "tasks_completed": 0,
+    "patterns_created": 0,
+    "learning_velocity": "developing"
+  }
+}

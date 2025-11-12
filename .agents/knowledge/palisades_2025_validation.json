@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-10-28T21:30:00Z",
+  "event": "palisades_2025",
+  "date": "2025-01-07",
+  "predicted_ha": 14376,
+  "actual_ha": 6879,
+  "error_pct": 108.98386393371129,
+  "passed": false,
+  "conditions": {
+    "ffmc": 97,
+    "wind_speed": 130,
+    "fwi": 60,
+    "fuel_type": "C7 (chaparral analog)",
+    "santa_ana_winds": true
+  },
+  "significance": "3rd most destructive California wildfire",
+  "limitations": "Fuel type mismatch - chaparral not in Canadian FBP"
+}

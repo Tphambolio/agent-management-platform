@@ -1,0 +1,28 @@
+{
+  "api_keys": {
+    "anthropic": null,
+    "semantic_scholar": null,
+    "openai": null
+  },
+  "rate_limits": {
+    "arxiv_delay": 3.0,
+    "semantic_scholar_delay": 1.0,
+    "crossref_delay": 1.0
+  },
+  "search_settings": {
+    "max_results_per_source": 10,
+    "recent_years_filter": 10,
+    "include_preprints": true,
+    "require_open_access": false
+  },
+  "llm_settings": {
+    "model": "claude-3-5-sonnet-20241022",
+    "max_tokens": 4096,
+    "temperature": 0.7
+  },
+  "reasoning_settings": {
+    "max_research_iterations": 5,
+    "confidence_threshold": 0.7,
+    "require_multiple_sources": true
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "agent": "research-professor-agent",
+  "version": "1.1",
+  "created": "2025-10-28T16:23:00Z",
+  "last_updated": "2025-10-28T22:40:00Z",
+  "session": 1,
+  "role": "Research Professor",
+  "purpose": "Continuously collect and summarize new scientific literature on wildfire, fuels, and fire behaviour to guide model improvements.",
+  "knowledge_sources": [
+    "arXiv",
+    "CrossRef",
+    "Government of Canada Natural Resources",
+    "US Forest Service",
+    "Canadian Forest Service",
+    "Natural Resources Canada Publications"
+  ],
+  "output_log": ".agents/logs/research_insights_YYYYMMDD.jsonl",
+  "integration_points": [
+    "pre_evolution_review",
+    "mentor_guidance",
+    "scientific_validation"
+  ],
+  "skills": {
+    "technical": {},
+    "domain": {
+      "polygon-fire-prediction": {
+        "version": "1.0.0",
+        "description": "Complete workflow for polygon-based fire prediction with data fetching and result generation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "terrain-analysis": {
+        "version": "1.0.0",
+        "description": "Calculate slope, aspect, and topographic features from DEMs for fire spread calculations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fbp-fuel-mapping": {
+        "version": "1.0.0",
+        "description": "Handle fuel type classification and conversion between different fuel systems.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "monte-carlo-workflow": {
+        "version": "1.0.0",
+        "description": "Set up and run Monte Carlo fire simulations with proper parallelization.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fire-visualization": {
+        "version": "1.0.0",
+        "description": "Generate professional maps, animations, and interactive visualizations of fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fbp-fire-behavior": {
+        "version": "1.0.0",
+        "description": "Calculate fire behavior using the Canadian Forest Fire Behavior Prediction (FBP) System.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "historical-fire-validation": {
+        "version": "1.0.0",
+        "description": "Validate simulation outputs against known historical fires for calibration and benchmarking.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "simulation-reporting": {
+        "version": "1.0.0",
+        "description": "Generate comprehensive reports with statistics, visualizations, and interpretation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "geotiff-processor": {
+        "version": "1.0.0",
+        "description": "Load, validate, transform, and export GeoTIFF raster data for fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fwi-weather-processing": {
+        "version": "1.0.0",
+        "description": "Process meteorological data into Fire Weather Index (FWI) System components.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      }
+    }
+  },
+  "patterns": [
+    "Query multiple sources (arXiv + CrossRef) for comprehensive coverage",
+    "Use domain-specific keywords: wildfire, fuel, fire behaviour, FBP",
+    "Store results in time-stamped JSONL for historical tracking",
+    "Focus on recent publications (last 1-2 years preferred)",
+    "Extract actionable insights for model improvements"
+  ],
+  "experience": {
+    "sessions_completed": 1,
+    "papers_collected": 10,
+    "sources_queried": 2,
+    "successes": [
+      "Successfully retrieved 5 papers from CrossRef on wildfire fuel topics",
+      "Successfully retrieved 5 papers from arXiv on wildfire modeling",
+      "Generated timestamped JSONL output for 2025-10-28",
+      "Identified key papers on fuel load modeling in BC forests",
+      "Found papers on community wildfire mitigation planning"
+    ],
+    "learnings": [
+      "CrossRef provides more applied/practical papers than arXiv",
+      "arXiv has more modeling/theoretical papers",
+      "Fuel-related queries yield highly relevant results",
+      "Canadian-specific research available but requires targeted queries",
+      "JSON output enables programmatic integration with other agents"
+    ],
+    "key_papers_found": [
+      "Analysis, modelling and estimation of wildfire fuel load in north-central BC forests",
+      "Optimizing Fuel Treatments for Community Wildfire Mitigation Planning",
+      "Analyzing Live and Dead Fuel Moisture in California",
+      "Wildfire fuel mapping using airborne laser scanning data: X\u00e1xli'p community",
+      "Design of a test stand for alternate fuel and ignition systems testing"
+    ]
+  },
+  "performance_metrics": {
+    "average_papers_per_run": 10,
+    "api_success_rate": 1.0,
+    "execution_time_seconds": 3.0,
+    "last_run": "2025-10-28T22:24:03Z"
+  },
+  "next_improvements": [
+    "Add Google Scholar integration for broader coverage",
+    "Implement paper relevance scoring (0-1)",
+    "Extract abstracts for deeper analysis",
+    "Cross-reference with existing model parameters",
+    "Flag papers that contradict current FBP assumptions"
+  ],
+  "integration_notes": {
+    "pre_evolution_review": "Papers inform parameter adjustments before evolution cycles",
+    "mentor_guidance": "Research insights guide mentor recommendations to other agents",
+    "scientific_validation": "Latest papers validate or challenge current model assumptions"
+  }
+}

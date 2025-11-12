@@ -1,0 +1,3 @@
+[console_scripts]
+agent-mcp = agent_mcp.server:main
+

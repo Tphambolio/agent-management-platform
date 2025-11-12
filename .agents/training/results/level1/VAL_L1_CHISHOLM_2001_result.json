@@ -1,0 +1,83 @@
+{
+  "scenario_id": "VAL_L1_CHISHOLM_2001",
+  "scenario": {
+    "scenario_id": "VAL_L1_CHISHOLM_2001",
+    "level": 1,
+    "difficulty": "validation",
+    "generated": "2025-10-29T03:45:32.859824",
+    "is_validation": true,
+    "real_fire_event": {
+      "name": "Chisholm Fire 2001 (Day 1)",
+      "location": "Alberta, Canada",
+      "date": "2001-05-23"
+    },
+    "fire_weather": {
+      "ffmc": 89,
+      "dmc": 55,
+      "dc": 380,
+      "wind_speed": 35,
+      "wind_direction": 270,
+      "temperature": 24,
+      "relative_humidity": 18,
+      "fuel_type": "C2"
+    },
+    "terrain": {
+      "slope": 8
+    },
+    "simulation": {
+      "max_iterations": 180,
+      "spotting_enabled": false
+    },
+    "validation": {
+      "actual_area_ha": 18000,
+      "actual_fire_type": "active_crown",
+      "notes": "Very active crown fire",
+      "error": 23.73,
+      "predicted_area_ha": 13728.4
+    },
+    "expected_behavior": {
+      "fire_danger_index": 3.0,
+      "expected_behavior": "extreme",
+      "expected_ros_range": {
+        "min": 50,
+        "max": 200
+      }
+    }
+  },
+  "fbp_result": {
+    "fuel_type": "C2",
+    "ffmc": 89,
+    "dmc": 55,
+    "dc": 380,
+    "isi": 21.668229727656705,
+    "bui": 80.77294685990339,
+    "ros_surface": 92.76235182624272,
+    "ros_final": 213.35340920035824,
+    "cfb": 1.0,
+    "sfi": 22262.96443829825,
+    "fi": 102409.63641617195,
+    "rso": 0.05196152422706632,
+    "fire_type": "active_crown",
+    "crown_initiated": true
+  },
+  "metrics": {
+    "burned_area_ha": 13728.4,
+    "max_ros_m_min": 213.35,
+    "max_intensity_kw_m": 102409.64,
+    "crown_fraction_burned": 1.0,
+    "fire_type": "active_crown",
+    "duration_iterations": 180
+  },
+  "validation": {
+    "actual_area_ha": 18000,
+    "actual_fire_type": "active_crown",
+    "notes": "Very active crown fire",
+    "error": 23.73,
+    "predicted_area_ha": 13728.4
+  },
+  "execution": {
+    "timestamp": "2025-10-29T04:22:21.558928",
+    "execution_time_seconds": 0.1,
+    "cache_hit": false
+  }
+}

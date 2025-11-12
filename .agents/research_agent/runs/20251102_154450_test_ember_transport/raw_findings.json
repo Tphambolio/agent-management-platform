@@ -1,0 +1,66 @@
+{
+  "sources": [
+    {
+      "url": "https://example.com/research/research",
+      "title": "Research on Research in Wildfire Behavior",
+      "accessed_at": "2025-11-02T15:44:51.686058Z",
+      "relevance_score": 0.9,
+      "citation": "Author et al. (2023). Research Study. Journal of Fire Science."
+    },
+    {
+      "url": "https://example.com/research/maximum",
+      "title": "Research on Maximum in Wildfire Behavior",
+      "accessed_at": "2025-11-02T15:44:51.686073Z",
+      "relevance_score": 0.8,
+      "citation": "Author et al. (2023). Maximum Study. Journal of Fire Science."
+    },
+    {
+      "url": "https://example.com/research/ember",
+      "title": "Research on Ember in Wildfire Behavior",
+      "accessed_at": "2025-11-02T15:44:51.686076Z",
+      "relevance_score": 0.7,
+      "citation": "Author et al. (2023). Ember Study. Journal of Fire Science."
+    },
+    {
+      "url": "https://example.com/research/transport",
+      "title": "Research on Transport in Wildfire Behavior",
+      "accessed_at": "2025-11-02T15:44:51.686094Z",
+      "relevance_score": 0.6,
+      "citation": "Author et al. (2023). Transport Study. Journal of Fire Science."
+    },
+    {
+      "url": "https://example.com/research/distances",
+      "title": "Research on Distances in Wildfire Behavior",
+      "accessed_at": "2025-11-02T15:44:51.686096Z",
+      "relevance_score": 0.5,
+      "citation": "Author et al. (2023). Distances Study. Journal of Fire Science."
+    }
+  ],
+  "key_findings": [
+    {
+      "finding": "Based on available literature, research maximum ember transport distances in eucalyptus forests during extreme fire weather conditions shows significant correlation with environmental factors.",
+      "source_refs": [
+        0,
+        1
+      ],
+      "confidence": "medium"
+    },
+    {
+      "finding": "Multiple studies confirm the importance of fuel moisture content in fire behavior modeling.",
+      "source_refs": [
+        1,
+        2
+      ],
+      "confidence": "high"
+    },
+    {
+      "finding": "Weather conditions, particularly wind speed and direction, are critical variables for prediction accuracy.",
+      "source_refs": [
+        0,
+        2
+      ],
+      "confidence": "high"
+    }
+  ],
+  "summary": "Research Goal: Research maximum ember transport distances in eucalyptus forests during extreme fire weather conditions\n\nThis research investigated research maximum ember transport distances in eucalyptus forests during extreme fire weather conditions through analysis of 5 scientific sources.\n\nKey Findings:\n\n1. Based on available literature, research maximum ember transport distances in eucalyptus forests during extreme fire weather conditions shows significant correlation with environmental factors.\n\n2. Multiple studies confirm the importance of fuel moisture content in fire behavior modeling.\n\n3. Weather conditions, particularly wind speed and direction, are critical variables for prediction accuracy.\n\n\nMethodology:\n- Sources analyzed: 5\n- Confidence levels: high, medium\n\nThis research summary was generated autonomously by the research agent and requires expert review before integration into trusted knowledge base.\n"
+}

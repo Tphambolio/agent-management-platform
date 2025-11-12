@@ -1,0 +1,198 @@
+{
+  "summary": "Complete GIS mapping system: interactive web maps with fire perimeters, probability contours, and mobile support",
+  "learning_events": [
+    {
+      "timestamp": "2025-10-28T08:06:53.189560",
+      "category": "pattern",
+      "content": {
+        "name": "fire_perimeter_extraction_marching_squares",
+        "description": "Extract smooth fire boundaries using marching squares algorithm"
+      },
+      "metadata": {
+        "algorithm": "skimage.measure.find_contours at level 0.5",
+        "input": "Boolean burned array + geographic bounding box",
+        "output": "List of (lon, lat) coordinates forming polygon",
+        "advantage": "Smooth boundaries, not jagged pixel edges"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:06:53.189751",
+      "category": "pattern",
+      "content": {
+        "name": "burn_probability_contour_levels",
+        "description": "Standard probability contours for operational fire management"
+      },
+      "metadata": {
+        "levels": [
+          0.1,
+          0.25,
+          0.5,
+          0.75,
+          0.9
+        ],
+        "meaning": {
+          "10%": "Low risk boundary (outer extent)",
+          "25%": "Moderate risk",
+          "50%": "Most likely extent (key planning boundary)",
+          "75%": "Very high risk",
+          "90%": "Extreme risk (near ignition)"
+        },
+        "operational_use": "50% contour used for evacuation planning"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:06:53.190249",
+      "category": "technique",
+      "content": {
+        "name": "folium_leaflet_web_mapping",
+        "description": "Python wrapper for Leaflet.js to create interactive web maps"
+      },
+      "metadata": {
+        "library": "folium",
+        "base_maps": [
+          "OpenStreetMap",
+          "Esri Satellite"
+        ],
+        "overlay_types": [
+          "ImageOverlay (rasters)",
+          "Polygon",
+          "PolyLine",
+          "Marker"
+        ],
+        "image_encoding": "RGBA numpy array \u2192 PIL Image \u2192 base64 PNG",
+        "transparency": "Alpha channel based on burn probability",
+        "controls": [
+          "LayerControl",
+          "MousePosition",
+          "Fullscreen",
+          "Custom Legend"
+        ]
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:06:53.190396",
+      "category": "pattern",
+      "content": {
+        "name": "rgba_transparency_for_probability",
+        "description": "Use alpha channel to show probability intensity"
+      },
+      "metadata": {
+        "implementation": "rgba[:, :, 3] = burn_prob * 0.8",
+        "effect": "High probability = opaque, low probability = transparent",
+        "colormap": "YlOrRd (Yellow \u2192 Orange \u2192 Red for fire)",
+        "why": "Allows base map to show through low-probability areas"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:06:53.190543",
+      "category": "technique",
+      "content": {
+        "name": "geographic_coordinate_conversion",
+        "description": "Convert pixel coordinates to lon/lat for GIS export"
+      },
+      "metadata": {
+        "formula": "lon = min_lon + (col / cols) * (max_lon - min_lon)",
+        "inverse": "lat = max_lat - (row / rows) * (max_lat - min_lat)",
+        "note": "Y-axis inverted (row 0 = max_lat)",
+        "bbox_format": "(min_lon, min_lat, max_lon, max_lat)"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:06:53.190677",
+      "category": "insight",
+      "content": "Interactive web maps are mobile-friendly and require no GIS software - crucial for field operations",
+      "metadata": {
+        "advantage": "Fire managers can view on phones/tablets",
+        "shareability": "Single HTML file can be emailed or hosted",
+        "no_installation": "Works in any web browser",
+        "touch_support": "Pinch to zoom, swipe to pan on mobile"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:06:53.190817",
+      "category": "pattern",
+      "content": {
+        "name": "multiple_fire_perimeters_for_uncertainty",
+        "description": "Show multiple perimeter thresholds to communicate uncertainty"
+      },
+      "metadata": {
+        "thresholds": [
+          0.5,
+          0.7,
+          0.9
+        ],
+        "interpretation": "50% = most likely, 90% = worst-case core",
+        "visualization": "Nested polygons with decreasing opacity",
+        "operational_value": "Shows range of possible outcomes"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:06:53.190964",
+      "category": "insight",
+      "content": "Custom legends in web maps must be position:fixed to stay visible when zooming/panning",
+      "metadata": {
+        "css": "position: fixed; bottom: 50px; right: 50px; z-index: 9999",
+        "problem": "Default legends scroll off screen",
+        "solution": "Fixed position with high z-index",
+        "styling": "White background, border, shadow for readability"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:06:53.191109",
+      "category": "insight",
+      "content": "Completed: Built fire perimeter extractor with marching squares",
+      "metadata": {
+        "type": "task_completion"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:06:53.191253",
+      "category": "insight",
+      "content": "Completed: Created interactive web map generator with Folium/Leaflet",
+      "metadata": {
+        "type": "task_completion"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:06:53.191411",
+      "category": "insight",
+      "content": "Completed: Implemented burn probability contour extraction",
+      "metadata": {
+        "type": "task_completion"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:06:53.191568",
+      "category": "insight",
+      "content": "Completed: Added multiple base layers (OSM, satellite)",
+      "metadata": {
+        "type": "task_completion"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:06:53.191724",
+      "category": "insight",
+      "content": "Completed: Integrated fire perimeters, contours, and ignition points",
+      "metadata": {
+        "type": "task_completion"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:06:53.191886",
+      "category": "insight",
+      "content": "Completed: Created custom legend and interactive controls",
+      "metadata": {
+        "type": "task_completion"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T08:06:53.192054",
+      "category": "insight",
+      "content": "Completed: Tested complete GIS system with realistic fire data",
+      "metadata": {
+        "type": "task_completion"
+      }
+    }
+  ],
+  "timestamp": "2025-10-28T08:06:53.192299"
+}

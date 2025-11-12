@@ -1,0 +1,46 @@
+{
+  "agent": "monte-carlo-agent",
+  "version": "1.0",
+  "tasks": [
+    {
+      "task_id": "mc-001",
+      "priority": "critical",
+      "status": "pending",
+      "objective": "Validate Monte Carlo statistical methods",
+      "scope": {"files": ["src/simulation/monte_carlo.py"]},
+      "success_criteria": [
+        "Sampling methods verified (weather, ignition, fuel)",
+        "Random seed management ensures reproducibility",
+        "Statistical aggregation equations validated",
+        "Burn probability calculation correct",
+        "Confidence intervals computed properly"
+      ]
+    },
+    {
+      "task_id": "mc-002",
+      "priority": "high",
+      "status": "pending",
+      "objective": "Analyze convergence and sample size requirements",
+      "scope": {"files": ["src/simulation/monte_carlo.py"]},
+      "success_criteria": [
+        "Convergence analysis performed",
+        "Minimum sample size determined for target accuracy",
+        "Variance reduction techniques evaluated",
+        "Computational cost vs accuracy trade-off documented"
+      ]
+    },
+    {
+      "task_id": "mc-003",
+      "priority": "high",
+      "status": "pending",
+      "objective": "Optimize parallel Monte Carlo execution",
+      "scope": {"files": ["src/simulation/monte_carlo.py", "run_production.py"]},
+      "success_criteria": [
+        "Parallel execution strategy optimized",
+        "Load balancing implemented",
+        "Result aggregation efficient",
+        "Speedup scales with CPU cores"
+      ]
+    }
+  ]
+}

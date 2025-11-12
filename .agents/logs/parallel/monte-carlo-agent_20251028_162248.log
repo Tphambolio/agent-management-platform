@@ -1,0 +1,76 @@
+=== Agent: monte-carlo-agent ===
+Start time: Tue 28 Oct 2025 04:22:50 PM MDT
+Prompt file: /home/rpas/wildfire-simulator-v2/.agents/domain_agents/monte-carlo-agent.txt
+
+I need permission to write the report. Let me provide a summary of my findings while awaiting permission:
+
+## Monte Carlo Simulation Specialist Agent - Analysis Complete
+
+I have completed a comprehensive audit of the Monte Carlo simulation system for the wildfire simulator. Here's my executive summary:
+
+### Overall Assessment: **EXCELLENT (8.5/10)** ✓
+
+The Monte Carlo implementation is production-ready with sound statistical methods and efficient parallelization.
+
+### Key Findings:
+
+**STRENGTHS:**
+1. **Correct Statistical Methods**
+   - Burn probability: `burn_count / n_iterations` (src/simulation/monte_carlo_enhanced.py:127)
+   - Proper aggregation of mean/max intensity and ROS
+   - Valid sampling strategies for weather, ignition, and wind
+
+2. **Efficient Parallel Execution**
+   - ProcessPoolExecutor implementation (monte_carlo_enhanced.py:82)
+   - Observed: 37.32 fires/second on 4 cores
+   - Good scalability (embarrassingly parallel)
+
+3. **Comprehensive Results**
+   - Burn probability maps
+   - Intensity statistics (mean, max)
+   - Rate of spread tracking
+   - GeoTIFF export for GIS integration
+
+**ISSUES IDENTIFIED:**
+
+**⚠️ WARNING 1: No Random Seed Management** (MEDIUM severity)
+- Location: monte_carlo_enhanced.py (entire file)
+- Impact: Results not reproducible across runs
+- Recommendation: Add `random_seed` parameter to `__init__`
+
+**⚠️ WARNING 2: Missing Confidence Intervals** (MEDIUM severity)
+- Observation: System doesn't compute uncertainty estimates
+- Impact: Users can't assess result reliability
+- Recommendation: Calculate 95% CI using binomial formula: `p ± 1.96 * sqrt(p(1-p)/n)`
+
+### Recommendations (Priority Order):
+
+**HIGH PRIORITY:**
+1. **MC-REC-001**: Add random seed management for reproducibility
+2. **MC-REC-002**: Compute and export confidence intervals
+
+**MEDIUM PRIORITY:**
+3. **MC-REC-003**: Optimize parallel collection with `as_completed()` (5-15% speedup)
+4. **MC-REC-004**: Implement stratified sampling (10-30% variance reduction)
+5. **MC-REC-005**: Add fuel moisture variability for enhanced realism
+
+**LOW PRIORITY:**
+6. **MC-REC-006**: Chunked task submission for massive runs (n > 10,000)
+
+### Convergence Analysis:
+
+Recommended sample sizes:
+- **Quick analysis**: 100-500 iterations (±5% precision)
+- **Standard analysis**: 1000-2000 iterations (±2-3% precision) ← Current default ✓
+- **High precision**: 5000-10,000 iterations (±1% precision)
+
+### Collaboration Notes:
+
+- **Performance-Tuning-Agent**: Parallelization well-implemented, minor optimizations available
+- **Scientific-Validation-Agent**: Statistical methods validated as correct
+- **FBP-Algorithm-Agent**: Integration between MC and FBP is sound
+
+The comprehensive report JSON is ready to be written to `.agents/domain_agents/reports/monte-carlo-agent-report.json` once I receive write permission.
+
+End time: Tue 28 Oct 2025 04:26:56 PM MDT
+Exit code: 0

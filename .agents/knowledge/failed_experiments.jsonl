@@ -1,0 +1,8 @@
+{"timestamp": "2025-10-29T07:19:04.908291", "task_id": "task_001", "parameter": "max_iterations", "tested_value": 750, "test_iou": 0.64479637151652, "reason": "Insufficient improvement (-0.133)", "status": "rejected"}
+{"timestamp": "2025-10-29T07:19:04.908424", "task_id": "task_002", "parameter": "spread_factor", "tested_value": 3.0, "test_iou": null, "reason": "Task execution failed", "status": "rejected"}
+{"timestamp": "2025-10-29T07:19:04.908488", "task_id": "task_003", "parameter": "spread_factor", "tested_value": 3.5, "test_iou": null, "reason": "Task execution failed", "status": "rejected"}
+{"timestamp": "2025-10-29T07:19:04.908551", "task_id": "task_004", "parameter": "spread_factor", "tested_value": 4.0, "test_iou": null, "reason": "Task execution failed", "status": "rejected"}
+{"timestamp": "2025-10-29T07:19:04.908628", "task_id": "task_005", "parameter": "spread_factor", "tested_value": 2.5, "test_iou": 0.761, "reason": "Insufficient improvement (-0.017)", "status": "rejected"}
+{"timestamp": "2025-10-29T07:19:04.908707", "task_id": "task_006", "parameter": "spread_factor", "tested_value": 3.0, "test_iou": 0.777, "reason": "Insufficient improvement (-0.001)", "status": "rejected"}
+{"timestamp": "2025-10-29T07:19:04.908781", "task_id": "task_007", "parameter": "spread_factor", "tested_value": 3.5, "test_iou": 0.77, "reason": "Insufficient improvement (-0.008)", "status": "rejected"}
+{"timestamp": "2025-10-29T07:19:04.908857", "task_id": "task_008", "parameter": "spread_factor", "tested_value": 4.0, "test_iou": 0.778, "reason": "Insufficient improvement (0.000)", "status": "rejected"}

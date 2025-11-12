@@ -1,0 +1,51 @@
+{
+  "summary": "Discovered and created tools for Canada-wide FBP fuel data access",
+  "learning_events": [
+    {
+      "timestamp": "2025-10-28T02:00:06.240958",
+      "category": "insight",
+      "content": "Canada-wide FBP fuel data available: 3.0 GB, 30m resolution, 178k\u00d7119k pixels covering all of Canada",
+      "metadata": {
+        "file": "FBP_Canada_30m_3978_22052024_forRelease.tif",
+        "coverage_km2": 19000000,
+        "resolution_m": 30,
+        "released": "2024-05-22"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T02:00:06.241530",
+      "category": "pattern",
+      "content": {
+        "name": "national_data_extraction",
+        "description": "Extract any Canadian region from national 3GB fuel dataset - Fort McMurray, Jasper, anywhere"
+      },
+      "metadata": {
+        "implementation": "src/data/canada_data_extractor.py",
+        "supports": [
+          "fort_mcmurray",
+          "jasper",
+          "slave_lake",
+          "kelowna",
+          "custom_bounds"
+        ]
+      }
+    },
+    {
+      "timestamp": "2025-10-28T02:00:06.242353",
+      "category": "insight",
+      "content": "Can validate against ANY Canadian wildfire - Fort McMurray 2016, Jasper 2024, Slave Lake 2011",
+      "metadata": {
+        "data_source": "national_fbp_30m"
+      }
+    },
+    {
+      "timestamp": "2025-10-28T02:00:06.245746",
+      "category": "insight",
+      "content": "Completed: Canada-wide data access and extraction system",
+      "metadata": {
+        "type": "task_completion"
+      }
+    }
+  ],
+  "timestamp": "2025-10-28T02:00:06.246334"
+}

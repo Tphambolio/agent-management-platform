@@ -1,0 +1,48 @@
+{
+  "agent": "visualization-agent",
+  "version": "1.0",
+  "tasks": [
+    {
+      "task_id": "viz-001",
+      "priority": "high",
+      "status": "pending",
+      "objective": "Create burn probability map visualizations",
+      "scope": {"files": ["src/visualization/maps.py"]},
+      "success_criteria": [
+        "Burn probability maps render correctly from GeoTIFF",
+        "Colormap is intuitive and accessible",
+        "Scale bar and legend included",
+        "Basemap/context added (roads, water bodies)",
+        "High-resolution output for reports"
+      ]
+    },
+    {
+      "task_id": "viz-002",
+      "priority": "high",
+      "status": "pending",
+      "objective": "Generate fire spread animations",
+      "scope": {"files": ["src/visualization/animations.py"]},
+      "success_criteria": [
+        "Time-series animation of fire spread",
+        "Smooth frame transitions",
+        "Overlays show intensity/rate of spread",
+        "Export to MP4/GIF format",
+        "Performance optimized for large grids"
+      ]
+    },
+    {
+      "task_id": "viz-003",
+      "priority": "medium",
+      "status": "pending",
+      "objective": "Build simulation monitoring dashboard",
+      "scope": {"files": ["src/visualization/dashboard.py"]},
+      "success_criteria": [
+        "Real-time monitoring of Monte Carlo progress",
+        "Summary statistics display",
+        "Interactive map viewer",
+        "Export capabilities",
+        "Web-accessible (optional: Flask/Dash)"
+      ]
+    }
+  ]
+}

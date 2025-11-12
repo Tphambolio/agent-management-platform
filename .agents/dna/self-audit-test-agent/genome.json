@@ -1,0 +1,142 @@
+{
+  "agent_metadata": {
+    "agent_id": "self-audit-test-agent",
+    "created_date": "2025-10-28T08:22:26.581707",
+    "total_sessions": 1,
+    "last_active": "2025-10-28T08:22:26.583153"
+  },
+  "skills": {
+    "technical": {},
+    "domain": {
+      "polygon-fire-prediction": {
+        "version": "1.0.0",
+        "description": "Complete workflow for polygon-based fire prediction with data fetching and result generation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "terrain-analysis": {
+        "version": "1.0.0",
+        "description": "Calculate slope, aspect, and topographic features from DEMs for fire spread calculations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fbp-fuel-mapping": {
+        "version": "1.0.0",
+        "description": "Handle fuel type classification and conversion between different fuel systems.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "monte-carlo-workflow": {
+        "version": "1.0.0",
+        "description": "Set up and run Monte Carlo fire simulations with proper parallelization.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fire-visualization": {
+        "version": "1.0.0",
+        "description": "Generate professional maps, animations, and interactive visualizations of fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fbp-fire-behavior": {
+        "version": "1.0.0",
+        "description": "Calculate fire behavior using the Canadian Forest Fire Behavior Prediction (FBP) System.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "historical-fire-validation": {
+        "version": "1.0.0",
+        "description": "Validate simulation outputs against known historical fires for calibration and benchmarking.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "simulation-reporting": {
+        "version": "1.0.0",
+        "description": "Generate comprehensive reports with statistics, visualizations, and interpretation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "geotiff-processor": {
+        "version": "1.0.0",
+        "description": "Load, validate, transform, and export GeoTIFF raster data for fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fwi-weather-processing": {
+        "version": "1.0.0",
+        "description": "Process meteorological data into Fire Weather Index (FWI) System components.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      }
+    }
+  },
+  "experience_bank": {
+    "patterns_known": [
+      {
+        "name": "ROS increases exponentially with wind speed",
+        "description": "",
+        "timestamp": "2025-10-28T08:22:26.582179"
+      },
+      {
+        "name": "BUI affects deep fuel moisture",
+        "description": "",
+        "timestamp": "2025-10-28T08:22:26.582299"
+      }
+    ],
+    "techniques_mastered": [],
+    "pitfalls_remembered": [],
+    "insights_discovered": [
+      {
+        "insight": "FBP system has 16 fuel types",
+        "timestamp": "2025-10-28T08:22:26.581726",
+        "context": ""
+      },
+      {
+        "insight": "Conifer fuels burn faster than deciduous",
+        "timestamp": "2025-10-28T08:22:26.581876",
+        "context": ""
+      },
+      {
+        "insight": "Spotting can cause fires to jump ahead",
+        "timestamp": "2025-10-28T08:22:26.582055",
+        "context": ""
+      },
+      {
+        "insight": "Completed: FBP fuel type database",
+        "timestamp": "2025-10-28T08:22:26.582910",
+        "context": ""
+      },
+      {
+        "insight": "Completed: ROS calculator",
+        "timestamp": "2025-10-28T08:22:26.583031",
+        "context": ""
+      },
+      {
+        "insight": "Completed: QGIS project generator",
+        "timestamp": "2025-10-28T08:22:26.583153",
+        "context": ""
+      }
+    ]
+  },
+  "session_memory": {
+    "last_session_summary": "Test session for self-audit",
+    "next_priorities": [],
+    "work_in_progress": []
+  },
+  "evolution_metrics": {
+    "tasks_completed": 3,
+    "patterns_created": 2,
+    "learning_velocity": "developing",
+    "total_learning_events": 12
+  }
+}

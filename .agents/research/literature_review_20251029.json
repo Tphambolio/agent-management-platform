@@ -1,0 +1,244 @@
+{
+  "timestamp": "2025-10-29T07:45:53.513603",
+  "topics": [
+    {
+      "name": "Fluid Dynamics in Fire Modeling",
+      "search_queries": [
+        "computational fluid dynamics wildfire",
+        "Navier-Stokes fire simulation",
+        "turbulence modeling wildfire",
+        "buoyancy driven flow fire",
+        "fire plume dynamics"
+      ],
+      "key_concepts": [
+        {
+          "concept": "Buoyancy-Driven Flow",
+          "description": "Fire generates heat causing air to rise, creating convective flow patterns",
+          "equations": "Boussinesq approximation: \u03c1 = \u03c1\u2080(1 - \u03b2(T - T\u2080))",
+          "relevance": "Critical for modeling plume rise and fire behavior on slopes",
+          "implementation": "Add buoyancy term to spread calculations based on temperature gradient"
+        },
+        {
+          "concept": "Turbulent Mixing",
+          "description": "Fire-induced turbulence enhances oxygen mixing and combustion",
+          "equations": "k-\u03b5 turbulence model or Large Eddy Simulation (LES)",
+          "relevance": "Affects fire intensity and rate of spread",
+          "implementation": "Incorporate turbulence factor based on fire intensity and wind speed"
+        },
+        {
+          "concept": "Fire Whirls",
+          "description": "Vorticity generation from buoyancy and wind shear creates rotating fire columns",
+          "equations": "Vorticity: \u03c9 = \u2207 \u00d7 v",
+          "relevance": "Can cause extreme fire behavior and long-range spotting",
+          "implementation": "Add vorticity threshold for fire whirl formation under high wind + intense fire"
+        },
+        {
+          "concept": "Entrainment",
+          "description": "Fire plume entrains ambient air, diluting smoke and affecting combustion",
+          "equations": "Entrainment velocity: v\u2091 = \u03b1 \u00d7 w (\u03b1 \u2248 0.1)",
+          "relevance": "Affects plume height and oxygen availability",
+          "implementation": "Model oxygen depletion in high-intensity fires"
+        },
+        {
+          "concept": "Radiation Heat Transfer",
+          "description": "Fire emits thermal radiation affecting unburned fuel ahead of fire front",
+          "equations": "Stefan-Boltzmann: q = \u03b5\u03c3T\u2074",
+          "relevance": "Pre-heats fuel, accelerating fire spread",
+          "implementation": "Add radiation factor to ROSf based on fire intensity"
+        }
+      ],
+      "relevant_papers": [
+        {
+          "title": "Large Eddy Simulation of wildfire spread",
+          "authors": "Linn et al.",
+          "year": 2002,
+          "journal": "International Journal of Wildland Fire",
+          "key_finding": "LES captures fire-atmosphere interactions better than RANS",
+          "relevance": "High-fidelity CFD approach for complex fire behavior"
+        },
+        {
+          "title": "Physics-based modeling of wildfire-atmosphere interactions",
+          "authors": "Coen et al.",
+          "year": 2013,
+          "journal": "Atmospheric Chemistry and Physics",
+          "key_finding": "Coupled fire-atmosphere models predict fire behavior more accurately",
+          "relevance": "Two-way coupling between fire and meteorology"
+        },
+        {
+          "title": "Vorticity-driven lateral spread of wildfires",
+          "authors": "Finney et al.",
+          "year": 2015,
+          "journal": "Combustion and Flame",
+          "key_finding": "Fire-induced vorticity can cause lateral fire spread",
+          "relevance": "Explains sudden fire growth perpendicular to wind"
+        }
+      ],
+      "implementation_notes": []
+    },
+    {
+      "name": "Climate Change, Precipitation, and Fire Behavior",
+      "search_queries": [
+        "climate change buildup index",
+        "precipitation drought code",
+        "fuel moisture climate projections",
+        "fire weather extremes",
+        "BUI trends climate change"
+      ],
+      "key_concepts": [
+        {
+          "concept": "Buildup Index (BUI) Trends",
+          "description": "BUI = f(DMC, DC) increases with longer dry periods under climate change",
+          "trends": "Projected 10-30% increase by 2050 in boreal regions",
+          "relevance": "Higher BUI = deeper burning, higher intensity, more difficult suppression",
+          "implementation": "Add climate adjustment factor: BUI_adjusted = BUI \u00d7 (1 + 0.002 \u00d7 years_since_2020)"
+        },
+        {
+          "concept": "Precipitation Intensity vs Duration",
+          "description": "Climate change shifts precipitation: fewer events, higher intensity",
+          "impact": "Short intense rain does not reduce DC as much as prolonged gentle rain",
+          "relevance": "Drought Code accumulation accelerates despite unchanged total precipitation",
+          "implementation": "Weight DC reduction by precipitation duration, not just amount"
+        },
+        {
+          "concept": "Fuel Moisture Lag",
+          "description": "Heavy fuels (DC, DMC) respond slowly to precipitation",
+          "timescales": "FFMC: hours, DMC: days, DC: weeks",
+          "relevance": "Single rain event may reduce FFMC but not DC",
+          "implementation": "Exponential decay: DC_new = DC_old \u00d7 exp(-P/\u03c4), \u03c4 = 52 days"
+        },
+        {
+          "concept": "Temperature-Precipitation Coupling",
+          "description": "Warmer temperatures increase evapotranspiration, drying fuels faster",
+          "effect": "Net drying even if precipitation unchanged",
+          "relevance": "Fire season lengthens and intensifies",
+          "implementation": "Temperature correction: DC_change += \u03b1 \u00d7 (T - T_ref), \u03b1 = 2.0"
+        },
+        {
+          "concept": "Compound Extremes",
+          "description": "Hot-dry-windy days cluster more frequently under climate change",
+          "statistics": "Frequency of FWI > 30 days projected to double by 2050",
+          "relevance": "More days with extreme fire potential",
+          "implementation": "Track multi-day heat waves and adjust fire risk accordingly"
+        }
+      ],
+      "relevant_papers": [
+        {
+          "title": "Increasing fire weather in Canada under climate change",
+          "authors": "Flannigan et al.",
+          "year": 2016,
+          "journal": "Climate Change",
+          "key_finding": "Fire season length increased 20% since 1970s in Canada",
+          "relevance": "Quantifies historical and projected fire weather changes"
+        },
+        {
+          "title": "Drought code projections for North America",
+          "authors": "Wang et al.",
+          "year": 2015,
+          "journal": "Forest Ecology and Management",
+          "key_finding": "DC > 400 days projected to increase 50-100% by 2100",
+          "relevance": "Direct relevance to BUI and deep burning fuels"
+        },
+        {
+          "title": "Precipitation intensity and fuel moisture dynamics",
+          "authors": "Ruffault & Martin-StPaul",
+          "year": 2020,
+          "journal": "Environmental Research Letters",
+          "key_finding": "Precipitation distribution matters more than total amount",
+          "relevance": "Explains why total precipitation can be unchanged but fire risk increases"
+        }
+      ],
+      "implementation_notes": []
+    }
+  ],
+  "key_papers": [],
+  "recommendations": [],
+  "implementation_guide": {
+    "title": "Fluid Dynamics & Climate Integration Guide",
+    "audience": "Fire Model Development Team",
+    "priority_recommendations": [
+      {
+        "priority": "HIGH",
+        "feature": "Buoyancy Factor in Spread",
+        "effort": "LOW",
+        "impact": "MEDIUM",
+        "description": "Add buoyancy-driven acceleration on slopes",
+        "formula": "ROSf_buoyancy = ROSf \u00d7 (1 + \u03b2 \u00d7 slope \u00d7 fire_intensity)",
+        "parameters": "\u03b2 = 0.15 (calibration parameter)",
+        "location": "src/fire/fire_model.py - spread calculation"
+      },
+      {
+        "priority": "HIGH",
+        "feature": "Climate-Adjusted BUI",
+        "effort": "LOW",
+        "impact": "HIGH",
+        "description": "Apply climate change adjustment to BUI calculation",
+        "formula": "BUI_climate = BUI \u00d7 (1 + climate_factor \u00d7 years_since_baseline)",
+        "parameters": "climate_factor = 0.002/year (based on Flannigan 2016)",
+        "location": "src/fire/fbp.py - BUI calculation"
+      },
+      {
+        "priority": "MEDIUM",
+        "feature": "Precipitation Duration Weighting",
+        "effort": "MEDIUM",
+        "impact": "MEDIUM",
+        "description": "Weight DC reduction by precipitation duration, not just amount",
+        "formula": "DC_reduction = P \u00d7 duration_factor, duration_factor = min(1.0, hours/24)",
+        "parameters": "Need historical precipitation intensity data",
+        "location": "src/fire/fbp.py - DC update"
+      },
+      {
+        "priority": "MEDIUM",
+        "feature": "Fire Whirl Detection",
+        "effort": "HIGH",
+        "impact": "MEDIUM",
+        "description": "Detect conditions favorable for fire whirl formation",
+        "formula": "whirl_risk = (wind_speed \u00d7 fire_intensity) / (1000 + terrain_roughness)",
+        "parameters": "Threshold whirl_risk > 5 for enhanced spotting",
+        "location": "src/fire/spotting_model.py - add whirl module"
+      },
+      {
+        "priority": "LOW",
+        "feature": "Turbulent Mixing Factor",
+        "effort": "MEDIUM",
+        "impact": "LOW",
+        "description": "Add turbulence enhancement to fire intensity",
+        "formula": "I_turbulent = I_base \u00d7 (1 + 0.1 \u00d7 turbulence_intensity)",
+        "parameters": "turbulence_intensity = f(wind_speed, fire_intensity)",
+        "location": "src/fire/fbp.py - intensity calculation"
+      }
+    ],
+    "implementation_phases": [
+      {
+        "phase": 1,
+        "name": "Quick Wins (1 week)",
+        "features": [
+          "Climate-Adjusted BUI",
+          "Buoyancy Factor"
+        ],
+        "deliverable": "Updated FBP with climate and buoyancy factors",
+        "validation": "Test on historical fires with known climate trends"
+      },
+      {
+        "phase": 2,
+        "name": "Precipitation Dynamics (2 weeks)",
+        "features": [
+          "Precipitation Duration Weighting",
+          "Temperature-DC coupling"
+        ],
+        "deliverable": "Improved fuel moisture dynamics",
+        "validation": "Compare DC evolution with weather station data"
+      },
+      {
+        "phase": 3,
+        "name": "Advanced Fluid Dynamics (1 month)",
+        "features": [
+          "Fire Whirl Detection",
+          "Turbulent Mixing"
+        ],
+        "deliverable": "Enhanced fire behavior under extreme conditions",
+        "validation": "Test on extreme fire case studies"
+      }
+    ],
+    "code_examples": []
+  }
+}

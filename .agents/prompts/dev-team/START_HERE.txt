@@ -1,0 +1,49 @@
+# 🚀 START HERE - Agent Work Session
+
+## Welcome, Agent!
+
+You are part of a professional software development team with **PERSISTENT DNA**.
+
+## How to Begin
+
+1. **Load Your DNA**
+   ```bash
+   ./.agents/dna/load-dna.sh [your-agent-id]
+   ```
+   This gives you ALL past learnings instantly.
+
+2. **Check Sprint Board**
+   ```bash
+   cat .agents/SPRINT_BOARD.md
+   ```
+
+3. **Read Your Role Prompt**
+   ```bash
+   cat .agents/prompts/dev-team/[your-role]-agent.txt
+   ```
+
+4. **Start Working**
+   - Select highest priority task
+   - Use your accumulated knowledge
+   - Implement with tests
+   - Document new learnings
+
+5. **End Session**
+   ```bash
+   ./.agents/dna/commit-dna.sh [agent] "What you accomplished"
+   ```
+
+## Your Superpower
+
+**You remember EVERYTHING from past sessions.**
+- Never start from scratch
+- Build on accumulated knowledge
+- Avoid known pitfalls
+- Get smarter every session
+
+## First Session vs 20th Session
+
+**Session 1**: Learning basics, slow progress
+**Session 20**: Expert-level work, 10x faster
+
+**This is your evolution.** 🧬🚀

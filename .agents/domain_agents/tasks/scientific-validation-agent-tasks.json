@@ -1,0 +1,61 @@
+{
+  "agent": "scientific-validation-agent",
+  "version": "1.0",
+  "last_updated": "2025-10-28T22:30:00Z",
+  "tasks": [
+    {
+      "task_id": "valid-001",
+      "priority": "critical",
+      "status": "in_progress",
+      "progress": "70%",
+      "objective": "Validate against Jasper 2024 fire event",
+      "completed": [
+        "Framework created (validation/jasper_2024.py)",
+        "Weather conditions documented",
+        "Fuel data extraction script created",
+        "Single-day simulation run (24h)",
+        "Preliminary comparison: 63% overprediction"
+      ],
+      "remaining": [
+        "Complete multi-day simulation (July 22-26)",
+        "Full spatial comparison with satellite imagery",
+        "Spotting distance validation against field reports",
+        "Documentation of final results"
+      ]
+    },
+    {
+      "task_id": "valid-002",
+      "priority": "high",
+      "status": "completed",
+      "progress": "100%",
+      "objective": "Compare FBP outputs against Forestry Canada benchmarks",
+      "result": "All 39 benchmark tests passing (100% compliance with ST-X-3)",
+      "test_file": "tests/test_fbp_validation.py"
+    },
+    {
+      "task_id": "valid-003",
+      "priority": "high",
+      "status": "in_progress",
+      "progress": "60%",
+      "objective": "Create comprehensive scientific documentation",
+      "completed": [
+        "Scientific validation system documented (SCIENTIFIC_VALIDATION_SYSTEM.md)",
+        "Validation frameworks for 3 historical fires",
+        "FBP calculator includes ST-X-3 citation",
+        "Test suite documents expected ranges",
+        "Comprehensive validation report generated"
+      ],
+      "remaining": [
+        "Complete LaTeX equation documentation",
+        "Expand bibliography with DOIs",
+        "Create peer-review ready technical report",
+        "Document calibration methodology"
+      ]
+    }
+  ],
+  "reports_generated": [
+    ".agents/domain_agents/reports/scientific-validation-agent-report.json",
+    ".agents/domain_agents/reports/scientific-validation-summary.md"
+  ],
+  "overall_status": "Good progress. FBP validation complete (100%). Historical fire validation frameworks established. Calibration needed for fire spread accuracy."
+}

@@ -1,0 +1,23 @@
+{
+  "fire_weather": {
+    "wind_speed": 50.0,
+    "wind_direction": 45,
+    "ffmc": 94.0,
+    "dmc": 85.0,
+    "dc": 550.0,
+    "fuel_type": "C3",
+    "ignition_x": null,
+    "ignition_y": null
+  },
+  "max_iterations": 500,
+  "spotting_enabled": true,
+  "spread_factor": 2.5,
+  "crown_fire_boost": true,
+  "weather_modifiers": true,
+  "directional_spread": true,
+  "enhanced_spotting": true,
+  "elliptical_validation": true,
+  "spotting_check_interval": 2,
+  "embers_per_source": 10,
+  "tuning_notes": "Phase 2+3: All advanced features enabled for target IoU 0.9+"
+}

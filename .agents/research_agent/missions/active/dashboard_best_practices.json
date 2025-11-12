@@ -1,0 +1,50 @@
+{
+  "mission_id": "dashboard_best_practices",
+  "goal": "Research modern web dashboard design best practices, particularly for scientific/geospatial data visualization dashboards like our wildfire simulator",
+  "constraints": {
+    "max_sources": 15,
+    "max_search_queries": 8,
+    "time_limit_minutes": 20,
+    "trusted_domains": [
+      "medium.com",
+      "developer.mozilla.org",
+      "css-tricks.com",
+      "smashingmagazine.com",
+      "nngroup.com",
+      "uxdesign.cc",
+      "deck.gl",
+      "leafletjs.com",
+      "react.dev",
+      "web.dev"
+    ]
+  },
+  "deliverables": [
+    "summary",
+    "source_list",
+    "key_findings",
+    "recommendations"
+  ],
+  "created_at": "2025-11-11T06:32:00Z",
+  "priority": "high",
+  "context": {
+    "background": "We have a wildfire fire spread simulator dashboard built with Leaflet.js for mapping, deck.gl for 3D visualization, vanilla JavaScript for interactions, and Flask backend. The dashboard includes fire simulation controls, weather inputs, fuel layer visualization, real-time fire spread animation, and multiple ignition point support. We need to identify industry best practices for dashboard UX, performance, accessibility, and modern design patterns to improve our implementation.",
+    "related_missions": [],
+    "keywords": [
+      "web dashboard design",
+      "data visualization UX",
+      "geospatial dashboard",
+      "scientific visualization",
+      "real-time data dashboard",
+      "leaflet.js best practices",
+      "deck.gl optimization",
+      "dashboard performance",
+      "map-based interface",
+      "control panel design",
+      "interactive visualization",
+      "dashboard accessibility",
+      "responsive dashboard design",
+      "fire simulation interface",
+      "WebGL visualization"
+    ]
+  }
+}

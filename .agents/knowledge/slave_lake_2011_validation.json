@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-10-28T21:15:00Z",
+  "event": "slave_lake_2011",
+  "date": "2011-05-14/15",
+  "predicted_ha": 12463,
+  "actual_ha": 15000,
+  "error_pct": 16.913333333333334,
+  "passed": true,
+  "conditions": {
+    "ffmc": 92,
+    "wind_speed": 60,
+    "fwi": 45,
+    "isi": 19,
+    "fuel_type": "C3"
+  },
+  "significance": "Most destructive Alberta wildfire at time, deemed 'unstoppable'"
+}

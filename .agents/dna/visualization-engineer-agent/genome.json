@@ -1,0 +1,202 @@
+{
+  "agent_metadata": {
+    "agent_id": "visualization-engineer-agent",
+    "created_date": "2025-10-28T07:15:32.163022",
+    "total_sessions": 2,
+    "last_active": "2025-10-28T08:06:53.192054"
+  },
+  "skills": {
+    "technical": {},
+    "domain": {
+      "polygon-fire-prediction": {
+        "version": "1.0.0",
+        "description": "Complete workflow for polygon-based fire prediction with data fetching and result generation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "terrain-analysis": {
+        "version": "1.0.0",
+        "description": "Calculate slope, aspect, and topographic features from DEMs for fire spread calculations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fbp-fuel-mapping": {
+        "version": "1.0.0",
+        "description": "Handle fuel type classification and conversion between different fuel systems.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "monte-carlo-workflow": {
+        "version": "1.0.0",
+        "description": "Set up and run Monte Carlo fire simulations with proper parallelization.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fire-visualization": {
+        "version": "1.0.0",
+        "description": "Generate professional maps, animations, and interactive visualizations of fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fbp-fire-behavior": {
+        "version": "1.0.0",
+        "description": "Calculate fire behavior using the Canadian Forest Fire Behavior Prediction (FBP) System.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "historical-fire-validation": {
+        "version": "1.0.0",
+        "description": "Validate simulation outputs against known historical fires for calibration and benchmarking.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "simulation-reporting": {
+        "version": "1.0.0",
+        "description": "Generate comprehensive reports with statistics, visualizations, and interpretation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "geotiff-processor": {
+        "version": "1.0.0",
+        "description": "Load, validate, transform, and export GeoTIFF raster data for fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fwi-weather-processing": {
+        "version": "1.0.0",
+        "description": "Process meteorological data into Fire Weather Index (FWI) System components.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      }
+    }
+  },
+  "experience_bank": {
+    "patterns_known": [
+      {
+        "name": "professional_cartographic_map",
+        "description": "",
+        "timestamp": "2025-10-28T07:15:32.163198"
+      },
+      {
+        "name": "multi_panel_layout",
+        "description": "",
+        "timestamp": "2025-10-28T07:15:32.163929"
+      },
+      {
+        "name": "fire_perimeter_extraction_marching_squares",
+        "description": "",
+        "timestamp": "2025-10-28T08:06:53.189560"
+      },
+      {
+        "name": "burn_probability_contour_levels",
+        "description": "",
+        "timestamp": "2025-10-28T08:06:53.189751"
+      },
+      {
+        "name": "rgba_transparency_for_probability",
+        "description": "",
+        "timestamp": "2025-10-28T08:06:53.190396"
+      },
+      {
+        "name": "multiple_fire_perimeters_for_uncertainty",
+        "description": "",
+        "timestamp": "2025-10-28T08:06:53.190817"
+      }
+    ],
+    "techniques_mastered": [],
+    "pitfalls_remembered": [],
+    "insights_discovered": [
+      {
+        "insight": "Fire managers need publication-quality maps with full cartographic elements (north arrow, scale bar, legend, statistics)",
+        "timestamp": "2025-10-28T07:15:32.163045",
+        "context": ""
+      },
+      {
+        "insight": "Statistical summary panels make maps actionable - show max/mean probability and area at risk",
+        "timestamp": "2025-10-28T07:15:32.163806",
+        "context": ""
+      },
+      {
+        "insight": "Completed: Designed and implemented professional fire map visualization system",
+        "timestamp": "2025-10-28T07:15:32.164278",
+        "context": ""
+      },
+      {
+        "insight": "Completed: Created ProfessionalFireMap class with full cartographic elements",
+        "timestamp": "2025-10-28T07:15:32.164411",
+        "context": ""
+      },
+      {
+        "insight": "Completed: Tested publication-quality output (300 DPI)",
+        "timestamp": "2025-10-28T07:15:32.164535",
+        "context": ""
+      },
+      {
+        "insight": "Interactive web maps are mobile-friendly and require no GIS software - crucial for field operations",
+        "timestamp": "2025-10-28T08:06:53.190677",
+        "context": ""
+      },
+      {
+        "insight": "Custom legends in web maps must be position:fixed to stay visible when zooming/panning",
+        "timestamp": "2025-10-28T08:06:53.190964",
+        "context": ""
+      },
+      {
+        "insight": "Completed: Built fire perimeter extractor with marching squares",
+        "timestamp": "2025-10-28T08:06:53.191109",
+        "context": ""
+      },
+      {
+        "insight": "Completed: Created interactive web map generator with Folium/Leaflet",
+        "timestamp": "2025-10-28T08:06:53.191253",
+        "context": ""
+      },
+      {
+        "insight": "Completed: Implemented burn probability contour extraction",
+        "timestamp": "2025-10-28T08:06:53.191411",
+        "context": ""
+      },
+      {
+        "insight": "Completed: Added multiple base layers (OSM, satellite)",
+        "timestamp": "2025-10-28T08:06:53.191568",
+        "context": ""
+      },
+      {
+        "insight": "Completed: Integrated fire perimeters, contours, and ignition points",
+        "timestamp": "2025-10-28T08:06:53.191724",
+        "context": ""
+      },
+      {
+        "insight": "Completed: Created custom legend and interactive controls",
+        "timestamp": "2025-10-28T08:06:53.191886",
+        "context": ""
+      },
+      {
+        "insight": "Completed: Tested complete GIS system with realistic fire data",
+        "timestamp": "2025-10-28T08:06:53.192054",
+        "context": ""
+      }
+    ]
+  },
+  "session_memory": {
+    "last_session_summary": "Complete GIS mapping system: interactive web maps with fire perimeters, probability contours, and mobile support",
+    "next_priorities": [],
+    "work_in_progress": []
+  },
+  "evolution_metrics": {
+    "tasks_completed": 10,
+    "patterns_created": 6,
+    "learning_velocity": "developing",
+    "total_learning_events": 25
+  }
+}

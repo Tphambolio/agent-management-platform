@@ -1,0 +1,42 @@
+{
+  "scenario_id": "VAL_L1_RICHARDSON_2011",
+  "level": 1,
+  "difficulty": "validation",
+  "generated": "2025-10-29T03:45:32.859917",
+  "is_validation": true,
+  "real_fire_event": {
+    "name": "Richardson Fire 2011",
+    "location": "Alberta, Canada",
+    "date": "2011-05-15"
+  },
+  "fire_weather": {
+    "ffmc": 88,
+    "dmc": 42,
+    "dc": 310,
+    "wind_speed": 25,
+    "wind_direction": 180,
+    "temperature": 20,
+    "relative_humidity": 22,
+    "fuel_type": "C7"
+  },
+  "terrain": {
+    "slope": 12
+  },
+  "simulation": {
+    "max_iterations": 150,
+    "spotting_enabled": false
+  },
+  "validation": {
+    "actual_area_ha": 8500,
+    "actual_fire_type": "surface",
+    "notes": "Primarily surface fire with some torching"
+  },
+  "expected_behavior": {
+    "fire_danger_index": 3.0,
+    "expected_behavior": "extreme",
+    "expected_ros_range": {
+      "min": 50,
+      "max": 200
+    }
+  }
+}

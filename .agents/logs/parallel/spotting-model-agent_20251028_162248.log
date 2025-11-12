@@ -1,0 +1,83 @@
+=== Agent: spotting-model-agent ===
+Start time: Tue 28 Oct 2025 04:22:49 PM MDT
+Prompt file: /home/rpas/wildfire-simulator-v2/.agents/domain_agents/spotting-model-agent.txt
+
+## Spotting Model Specialist Agent - Audit Complete
+
+I have completed a comprehensive audit of the wildfire spotting model. Here's my report:
+
+### Executive Summary
+
+**Status:** CRITICAL PHYSICS ISSUES IDENTIFIED  
+**Validation Score:** 45/100  
+**Recommendation:** URGENT ACTION REQUIRED
+
+### Key Findings
+
+**Strengths:**
+- Structurally excellent implementation with proper Albini (1979, 1983) physics framework
+- All 8 unit tests passing
+- Well-designed ignition probability model (90/100)
+- Proper grid integration with fire spread system
+- Clean code architecture and documentation
+
+**Critical Issues:**
+- **SPOT-001 (CRITICAL):** Spotting distances underestimated by **20-80x**
+  - Fort McMurray 2016: Predicted 48m, observed 1-4km
+  - Jasper 2024: Predicted 50m, observed >1km
+  
+- **SPOT-002 (HIGH):** Initial vertical velocity bug at `src/fire/spotting_model.py:251`
+  - Currently set to 0.0, should be convective updraft velocity
+  - Impact: Embers fall immediately instead of continuing upward
+  
+- **SPOT-003 (HIGH):** Lofting height too conservative
+  - Extreme fires (100MW/m) only reach 120m vs 300-500m expected
+
+### Physics Component Scores
+
+| Component | Score | Status |
+|-----------|-------|--------|
+| Lofting Height | 40/100 | NEEDS CALIBRATION |
+| Terminal Velocity | 85/100 | CORRECT PHYSICS |
+| Trajectory Simulation | 30/100 | MAJOR BUG (vz=0) |
+| Ember Burnout | 60/100 | TOO AGGRESSIVE |
+| Ignition Probability | 90/100 | WELL DESIGNED |
+
+### Urgent Recommendations (1-2 days)
+
+1. **Fix initial vertical velocity:** Set `ember.vz = w_plume` instead of 0.0
+   - Expected impact: 2-5x increase in spotting distance
+   
+2. **Increase lofting height for extreme fires:** Multiply by 2.5-3x for fires >50 MW/m
+   - Expected impact: 2-3x increase in lofting height
+   
+3. **Increase drag coefficient:** Change from 0.6 to 0.9
+   - Expected impact: 10-20% more distance
+
+4. **Update test expectations:** Require >500m for extreme fire tests
+   - Tests should FAIL until physics is corrected
+
+**Expected Outcome:** Spotting distances increase from 48-50m to 200-500m for extreme fires
+
+### Reports Generated
+
+- **JSON Report:** `.agents/domain_agents/reports/spotting-model-agent-report.json`
+- **Markdown Summary:** `.agents/domain_agents/reports/spotting-model-summary.md`
+
+### Collaboration Needed
+
+- **FBP-Algorithm-Agent:** Crown base height data for improved lofting
+- **Weather-Data-Agent:** Atmospheric stability index for pyrocumulonimbus detection
+- **Scientific-Validation-Agent:** Multi-event validation after physics fixes
+
+### Overall Assessment
+
+**Fitness for Purpose:** NOT READY - Critical physics issues prevent operational use  
+**Path Forward:** CLEAR - Root causes identified, solutions well-established  
+**Confidence in Fixes:** HIGH - Implementation is sound, only calibration needed  
+**Timeline to Operational:** 2-4 weeks with focused effort
+
+The spotting model has an excellent foundation but requires immediate physics corrections to be operationally viable. The issues are well-understood and fixable with moderate effort.
+
+End time: Tue 28 Oct 2025 04:32:53 PM MDT
+Exit code: 0

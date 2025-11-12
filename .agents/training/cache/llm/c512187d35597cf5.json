@@ -1,0 +1,38 @@
+{
+  "prompt": "batch_learning",
+  "response": {
+    "success_factors": [
+      {
+        "factor": "C7 fuel type",
+        "confidence": "medium",
+        "evidence": "10 scenarios"
+      },
+      {
+        "factor": "C4 fuel type",
+        "confidence": "medium",
+        "evidence": "12 scenarios"
+      },
+      {
+        "factor": "O1a fuel type",
+        "confidence": "medium",
+        "evidence": "19 scenarios"
+      },
+      {
+        "factor": "fuel_behavior",
+        "confidence": "medium",
+        "patterns_found": 5
+      },
+      {
+        "factor": "moisture_effects",
+        "confidence": "medium",
+        "patterns_found": 4
+      }
+    ],
+    "failure_modes": [],
+    "improvements": [],
+    "confidence_map": {},
+    "analyzed_scenarios": 50
+  },
+  "context": "{\"total_scenarios\": 50, \"fuel_types\": {\"C7\": 10, \"C4\": 12, \"C3\": 4, \"O1a\": 19, \"C2\": 5}, \"wind_ranges\": {\"medium\": 28, \"low\": 22}, \"performance_stats\": {}, \"pattern_highlights\": [{\"type\": \"fuel_behavior\", \"count\": 5}, {\"type\": \"wind_effects\", \"count\": 3}, {\"type\": \"moisture_effects\", \"count\": 4}, {\"type\": \"slope_effects\", \"count\": 3}]}",
+  "cached_at": "2025-10-29T03:59:51.072955"
+}

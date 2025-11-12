@@ -1,0 +1,182 @@
+{"rmse_ros": 0.0427, "iou_burn_area": 0.805, "timestamp": "2025-10-28T16:59:02.151593"}
+{"rmse_ros": 0.0322, "iou_burn_area": 0.885, "timestamp": "2025-10-28T16:59:02.151608"}
+{"rmse_ros": 0.0441, "iou_burn_area": 0.894, "timestamp": "2025-10-28T16:59:02.151610"}
+{"rmse_ros": 0.0414, "iou_burn_area": 0.859, "timestamp": "2025-10-28T16:59:02.151612"}
+{"rmse_ros": 0.0323, "iou_burn_area": 0.71, "timestamp": "2025-10-28T16:59:02.151613"}
+{"rmse_ros": 0.0392, "iou_burn_area": 0.853, "timestamp": "2025-10-28T16:59:44.702066"}
+{
+  "timestamp": "2025-10-28T16:59:45.062561",
+  "rmse_ros": 0.0378,
+  "iou_burn_area": 0.368
+}{"rmse_ros": 0.0392, "iou_burn_area": 0.853, "timestamp": "2025-10-28T19:11:52.005755"}
+{
+  "timestamp": "2025-10-28T19:11:52.378505",
+  "rmse_ros": 0.0335,
+  "iou_burn_area": 0.326
+}{"rmse_ros": 0.0392, "iou_burn_area": 0.853, "timestamp": "2025-10-28T19:18:31.402959"}
+{
+  "timestamp": "2025-10-28T19:18:34.416827",
+  "rmse_ros": 0.0008,
+  "iou_burn_area": 0.007,
+  "burned_area_pct": 0.08,
+  "fire_weather": {
+    "wind_speed": 45.0,
+    "ffmc": 92.0,
+    "dmc": 65.0,
+    "dc": 450.0,
+    "fuel_type": "C2",
+    "ignition_x": null,
+    "ignition_y": null
+  },
+  "model_type": "FBP + Crown Fire + Spotting",
+  "mean_burn_probability": 1.0
+}{"rmse_ros": 0.0392, "iou_burn_area": 0.853, "timestamp": "2025-10-28T19:46:38.445547"}
+{
+  "timestamp": "2025-10-28T19:46:41.443903",
+  "rmse_ros": 0.0008,
+  "iou_burn_area": 0.007,
+  "burned_area_pct": 0.08,
+  "fire_weather": {
+    "wind_speed": 45.0,
+    "ffmc": 92.0,
+    "dmc": 65.0,
+    "dc": 450.0,
+    "fuel_type": "C2",
+    "ignition_x": null,
+    "ignition_y": null
+  },
+  "model_type": "FBP + Crown Fire + Spotting",
+  "mean_burn_probability": 1.0
+}{"rmse_ros": 0.0392, "iou_burn_area": 0.853, "timestamp": "2025-10-28T19:46:45.920899"}
+{
+  "timestamp": "2025-10-28T19:46:48.851269",
+  "rmse_ros": 0.0008,
+  "iou_burn_area": 0.008,
+  "burned_area_pct": 0.09,
+  "fire_weather": {
+    "wind_speed": 45.0,
+    "ffmc": 92.0,
+    "dmc": 65.0,
+    "dc": 450.0,
+    "fuel_type": "C2",
+    "ignition_x": null,
+    "ignition_y": null
+  },
+  "model_type": "FBP + Crown Fire + Spotting",
+  "mean_burn_probability": 1.0
+}{"rmse_ros": 0.0392, "iou_burn_area": 0.853, "timestamp": "2025-10-28T19:54:52.534665"}
+{
+  "timestamp": "2025-10-28T19:54:55.512709",
+  "rmse_ros": 0.0011,
+  "iou_burn_area": 0.007,
+  "burned_area_pct": 0.08,
+  "fire_weather": {
+    "wind_speed": 45.0,
+    "ffmc": 92.0,
+    "dmc": 65.0,
+    "dc": 450.0,
+    "fuel_type": "C2",
+    "ignition_x": null,
+    "ignition_y": null
+  },
+  "model_type": "FBP + Crown Fire + Spotting",
+  "mean_burn_probability": 1.0
+}{"rmse_ros": 0.0392, "iou_burn_area": 0.853, "timestamp": "2025-10-28T20:50:44.044380"}
+{
+  "timestamp": "2025-10-28T20:54:23.311725",
+  "rmse_ros": 0.0,
+  "iou_burn_area": 0.065,
+  "burned_area_pct": 0.72,
+  "fire_weather": {
+    "wind_speed": 40,
+    "ffmc": 94.0,
+    "dmc": 85.0,
+    "dc": 550.0,
+    "fuel_type": "C3",
+    "ignition_x": null,
+    "ignition_y": null
+  },
+  "model_type": "FBP + Crown Fire + Spotting",
+  "mean_burn_probability": 1.0
+}{"rmse_ros": 0.0392, "iou_burn_area": 0.853, "timestamp": "2025-10-28T21:02:37.029090"}
+{
+  "timestamp": "2025-10-28T21:02:50.847190",
+  "rmse_ros": 0.0,
+  "iou_burn_area": 0.065,
+  "burned_area_pct": 0.72,
+  "fire_weather": {
+    "wind_speed": 40,
+    "ffmc": 94.0,
+    "dmc": 85.0,
+    "dc": 550.0,
+    "fuel_type": "C3",
+    "ignition_x": null,
+    "ignition_y": null
+  },
+  "model_type": "FBP + Crown Fire + Spotting",
+  "mean_burn_probability": 1.0
+}{"event": "slave_lake_2011", "date": "2011-05-14/15", "predicted_ha": 34652, "actual_ha": 15000, "error_pct": 131.01333333333335, "passed": false, "conditions": {"wind_speed": 45.0, "ffmc": 94.0, "dmc": 85.0, "dc": 550.0, "fuel_type": "C3", "ignition_x": null, "ignition_y": null}, "model_type": "FBP + Crown Fire + Spotting"}
+{"rmse_ros": 0.0392, "iou_burn_area": 0.853, "timestamp": "2025-11-02T16:02:33.595723"}
+{
+  "timestamp": "2025-11-02T16:05:52.696031",
+  "rmse_ros": 0.0002,
+  "iou_burn_area": 0.76,
+  "dice_coefficient": 0.863,
+  "burned_area_pct": 12.16,
+  "fire_weather": {
+    "wind_speed": 65,
+    "ffmc": 97,
+    "dmc": 85,
+    "dc": 410,
+    "fuel_type": "C7",
+    "ignition_x": null,
+    "ignition_y": null,
+    "wind_direction": 45,
+    "temperature": 18,
+    "relative_humidity": 20
+  },
+  "model_type": "FBP + Crown Fire + Spotting",
+  "mean_burn_probability": 1.0
+}{"rmse_ros": 0.0392, "iou_burn_area": 0.853, "timestamp": "2025-11-02T16:21:54.669854"}
+{"rmse_ros": 0.0392, "iou_burn_area": 0.853, "timestamp": "2025-11-02T16:25:16.036069"}
+{
+  "timestamp": "2025-11-02T16:25:21.711149",
+  "rmse_ros": 0.0002,
+  "iou_burn_area": 0.735,
+  "dice_coefficient": 0.847,
+  "burned_area_pct": 12.73,
+  "fire_weather": {
+    "wind_speed": 65,
+    "ffmc": 97,
+    "dmc": 85,
+    "dc": 410,
+    "fuel_type": "C7",
+    "ignition_x": null,
+    "ignition_y": null,
+    "wind_direction": 45,
+    "temperature": 18,
+    "relative_humidity": 20
+  },
+  "model_type": "FBP + Crown Fire + Spotting",
+  "mean_burn_probability": 1.0
+}{
+  "timestamp": "2025-11-02T16:28:39.660587",
+  "rmse_ros": 0.0002,
+  "iou_burn_area": 0.752,
+  "dice_coefficient": 0.858,
+  "burned_area_pct": 12.58,
+  "fire_weather": {
+    "wind_speed": 65,
+    "ffmc": 97,
+    "dmc": 85,
+    "dc": 410,
+    "fuel_type": "C7",
+    "ignition_x": null,
+    "ignition_y": null,
+    "wind_direction": 45,
+    "temperature": 18,
+    "relative_humidity": 20
+  },
+  "model_type": "FBP + Crown Fire + Spotting",
+  "mean_burn_probability": 1.0
+}

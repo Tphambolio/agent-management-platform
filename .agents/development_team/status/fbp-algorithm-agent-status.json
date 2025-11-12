@@ -1,0 +1,9 @@
+{
+  "agent": "fbp-algorithm-agent",
+  "status": "completed",
+  "start_time": "2025-10-28T16:27:05-06:00",
+  "end_time": "2025-10-28T16:27:05-06:00",
+  "execution_id": "20251028_161937",
+  "exit_code": 0,
+  "log_file": "/home/rpas/wildfire-simulator-v2/.agents/logs/parallel/fbp-algorithm-agent_20251028_161937.log"
+}

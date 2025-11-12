@@ -1,0 +1,16 @@
+{
+  "mission_id": "test_ember_transport",
+  "run_id": "20251102_154450_test_ember_transport",
+  "start_time": "2025-11-02T15:44:50.685152Z",
+  "end_time": "2025-11-02T15:44:53.187780Z",
+  "status": "COMPLETED",
+  "sources_found": 5,
+  "search_queries_executed": 5,
+  "errors": [],
+  "artifacts_generated": [
+    "raw_findings.json",
+    "metadata.json",
+    "reasoning_trace.json",
+    "search_log.json"
+  ]
+}

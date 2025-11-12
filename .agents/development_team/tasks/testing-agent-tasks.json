@@ -1,0 +1,289 @@
+{
+  "agent": "testing-agent",
+  "priority": "P1 - HIGH",
+  "assigned_date": "2025-10-27",
+  "estimated_effort_days": 5,
+  "dependencies": ["security-agent:SEC-004"],
+  "current_coverage": "~30% (2 test files, 93 LOC total)",
+  "target_coverage": "70%+",
+  "tasks": [
+    {
+      "id": "TEST-001",
+      "title": "Test Coverage Baseline Assessment",
+      "priority": "P1",
+      "status": "pending",
+      "description": "Measure current test coverage across backend and frontend",
+      "acceptance_criteria": [
+        "Run pytest --cov=. --cov-report=html on backend",
+        "Identify untested modules and functions",
+        "Generate coverage report with line-by-line gaps",
+        "Document critical paths with 0% coverage"
+      ],
+      "commands": [
+        "pytest --cov=. --cov-report=html --cov-report=json",
+        "pytest --cov=. --cov-report=term-missing"
+      ],
+      "deliverable": ".agents/reports/testing-coverage-baseline.json"
+    },
+    {
+      "id": "TEST-002",
+      "title": "Backend Unit Tests - Core Utilities",
+      "priority": "P1",
+      "status": "pending",
+      "description": "Add unit tests for utility functions in app.py",
+      "acceptance_criteria": [
+        "Test _parse_coordinate_tokens with valid/invalid inputs",
+        "Test _derive_primary_coordinate with various field combinations",
+        "Test _derive_hazard_signals with different threat summaries",
+        "Test _apply_branding_to_html with/without existing branding",
+        "Test _append_map_snapshot_to_plan_html with valid/invalid SVG",
+        "All tests passing with 90%+ coverage of utility functions"
+      ],
+      "files_to_test": [
+        "app.py:191-270 (coordinate handling)",
+        "app.py:587-632 (branding/map injection)",
+        "app.py:686-698 (hazard derivation)"
+      ],
+      "deliverable": "tests/test_app_utils_extended.py"
+    },
+    {
+      "id": "TEST-003",
+      "title": "Backend API Endpoint Tests",
+      "priority": "P1",
+      "status": "pending",
+      "description": "Add integration tests for all FastAPI endpoints",
+      "acceptance_criteria": [
+        "Test POST /submissions with valid/invalid payloads",
+        "Test GET /submissions/{id} with existing/non-existing IDs",
+        "Test POST /generate-plan/{id} with mock OpenAI responses",
+        "Test POST /forms/{id} with various form combinations",
+        "Test POST /mapping/{id} with valid/invalid GeoJSON",
+        "Test POST /infrastructure/suggest with mock Overpass responses",
+        "Test error handling (404, 422, 500 responses)",
+        "All tests use TestClient from fastapi.testclient"
+      ],
+      "files_to_create": [
+        "tests/test_api_submissions.py",
+        "tests/test_api_plan_generation.py",
+        "tests/test_api_forms.py",
+        "tests/test_api_mapping.py",
+        "tests/test_api_infrastructure.py"
+      ],
+      "deliverable": "5 new test files with 80%+ endpoint coverage"
+    },
+    {
+      "id": "TEST-004",
+      "title": "Mock External APIs",
+      "priority": "P1",
+      "status": "pending",
+      "description": "Add pytest fixtures to mock all external API calls",
+      "acceptance_criteria": [
+        "Mock OpenAI API (gpt-4o-mini responses)",
+        "Mock Open-Meteo API (weather forecasts)",
+        "Mock Overpass API (infrastructure/parcel data)",
+        "Mock Google Places API (if key provided)",
+        "Mock Clearbit/DuckDuckGo (logo resolution)",
+        "Add pytest-mock or responses library to requirements.txt",
+        "Create conftest.py with reusable fixtures"
+      ],
+      "files_to_create": [
+        "tests/conftest.py (shared fixtures)",
+        "tests/fixtures/openai_responses.json",
+        "tests/fixtures/weather_responses.json",
+        "tests/fixtures/overpass_responses.json"
+      ],
+      "deliverable": "tests/conftest.py + fixture data files"
+    },
+    {
+      "id": "TEST-005",
+      "title": "Forms Rendering Tests",
+      "priority": "P1",
+      "status": "pending",
+      "description": "Test ICS form rendering with sample submission data",
+      "acceptance_criteria": [
+        "Test each form in FORM_REGISTRY (ICS 201-206, 214, 214-RR)",
+        "Verify HTML structure contains expected sections",
+        "Test with minimal data (empty fields)",
+        "Test with full data (all fields populated)",
+        "Verify map snapshot embedding",
+        "Verify weather outlook rendering",
+        "Check HTML escaping of user input"
+      ],
+      "files_to_test": [
+        "forms.py (all _render_ics* functions)"
+      ],
+      "deliverable": "tests/test_forms_rendering.py"
+    },
+    {
+      "id": "TEST-006",
+      "title": "Knowledge Base Retrieval Tests",
+      "priority": "P1",
+      "status": "pending",
+      "description": "Test knowledge base chunk retrieval and scoring",
+      "acceptance_criteria": [
+        "Test retrieve_chunks with hazard matching",
+        "Test jurisdiction matching (province/country)",
+        "Test token overlap scoring",
+        "Test top-K selection (verify correct ranking)",
+        "Test empty knowledge base (graceful degradation)",
+        "Add sample chunks to test database"
+      ],
+      "files_to_test": [
+        "app.py:701-752 (retrieve_chunks)"
+      ],
+      "deliverable": "tests/test_knowledge_base.py"
+    },
+    {
+      "id": "TEST-007",
+      "title": "Map Snapshot Generation Tests",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Test map snapshot SVG generation and legend creation",
+      "acceptance_criteria": [
+        "Test generate_map_snapshot with various GeoJSON features",
+        "Test with Point, LineString, Polygon geometries",
+        "Test color palette assignment",
+        "Test legend generation with feature counts",
+        "Test basemap rendering (with/without PIL)",
+        "Verify SVG is valid XML"
+      ],
+      "files_to_test": [
+        "mapping.py (generate_map_snapshot, ensure_mapping_table)"
+      ],
+      "deliverable": "tests/test_mapping.py"
+    },
+    {
+      "id": "TEST-008",
+      "title": "Frontend Component Tests - MapEditor",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Add Jest/React Testing Library tests for MapEditor component",
+      "acceptance_criteria": [
+        "Setup Jest and @testing-library/react in frontend/",
+        "Test MapEditor component initialization",
+        "Test feature drawing (mock MapLibre GL)",
+        "Test category assignment",
+        "Test onChange callback firing",
+        "Test basemap style toggle",
+        "Mock maplibre-gl and maplibre-gl-draw"
+      ],
+      "files_to_test": [
+        "frontend/app/components/MapEditor.js"
+      ],
+      "files_to_create": [
+        "frontend/app/components/__tests__/MapEditor.test.js",
+        "frontend/jest.config.js",
+        "frontend/jest.setup.js"
+      ],
+      "deliverable": "Jest tests + config files"
+    },
+    {
+      "id": "TEST-009",
+      "title": "Frontend State Management Tests",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Test LocalStorage state management functions",
+      "acceptance_criteria": [
+        "Test loadIntake() with empty/existing localStorage",
+        "Test saveIntake() with patch and replace modes",
+        "Test clearIntake()",
+        "Test mergeDeep() with nested objects",
+        "Test withTimestamps() adds createdAt/updatedAt",
+        "Mock localStorage API"
+      ],
+      "files_to_test": [
+        "frontend/app/intake/lib/state.js"
+      ],
+      "deliverable": "frontend/app/intake/lib/__tests__/state.test.js"
+    },
+    {
+      "id": "TEST-010",
+      "title": "End-to-End Tests - Submission Flow",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Add Cypress E2E tests for full submission workflow",
+      "acceptance_criteria": [
+        "Setup Cypress in frontend/",
+        "Test Step 1: Workflow selection",
+        "Test Step 2-6: Data entry in each step",
+        "Test Review page with data validation",
+        "Test submission and plan generation",
+        "Test result page display",
+        "Mock backend API responses"
+      ],
+      "files_to_create": [
+        "frontend/cypress.config.js",
+        "frontend/cypress/e2e/submission-flow.cy.js",
+        "frontend/cypress/fixtures/sample-submission.json"
+      ],
+      "deliverable": "Cypress tests + config"
+    },
+    {
+      "id": "TEST-011",
+      "title": "Performance Tests - Load Testing",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Add load tests for concurrent submission handling",
+      "acceptance_criteria": [
+        "Use locust or pytest-benchmark",
+        "Test 10 concurrent /submissions requests",
+        "Test 5 concurrent /generate-plan requests",
+        "Measure response times and identify bottlenecks",
+        "Document SQLite lock contention issues"
+      ],
+      "files_to_create": [
+        "tests/performance/locustfile.py",
+        "tests/performance/test_concurrent_submissions.py"
+      ],
+      "deliverable": "Load test results report"
+    },
+    {
+      "id": "TEST-012",
+      "title": "Test Documentation",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Document testing strategy and how to run tests",
+      "acceptance_criteria": [
+        "Create TESTING.md with test running instructions",
+        "Document test fixtures and mocking approach",
+        "Add test coverage badge to README",
+        "Document how to add new tests",
+        "Include CI/CD integration guidance"
+      ],
+      "deliverable": "TESTING.md + README updates"
+    }
+  ],
+  "overall_objectives": [
+    "Achieve 70%+ test coverage across backend",
+    "Add frontend component and E2E tests",
+    "Mock all external APIs for reliable testing",
+    "Document testing strategy and procedures",
+    "Enable CI/CD test automation"
+  ],
+  "success_metrics": {
+    "backend_coverage_percentage": 70,
+    "frontend_test_files_created": 5,
+    "all_critical_paths_tested": true,
+    "e2e_tests_passing": true,
+    "ci_integration_documented": true
+  },
+  "dependencies": {
+    "python_packages": [
+      "pytest-asyncio",
+      "pytest-mock",
+      "responses",
+      "pytest-cov"
+    ],
+    "npm_packages": [
+      "jest",
+      "@testing-library/react",
+      "@testing-library/jest-dom",
+      "cypress"
+    ]
+  },
+  "report_format": {
+    "summary": ".agents/reports/testing-agent-report.json",
+    "coverage_report": ".agents/reports/testing-coverage-report.html",
+    "test_results": ".agents/reports/testing-results.json"
+  }
+}

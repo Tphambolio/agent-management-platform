@@ -1,0 +1,9 @@
+{
+  "agent": "security-agent",
+  "status": "completed",
+  "start_time": "2025-10-28T16:26:40-06:00",
+  "end_time": "2025-10-28T16:26:40-06:00",
+  "execution_id": "20251028_162302",
+  "exit_code": 0,
+  "log_file": "/home/rpas/wildfire-simulator-v2/.agents/logs/parallel/security-agent_20251028_162302.log"
+}

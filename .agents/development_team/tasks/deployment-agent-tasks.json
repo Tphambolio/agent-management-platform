@@ -1,0 +1,325 @@
+{
+  "agent": "deployment-agent",
+  "priority": "P3 - LOW",
+  "assigned_date": "2025-10-27",
+  "estimated_effort_days": 3,
+  "dependencies": ["security-agent:SEC-002", "security-agent:SEC-005"],
+  "tasks": [
+    {
+      "id": "DEPLOY-001",
+      "title": "Deployment Configuration Audit",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Audit all deployment configurations for consistency and completeness",
+      "acceptance_criteria": [
+        "Document all deployment targets (Local Docker, Railway, Vercel)",
+        "List environment variables required for each target",
+        "Identify configuration drift between environments",
+        "Document CORS origins for each deployment",
+        "Verify health check endpoints exist",
+        "Check for hardcoded values that should be environment-specific"
+      ],
+      "files_to_audit": [
+        "docker-compose.yml",
+        "Dockerfile (backend)",
+        "frontend/Dockerfile",
+        "vercel.json",
+        ".env.example",
+        "frontend/.env.example",
+        "DEPLOYMENT.md",
+        "REPOSITORY_STRATEGY.md"
+      ],
+      "deliverable": ".agents/reports/deployment-config-audit.json"
+    },
+    {
+      "id": "DEPLOY-002",
+      "title": "Environment Variable Template Creation",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Create comprehensive .env templates for all deployment targets",
+      "acceptance_criteria": [
+        "Create .env.local.template (local Docker development)",
+        "Create .env.railway.template (Railway backend)",
+        "Create .env.vercel.template (Vercel frontend)",
+        "Document each variable with description and example",
+        "Mark required vs optional variables",
+        "Add validation script to check required vars are set",
+        "Update DEPLOYMENT.md with new templates"
+      ],
+      "files_to_create": [
+        "config/environments/.env.local.template",
+        "config/environments/.env.railway.template",
+        "config/environments/.env.vercel.template",
+        "scripts/validate-env.sh"
+      ],
+      "deliverable": "Environment templates + validation script"
+    },
+    {
+      "id": "DEPLOY-003",
+      "title": "Docker Configuration Optimization",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Optimize Docker configurations for production use",
+      "acceptance_criteria": [
+        "Add health checks to docker-compose.yml",
+        "Configure restart policies (restart: unless-stopped)",
+        "Add volume mounts for persistent data (crisiskit.db)",
+        "Configure logging drivers (json-file with rotation)",
+        "Add resource limits (memory, CPU)",
+        "Test Docker Compose with fresh database",
+        "Document Docker deployment procedure"
+      ],
+      "files_to_modify": [
+        "docker-compose.yml",
+        "Dockerfile (add HEALTHCHECK)"
+      ],
+      "deliverable": "Optimized Docker configs + deployment guide"
+    },
+    {
+      "id": "DEPLOY-004",
+      "title": "Railway Deployment Validation",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Validate and document Railway backend deployment",
+      "acceptance_criteria": [
+        "Verify Railway builds successfully with current code",
+        "Add health check endpoint (/health)",
+        "Configure Railway environment variables",
+        "Test PostgreSQL addon integration (if needed)",
+        "Document Railway-specific configuration",
+        "Add Railway deploy button to README (optional)"
+      ],
+      "files_to_modify": [
+        "app.py (ensure /health endpoint exists)",
+        "Create: railway.json (optional config)"
+      ],
+      "deliverable": "Railway deployment guide + validation report"
+    },
+    {
+      "id": "DEPLOY-005",
+      "title": "Vercel Frontend Deployment Validation",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Validate and optimize Vercel frontend deployment",
+      "acceptance_criteria": [
+        "Verify vercel.json configuration is correct",
+        "Test production build locally (npm run build && npm start)",
+        "Configure Vercel environment variables",
+        "Add API proxy configuration (optional, for CORS)",
+        "Test deployment with preview URLs",
+        "Document Vercel-specific configuration"
+      ],
+      "files_to_modify": [
+        "vercel.json (add routes, headers if needed)",
+        "frontend/next.config.mjs (verify settings)"
+      ],
+      "deliverable": "Vercel deployment guide + build verification"
+    },
+    {
+      "id": "DEPLOY-006",
+      "title": "CI/CD Pipeline Setup",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Create GitHub Actions workflow for automated testing and deployment",
+      "acceptance_criteria": [
+        "Create .github/workflows/backend-ci.yml",
+        "Create .github/workflows/frontend-ci.yml",
+        "Run tests on every pull request",
+        "Run linting and type checking",
+        "Build Docker images on main branch push",
+        "Add deployment workflow for Railway (manual trigger)",
+        "Add secret scanning with truffleHog",
+        "Document CI/CD setup in README"
+      ],
+      "files_to_create": [
+        ".github/workflows/backend-ci.yml",
+        ".github/workflows/frontend-ci.yml",
+        ".github/workflows/deploy-railway.yml",
+        ".github/workflows/security-scan.yml"
+      ],
+      "deliverable": "GitHub Actions workflows + documentation"
+    },
+    {
+      "id": "DEPLOY-007",
+      "title": "Database Backup Strategy",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Implement automated backup strategy for SQLite database",
+      "acceptance_criteria": [
+        "Create backup script (sqlite3 .backup command)",
+        "Schedule daily backups via cron (local) or Railway task",
+        "Store backups in S3 or local volume with retention policy",
+        "Test restore procedure from backup",
+        "Document backup/restore procedures",
+        "Add monitoring for backup failures"
+      ],
+      "files_to_create": [
+        "scripts/backup-database.sh",
+        "scripts/restore-database.sh",
+        "docs/BACKUP_RESTORE.md"
+      ],
+      "deliverable": "Backup scripts + procedures documentation"
+    },
+    {
+      "id": "DEPLOY-008",
+      "title": "Monitoring and Alerting Setup",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Setup monitoring and alerting for production deployments",
+      "acceptance_criteria": [
+        "Add health check endpoints (/health, /health/db, /health/api)",
+        "Configure uptime monitoring (UptimeRobot, Pingdom, or Railway)",
+        "Setup error tracking (Sentry integration)",
+        "Add performance monitoring (response time alerts)",
+        "Configure alerting channels (email, Slack)",
+        "Document monitoring setup and alert thresholds"
+      ],
+      "files_to_modify": [
+        "app.py (add detailed health checks)",
+        "Create: monitoring/sentry-config.py"
+      ],
+      "deliverable": "Monitoring setup + alert configuration guide"
+    },
+    {
+      "id": "DEPLOY-009",
+      "title": "Staging Environment Setup",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Create staging environment for pre-production testing",
+      "acceptance_criteria": [
+        "Setup staging Railway instance",
+        "Setup staging Vercel deployment (preview branch)",
+        "Configure staging-specific environment variables",
+        "Add staging URL to CORS allow list",
+        "Document promotion process (staging → production)",
+        "Add smoke tests to run post-deployment"
+      ],
+      "deliverable": "Staging environment setup guide"
+    },
+    {
+      "id": "DEPLOY-010",
+      "title": "Deployment Smoke Tests",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Create automated smoke tests to run after deployment",
+      "acceptance_criteria": [
+        "Create smoke test script (curl-based or Python requests)",
+        "Test /health endpoint returns 200",
+        "Test POST /submissions with sample data",
+        "Test GET /submissions returns list",
+        "Test frontend loads successfully",
+        "Add smoke tests to deployment workflow",
+        "Document smoke test procedures"
+      ],
+      "files_to_create": [
+        "scripts/smoke-tests.sh",
+        "tests/smoke/test_api_smoke.py"
+      ],
+      "deliverable": "Smoke test scripts + integration into CI/CD"
+    },
+    {
+      "id": "DEPLOY-011",
+      "title": "Rollback Procedures Documentation",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Document rollback procedures for failed deployments",
+      "acceptance_criteria": [
+        "Document Railway rollback procedure",
+        "Document Vercel rollback to previous deployment",
+        "Document database rollback/restore procedure",
+        "Create rollback checklist (what to check after rollback)",
+        "Add emergency contact information",
+        "Test rollback procedure in staging"
+      ],
+      "deliverable": "docs/ROLLBACK_PROCEDURES.md"
+    },
+    {
+      "id": "DEPLOY-012",
+      "title": "Production Deployment Checklist",
+      "priority": "P3",
+      "status": "pending",
+      "description": "Create comprehensive deployment checklist",
+      "acceptance_criteria": [
+        "Pre-deployment: code review, tests passing, security scan",
+        "Deployment: backup database, deploy backend, deploy frontend",
+        "Post-deployment: smoke tests, monitor logs, verify functionality",
+        "Create deployment template in Notion/Confluence (or Markdown)",
+        "Include rollback decision tree",
+        "Add deployment sign-off process"
+      ],
+      "deliverable": "docs/DEPLOYMENT_CHECKLIST.md"
+    }
+  ],
+  "overall_objectives": [
+    "Standardize deployment configurations across all targets",
+    "Automate testing and deployment with CI/CD",
+    "Implement backup and disaster recovery procedures",
+    "Setup monitoring and alerting for production",
+    "Document deployment and rollback procedures"
+  ],
+  "success_metrics": {
+    "all_deployments_documented": true,
+    "ci_cd_pipeline_functional": true,
+    "automated_backups_configured": true,
+    "monitoring_alerts_active": true,
+    "staging_environment_operational": true,
+    "smoke_tests_passing": true
+  },
+  "deployment_targets": {
+    "local_docker": {
+      "status": "production",
+      "url": "http://localhost:3000",
+      "backend": "http://localhost:8000",
+      "database": "SQLite (./crisiskit.db)"
+    },
+    "railway_backend": {
+      "status": "production",
+      "url": "https://<project>.railway.app",
+      "database": "SQLite or PostgreSQL addon",
+      "notes": "Auto-deploys from main branch"
+    },
+    "vercel_frontend": {
+      "status": "production",
+      "url": "https://crisiskitai.vercel.app",
+      "backend": "Railway URL",
+      "notes": "Auto-deploys from main branch"
+    },
+    "staging": {
+      "status": "to_be_created",
+      "purpose": "Pre-production testing",
+      "notes": "Should mirror production config"
+    }
+  },
+  "critical_deployment_issues": [
+    {
+      "issue": "No health check endpoint for Railway",
+      "impact": "Railway cannot verify backend is running",
+      "priority": "P2",
+      "resolution": "Add /health endpoint with DB connectivity check"
+    },
+    {
+      "issue": "SQLite not suitable for Railway (ephemeral filesystem)",
+      "impact": "Data loss on container restart",
+      "priority": "P1",
+      "resolution": "Migrate to PostgreSQL or use persistent volume"
+    },
+    {
+      "issue": "No automated backups configured",
+      "impact": "Risk of data loss",
+      "priority": "P2",
+      "resolution": "Implement DEPLOY-007 backup strategy"
+    },
+    {
+      "issue": "Hardcoded CORS origins",
+      "impact": "Cannot deploy to new domains without code change",
+      "priority": "P2",
+      "resolution": "Use environment variable for CORS origins"
+    }
+  ],
+  "report_format": {
+    "summary": ".agents/reports/deployment-agent-report.json",
+    "config_audit": ".agents/reports/deployment-config-audit.json",
+    "deployment_guide": "docs/DEPLOYMENT_GUIDE.md",
+    "rollback_procedures": "docs/ROLLBACK_PROCEDURES.md"
+  }
+}

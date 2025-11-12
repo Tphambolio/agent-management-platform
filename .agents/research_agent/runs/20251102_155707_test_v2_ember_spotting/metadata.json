@@ -1,0 +1,16 @@
+{
+  "mission_id": "test_v2_ember_spotting",
+  "run_id": "20251102_155707_test_v2_ember_spotting",
+  "start_time": "2025-11-02T15:57:07.182390Z",
+  "end_time": "2025-11-02T15:57:11.187456Z",
+  "status": "COMPLETED",
+  "sources_found": 9,
+  "search_queries_executed": 9,
+  "errors": [],
+  "artifacts_generated": [
+    "raw_findings.json",
+    "metadata.json",
+    "reasoning_trace.json",
+    "search_log.json"
+  ]
+}

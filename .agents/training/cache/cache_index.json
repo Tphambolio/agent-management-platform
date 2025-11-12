@@ -1,0 +1,127 @@
+{
+  "simulations": {},
+  "llm_calls": {
+    "f90c430650686bff": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/f90c430650686bff.json",
+      "cached_at": "2025-10-29T03:36:15.467457",
+      "ttl_days": 30,
+      "size_bytes": 966
+    },
+    "6cef1a0117eb87ea": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/6cef1a0117eb87ea.json",
+      "cached_at": "2025-10-29T03:36:15.467774",
+      "ttl_days": 30,
+      "size_bytes": 966
+    },
+    "e6cd9d991405843d": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/e6cd9d991405843d.json",
+      "cached_at": "2025-10-29T03:36:15.468192",
+      "ttl_days": 30,
+      "size_bytes": 966
+    },
+    "b69a6df5963bda04": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/b69a6df5963bda04.json",
+      "cached_at": "2025-10-29T03:36:15.468455",
+      "ttl_days": 30,
+      "size_bytes": 966
+    },
+    "62d095d8ba65ec8b": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/62d095d8ba65ec8b.json",
+      "cached_at": "2025-10-29T03:59:51.071648",
+      "ttl_days": 30,
+      "size_bytes": 1453
+    },
+    "5109467380d65bf4": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/5109467380d65bf4.json",
+      "cached_at": "2025-10-29T03:59:51.072023",
+      "ttl_days": 30,
+      "size_bytes": 1451
+    },
+    "cbbadf575d3db684": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/cbbadf575d3db684.json",
+      "cached_at": "2025-10-29T03:59:51.072455",
+      "ttl_days": 30,
+      "size_bytes": 1449
+    },
+    "d8eddb9ba66fa5bb": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/d8eddb9ba66fa5bb.json",
+      "cached_at": "2025-10-29T03:59:51.072753",
+      "ttl_days": 30,
+      "size_bytes": 1451
+    },
+    "c512187d35597cf5": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/c512187d35597cf5.json",
+      "cached_at": "2025-10-29T03:59:51.073029",
+      "ttl_days": 30,
+      "size_bytes": 1217
+    },
+    "8b35e7f0b9eda60d": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/8b35e7f0b9eda60d.json",
+      "cached_at": "2025-10-29T04:28:58.298124",
+      "ttl_days": 30,
+      "size_bytes": 1762
+    },
+    "44ab0029ce66e263": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/44ab0029ce66e263.json",
+      "cached_at": "2025-10-29T04:28:58.298482",
+      "ttl_days": 30,
+      "size_bytes": 1629
+    },
+    "055fc1d193303d7b": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/055fc1d193303d7b.json",
+      "cached_at": "2025-10-29T04:28:58.299008",
+      "ttl_days": 30,
+      "size_bytes": 1747
+    },
+    "f628a0a1f6bda91a": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/f628a0a1f6bda91a.json",
+      "cached_at": "2025-10-29T04:28:58.299322",
+      "ttl_days": 30,
+      "size_bytes": 1629
+    },
+    "903ab12dbcc083f2": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/903ab12dbcc083f2.json",
+      "cached_at": "2025-10-29T04:28:58.299637",
+      "ttl_days": 30,
+      "size_bytes": 1643
+    },
+    "1dd9475d1b062bad": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/1dd9475d1b062bad.json",
+      "cached_at": "2025-10-29T13:42:37.431845",
+      "ttl_days": 30,
+      "size_bytes": 2008
+    },
+    "4e3a86305b7dfb51": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/4e3a86305b7dfb51.json",
+      "cached_at": "2025-10-29T13:42:37.432366",
+      "ttl_days": 30,
+      "size_bytes": 1904
+    },
+    "09b8ad530271f24c": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/09b8ad530271f24c.json",
+      "cached_at": "2025-10-29T13:42:37.432900",
+      "ttl_days": 30,
+      "size_bytes": 1778
+    },
+    "eda3a3c90bbf0edf": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/eda3a3c90bbf0edf.json",
+      "cached_at": "2025-10-29T13:42:37.433299",
+      "ttl_days": 30,
+      "size_bytes": 2011
+    },
+    "6571ddeed238bdb3": {
+      "file": "/home/rpas/wildfire-simulator-v2/.agents/training/cache/llm/6571ddeed238bdb3.json",
+      "cached_at": "2025-10-29T13:42:37.433658",
+      "ttl_days": 30,
+      "size_bytes": 1893
+    }
+  },
+  "patterns": {},
+  "statistics": {
+    "total_cached_simulations": 0,
+    "total_cached_llm_calls": 19,
+    "cache_hit_rate": 0.5,
+    "total_hits": 9,
+    "total_requests": 28
+  }
+}

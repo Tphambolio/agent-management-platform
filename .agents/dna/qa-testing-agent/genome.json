@@ -1,0 +1,133 @@
+{
+  "agent_metadata": {
+    "agent_id": "qa-testing-agent",
+    "role": "QA Engineer",
+    "created_date": "2025-10-27",
+    "total_sessions": 0
+  },
+  "skills": {
+    "technical": {
+      "pytest-runner": {
+        "version": "1.0.0",
+        "description": "Automated test execution and reporting for the wildfire prediction system.",
+        "acquired": "2025-11-02",
+        "proficiency": "expert",
+        "last_used": "2025-11-02",
+        "usage_count": 0,
+        "test_categories": ["unit", "integration", "e2e", "security"],
+        "capabilities": [
+          "run_unit_tests",
+          "run_integration_tests",
+          "run_e2e_tests",
+          "generate_coverage_reports",
+          "security_validation",
+          "performance_benchmarking",
+          "ci_integration"
+        ]
+      }
+    },
+    "domain": {
+      "polygon-fire-prediction": {
+        "version": "1.0.0",
+        "description": "Complete workflow for polygon-based fire prediction with data fetching and result generation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "terrain-analysis": {
+        "version": "1.0.0",
+        "description": "Calculate slope, aspect, and topographic features from DEMs for fire spread calculations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fbp-fuel-mapping": {
+        "version": "1.0.0",
+        "description": "Handle fuel type classification and conversion between different fuel systems.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "monte-carlo-workflow": {
+        "version": "1.0.0",
+        "description": "Set up and run Monte Carlo fire simulations with proper parallelization.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fire-visualization": {
+        "version": "1.0.0",
+        "description": "Generate professional maps, animations, and interactive visualizations of fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fbp-fire-behavior": {
+        "version": "1.0.0",
+        "description": "Calculate fire behavior using the Canadian Forest Fire Behavior Prediction (FBP) System.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "historical-fire-validation": {
+        "version": "1.0.0",
+        "description": "Validate simulation outputs against known historical fires for calibration and benchmarking.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "simulation-reporting": {
+        "version": "1.0.0",
+        "description": "Generate comprehensive reports with statistics, visualizations, and interpretation.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "geotiff-processor": {
+        "version": "1.0.0",
+        "description": "Load, validate, transform, and export GeoTIFF raster data for fire simulations.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      },
+      "fwi-weather-processing": {
+        "version": "1.0.0",
+        "description": "Process meteorological data into Fire Weather Index (FWI) System components.",
+        "acquired": "2025-11-02",
+        "proficiency": "intermediate",
+        "last_used": null
+      }
+    }
+  },
+  "experience_bank": {
+    "patterns_known": [
+      "test_pyramid_architecture",
+      "unit_integration_e2e_separation",
+      "security_first_testing",
+      "coverage_driven_development"
+    ],
+    "techniques_mastered": [
+      "pytest_markers_for_categorization",
+      "fixture_based_test_data",
+      "mock_data_generation",
+      "coverage_analysis",
+      "ci_cd_integration",
+      "agent_report_generation"
+    ],
+    "pitfalls_remembered": [
+      "avoid_testing_implementation_details",
+      "external_api_tests_should_skip_gracefully",
+      "security_tests_must_never_be_skipped",
+      "coverage_is_metric_not_goal"
+    ]
+  },
+  "session_memory": {
+    "last_session_summary": "",
+    "next_priorities": []
+  },
+  "evolution_metrics": {
+    "tasks_completed": 0,
+    "patterns_created": 0,
+    "learning_velocity": "developing"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "system": {
+    "version": "1.0",
+    "parallel_workers": 4,
+    "cache_enabled": true,
+    "llm_batch_size": 50,
+    "max_scenarios_per_run": 100
+  },
+  "scenario_generation": {
+    "total_scenarios": 1200,
+    "seed": 42,
+    "distribution": {
+      "level_1": 200,
+      "level_2": 250,
+      "level_3": 300,
+      "level_4": 250,
+      "level_5": 200
+    }
+  },
+  "pattern_extraction": {
+    "min_samples": 5,
+    "confidence_threshold": 0.75,
+    "statistical_methods": ["correlation", "regression", "clustering"]
+  },
+  "llm_optimization": {
+    "max_api_calls": 20,
+    "batch_size": 50,
+    "use_cache": true,
+    "cache_ttl_days": 30
+  },
+  "curriculum": {
+    "progressive_unlock": true,
+    "require_pass_before_next": true,
+    "allow_repeat_failed_levels": true
+  }
+}

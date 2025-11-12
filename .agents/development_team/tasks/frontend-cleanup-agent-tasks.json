@@ -1,0 +1,89 @@
+{
+  "agent": "frontend-cleanup-agent",
+  "tasks": [
+    {
+      "task_id": "frontend-001",
+      "priority": "high",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Fix console errors and warnings in browser",
+      "scope": {
+        "files": ["templates/*.html", "static/js/*.js"],
+        "directories": ["static"],
+        "exclusions": ["node_modules", "dist"]
+      },
+      "success_criteria": [
+        "No console errors on page load",
+        "No React/Vue warnings if applicable",
+        "All JavaScript errors resolved",
+        "Browser console clean"
+      ],
+      "dependencies": [],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Test in Chrome DevTools console"
+    },
+    {
+      "task_id": "frontend-002",
+      "priority": "high",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Remove unused CSS and consolidate styles",
+      "scope": {
+        "files": ["static/css/*.css", "templates/*.html"],
+        "directories": ["static"],
+        "exclusions": ["vendor", "lib"]
+      },
+      "success_criteria": [
+        "No duplicate CSS rules",
+        "Unused styles removed",
+        "CSS file size reduced",
+        "UI appearance unchanged"
+      ],
+      "dependencies": [],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Use browser DevTools coverage tool to find unused CSS"
+    },
+    {
+      "task_id": "frontend-003",
+      "priority": "medium",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Optimize frontend asset loading and performance",
+      "scope": {
+        "files": ["templates/*.html", "static/js/*.js"],
+        "directories": ["static"],
+        "exclusions": []
+      },
+      "success_criteria": [
+        "Scripts loaded with async/defer where appropriate",
+        "Images optimized and lazy-loaded",
+        "CSS minified",
+        "Page load time improved"
+      ],
+      "dependencies": ["frontend-001", "frontend-002"],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Check Lighthouse performance score"
+    },
+    {
+      "task_id": "frontend-004",
+      "priority": "low",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Improve accessibility and semantic HTML",
+      "scope": {
+        "files": ["templates/*.html"],
+        "directories": [],
+        "exclusions": []
+      },
+      "success_criteria": [
+        "All images have alt text",
+        "Proper heading hierarchy",
+        "ARIA labels where needed",
+        "Color contrast meets WCAG AA"
+      ],
+      "dependencies": [],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Use axe DevTools for accessibility audit"
+    }
+  ]
+}

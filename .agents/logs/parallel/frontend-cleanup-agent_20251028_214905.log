@@ -1,0 +1,46 @@
+=== Agent: frontend-cleanup-agent ===
+Start time: Tue 28 Oct 2025 09:49:05 PM MDT
+Prompt file: /home/rpas/wildfire-simulator-v2/.agents/frontend-cleanup-agent.txt
+
+I need permission to edit the frontend files. Let me wait for your approval to proceed with the frontend cleanup tasks.
+
+Meanwhile, let me document what I've found and prepare the fixes:
+
+## Frontend Cleanup Analysis
+
+### Issues Identified:
+
+#### **web/static/index.html** (High Priority):
+1. ❌ No error handling on API calls - will cause unhandled promise rejections
+2. ❌ No null checks before DOM manipulation - could cause "Cannot read property of null"
+3. ❌ No verification that Chart.js or Leaflet loaded successfully
+4. ❌ Chart initialization happens immediately, not waiting for DOM ready
+5. ❌ Missing color configuration for chart datasets
+6. ❌ Incomplete OpenStreetMap attribution
+7. ❌ No input validation or clearing after form submission
+
+#### **viewer/index.html** (Medium Priority):
+1. ⚠️ No error handling for WMS layer failures
+2. ⚠️ External CDN dependencies without fallback or integrity checks
+3. ⚠️ No loading indicators for slow tile loads
+
+#### **web/static/style.css** (Low Priority):
+- ✅ Looks clean, no duplicate rules found
+- ✅ All styles appear to be used
+- Minor: Could add focus states for accessibility
+
+### Proposed Fixes:
+
+1. **Add comprehensive error handling** to all async operations
+2. **Add null checks** before DOM manipulation
+3. **Add library load verification** before using Chart.js and Leaflet
+4. **Add DOM ready check** before initialization
+5. **Clear form inputs** after successful submission
+6. **Add proper attribution** for OpenStreetMap
+7. **Add dataset colors** to charts for better visibility
+8. **Add error handling** to viewer/index.html WMS layers
+
+Would you like me to proceed with these fixes?
+
+End time: Tue 28 Oct 2025 09:50:26 PM MDT
+Exit code: 0

@@ -1,0 +1,1029 @@
+{
+  "version": "1.0",
+  "timestamp": "2025-10-29T13:42:28.874339",
+  "total_patterns": 60,
+  "patterns": {
+    "level_1": {
+      "fuel_behavior": [
+        {
+          "fuel_type": "C7",
+          "samples": 75,
+          "ros": {
+            "mean": 14.746833297661851,
+            "std": 12.027901291994985,
+            "min": 1.4927547071781042,
+            "max": 55.48988048450929
+          },
+          "intensity": {
+            "mean": 2280.3053235649904,
+            "std": 2010.258477387976,
+            "range": [
+              223.91320607671562,
+              10361.404206187599
+            ]
+          },
+          "crown_fire_frequency": 0.0,
+          "correlations": {
+            "ros_vs_wind": 0.7607959432051594,
+            "ros_vs_ffmc": 0.5269744841930263
+          }
+        },
+        {
+          "fuel_type": "C2",
+          "samples": 69,
+          "ros": {
+            "mean": 134.16950339778484,
+            "std": 89.77945910736402,
+            "min": 21.42365491278257,
+            "max": 364.6505791247418
+          },
+          "intensity": {
+            "mean": 64385.80828188835,
+            "std": 43113.67113672883,
+            "range": [
+              9638.290005933179,
+              175032.27797987606
+            ]
+          },
+          "crown_fire_frequency": 0.9855072463768116,
+          "correlations": {
+            "ros_vs_wind": 0.8236895424638533,
+            "ros_vs_ffmc": 0.5991514819873203
+          }
+        },
+        {
+          "fuel_type": "C3",
+          "samples": 56,
+          "ros": {
+            "mean": 56.87690373517881,
+            "std": 60.06290584032945,
+            "min": 2.2217725687667267,
+            "max": 214.5388791681118
+          },
+          "intensity": {
+            "mean": 37644.5336654669,
+            "std": 42511.9534819913,
+            "range": [
+              766.5115362245208,
+              148031.82662599714
+            ]
+          },
+          "crown_fire_frequency": 0.44642857142857145,
+          "correlations": {
+            "ros_vs_wind": 0.7410579889115446,
+            "ros_vs_ffmc": 0.6452177262637676
+          }
+        }
+      ],
+      "wind_effects": [
+        {
+          "wind_range_kmh": "20-40",
+          "samples": 135,
+          "ros_multiplier": {
+            "mean": 3.519994937724714,
+            "std": 88.45091047320307
+          },
+          "area_impact": {
+            "mean_ha": 59177.49237037036,
+            "variability": 2.158129782355728
+          },
+          "common_fuels": [
+            "C7",
+            "C2",
+            "C3"
+          ]
+        },
+        {
+          "wind_range_kmh": "0-20",
+          "samples": 65,
+          "ros_multiplier": {
+            "mean": 1.0,
+            "std": 30.20512079977598
+          },
+          "area_impact": {
+            "mean_ha": 4742.935076923078,
+            "variability": 1.9783106491092364
+          },
+          "common_fuels": [
+            "C7",
+            "C2",
+            "C3"
+          ]
+        }
+      ],
+      "moisture_effects": [
+        {
+          "ffmc_range": "90-93",
+          "samples": 64,
+          "ros_impact": {
+            "mean": 105.97672282927317,
+            "relative_increase": 4.298836141463658
+          },
+          "fire_type_distribution": {
+            "surface": 0.28125,
+            "passive_crown": 0.109375,
+            "active_crown": 0.5625
+          }
+        },
+        {
+          "ffmc_range": "85-90",
+          "samples": 136,
+          "ros_impact": {
+            "mean": 49.75223955785533,
+            "relative_increase": 1.4876119778927666
+          },
+          "fire_type_distribution": {
+            "surface": 0.5,
+            "passive_crown": 0.07352941176470588,
+            "active_crown": 0.41911764705882354
+          }
+        }
+      ],
+      "slope_effects": [
+        {
+          "slope_range_percent": "0-10",
+          "samples": 143,
+          "ros_multiplier": 1.0,
+          "variability": 74.86321065713499
+        },
+        {
+          "slope_range_percent": "10-20",
+          "samples": 57,
+          "ros_multiplier": 1.094092641471501,
+          "variability": 92.50330366386984
+        }
+      ],
+      "scale_dependency": [],
+      "performance": []
+    },
+    "level_2": {
+      "fuel_behavior": [
+        {
+          "fuel_type": "C2",
+          "samples": 48,
+          "ros": {
+            "mean": 178.53339315667313,
+            "std": 183.64251769224327,
+            "min": 3.8505762664916587,
+            "max": 836.3335879587256
+          },
+          "intensity": {
+            "mean": 85620.52353384638,
+            "std": 88218.7598891616,
+            "range": [
+              939.5775358914108,
+              401440.1222201883
+            ]
+          },
+          "crown_fire_frequency": 0.9375,
+          "correlations": {
+            "ros_vs_wind": 0.6505542131571432,
+            "ros_vs_ffmc": 0.4484574597082556
+          }
+        },
+        {
+          "fuel_type": "C4",
+          "samples": 40,
+          "ros": {
+            "mean": 234.84149914942827,
+            "std": 214.89461958976204,
+            "min": 8.897168426234588,
+            "max": 822.6488604920645
+          },
+          "intensity": {
+            "mean": 168918.38801923062,
+            "std": 154898.68765984548,
+            "range": [
+              4484.89507147455,
+              592307.1795542865
+            ]
+          },
+          "crown_fire_frequency": 0.9,
+          "correlations": {
+            "ros_vs_wind": 0.6016181688287197,
+            "ros_vs_ffmc": 0.6090540336234532
+          }
+        },
+        {
+          "fuel_type": "C3",
+          "samples": 48,
+          "ros": {
+            "mean": 139.06396992383517,
+            "std": 178.9799313413521,
+            "min": 0.21386303822432873,
+            "max": 695.9549498153272
+          },
+          "intensity": {
+            "mean": 95238.73544481686,
+            "std": 124001.31835342127,
+            "range": [
+              73.78274818739342,
+              480208.91537257575
+            ]
+          },
+          "crown_fire_frequency": 0.5625,
+          "correlations": {
+            "ros_vs_wind": 0.7196074749549264,
+            "ros_vs_ffmc": 0.5856782051023502
+          }
+        },
+        {
+          "fuel_type": "O1a",
+          "samples": 62,
+          "ros": {
+            "mean": 102.8955649231789,
+            "std": 87.6369139508659,
+            "min": 4.5701982540905455,
+            "max": 347.60358193957484
+          },
+          "intensity": {
+            "mean": 10804.034316933781,
+            "std": 9201.87596484092,
+            "range": [
+              479.8708166795073,
+              36498.376103655355
+            ]
+          },
+          "crown_fire_frequency": 0.0,
+          "correlations": {
+            "ros_vs_wind": 0.7683196785325407,
+            "ros_vs_ffmc": 0.5820780076007694
+          }
+        },
+        {
+          "fuel_type": "C7",
+          "samples": 52,
+          "ros": {
+            "mean": 50.31288521797978,
+            "std": 53.41545450644863,
+            "min": 0.5305372018076406,
+            "max": 206.05849714597818
+          },
+          "intensity": {
+            "mean": 12245.850735311464,
+            "std": 16226.682365527202,
+            "range": [
+              79.58058027114609,
+              61817.549143793454
+            ]
+          },
+          "crown_fire_frequency": 0.11538461538461539,
+          "correlations": {
+            "ros_vs_wind": 0.6213514696253605,
+            "ros_vs_ffmc": 0.5560249895576059
+          }
+        }
+      ],
+      "wind_effects": [
+        {
+          "wind_range_kmh": "20-40",
+          "samples": 83,
+          "ros_multiplier": {
+            "mean": 3.106051308928669,
+            "std": 113.4502701912655
+          },
+          "area_impact": {
+            "mean_ha": 83866.9678313253,
+            "variability": 2.183464780072342
+          },
+          "common_fuels": [
+            "C2",
+            "C3",
+            "C4",
+            "O1a",
+            "C7"
+          ]
+        },
+        {
+          "wind_range_kmh": "0-20",
+          "samples": 76,
+          "ros_multiplier": {
+            "mean": 1.0,
+            "std": 47.26118159441418
+          },
+          "area_impact": {
+            "mean_ha": 10882.095921052633,
+            "variability": 2.3509771705902254
+          },
+          "common_fuels": [
+            "C2",
+            "C3",
+            "C4",
+            "O1a",
+            "C7"
+          ]
+        },
+        {
+          "wind_range_kmh": "40-60",
+          "samples": 91,
+          "ros_multiplier": {
+            "mean": 6.482746040593084,
+            "std": 199.1683801347041
+          },
+          "area_impact": {
+            "mean_ha": 353813.936923077,
+            "variability": 1.7207101291340319
+          },
+          "common_fuels": [
+            "C2",
+            "C3",
+            "C4",
+            "O1a",
+            "C7"
+          ]
+        }
+      ],
+      "moisture_effects": [
+        {
+          "ffmc_range": "70-85",
+          "samples": 73,
+          "ros_impact": {
+            "mean": 51.260425791764725,
+            "relative_increase": 1.5630212895882363
+          },
+          "fire_type_distribution": {
+            "surface": 0.5342465753424658,
+            "passive_crown": 0.0821917808219178,
+            "active_crown": 0.3561643835616438
+          }
+        },
+        {
+          "ffmc_range": "90-93",
+          "samples": 50,
+          "ros_impact": {
+            "mean": 178.09052320236304,
+            "relative_increase": 7.904526160118152
+          },
+          "fire_type_distribution": {
+            "surface": 0.42,
+            "passive_crown": 0.08,
+            "active_crown": 0.5
+          }
+        },
+        {
+          "ffmc_range": "85-90",
+          "samples": 85,
+          "ros_impact": {
+            "mean": 122.65259798262416,
+            "relative_increase": 5.132629899131208
+          },
+          "fire_type_distribution": {
+            "surface": 0.4,
+            "passive_crown": 0.10588235294117647,
+            "active_crown": 0.4588235294117647
+          }
+        },
+        {
+          "ffmc_range": "93-95",
+          "samples": 42,
+          "ros_impact": {
+            "mean": 251.47905664222702,
+            "relative_increase": 11.57395283211135
+          },
+          "fire_type_distribution": {
+            "surface": 0.30952380952380953,
+            "passive_crown": 0.09523809523809523,
+            "active_crown": 0.5714285714285714
+          }
+        }
+      ],
+      "slope_effects": [
+        {
+          "slope_range_percent": "10-20",
+          "samples": 87,
+          "ros_multiplier": 1.406645842273261,
+          "variability": 125.4889579429948
+        },
+        {
+          "slope_range_percent": "0-10",
+          "samples": 82,
+          "ros_multiplier": 1.0,
+          "variability": 103.14441354909104
+        },
+        {
+          "slope_range_percent": "20-30",
+          "samples": 80,
+          "ros_multiplier": 2.229561360811472,
+          "variability": 218.21565165755973
+        }
+      ],
+      "scale_dependency": [],
+      "performance": []
+    },
+    "level_3": {
+      "fuel_behavior": [
+        {
+          "fuel_type": "C5",
+          "samples": 54,
+          "ros": {
+            "mean": 288.44695778220785,
+            "std": 154.1653195498054,
+            "min": 60.10695252199006,
+            "max": 590.611164157971
+          },
+          "intensity": {
+            "mean": 202876.29328966027,
+            "std": 116302.19745597917,
+            "range": [
+              26145.77572624324,
+              425240.0381937391
+            ]
+          },
+          "crown_fire_frequency": 0.6851851851851852,
+          "correlations": {
+            "ros_vs_wind": -0.1451350508964403,
+            "ros_vs_ffmc": 0.03295193739728876
+          }
+        },
+        {
+          "fuel_type": "C7",
+          "samples": 65,
+          "ros": {
+            "mean": 253.58786455429504,
+            "std": 108.61786212922824,
+            "min": 73.52449080393527,
+            "max": 534.8645415407478
+          },
+          "intensity": {
+            "mean": 75837.113354901,
+            "std": 32964.5476775376,
+            "range": [
+              15989.387536629549,
+              160459.36246222435
+            ]
+          },
+          "crown_fire_frequency": 0.9538461538461539,
+          "correlations": {
+            "ros_vs_wind": -0.12287869978746405,
+            "ros_vs_ffmc": 0.20195629280312513
+          }
+        },
+        {
+          "fuel_type": "C3",
+          "samples": 41,
+          "ros": {
+            "mean": 788.4589314484739,
+            "std": 364.79197121095376,
+            "min": 262.3320539469372,
+            "max": 1618.498049009516
+          },
+          "intensity": {
+            "mean": 544036.662699447,
+            "std": 251706.46013555807,
+            "range": [
+              181009.11722338668,
+              1116763.653816566
+            ]
+          },
+          "crown_fire_frequency": 1.0,
+          "correlations": {
+            "ros_vs_wind": 0.24849203435236514,
+            "ros_vs_ffmc": 0.2000705382914591
+          }
+        },
+        {
+          "fuel_type": "C2",
+          "samples": 47,
+          "ros": {
+            "mean": 1197.84318669037,
+            "std": 599.504595642506,
+            "min": 524.0119852699692,
+            "max": 2610.488191875719
+          },
+          "intensity": {
+            "mean": 574964.7296113777,
+            "std": 287762.205908403,
+            "range": [
+              251525.7529295852,
+              1253034.3321003453
+            ]
+          },
+          "crown_fire_frequency": 1.0,
+          "correlations": {
+            "ros_vs_wind": -0.010202880216850433,
+            "ros_vs_ffmc": 0.2810576240978961
+          }
+        },
+        {
+          "fuel_type": "C4",
+          "samples": 52,
+          "ros": {
+            "mean": 1020.6331668625238,
+            "std": 456.254366871131,
+            "min": 464.26052454904857,
+            "max": 2042.990759657089
+          },
+          "intensity": {
+            "mean": 734855.8801410171,
+            "std": 328503.1441472143,
+            "range": [
+              334267.57767531497,
+              1470953.3469531043
+            ]
+          },
+          "crown_fire_frequency": 1.0,
+          "correlations": {
+            "ros_vs_wind": -0.07855468939528751,
+            "ros_vs_ffmc": 0.3260498179076519
+          }
+        },
+        {
+          "fuel_type": "O1a",
+          "samples": 41,
+          "ros": {
+            "mean": 495.5190498031712,
+            "std": 186.65979460819608,
+            "min": 191.4532299413277,
+            "max": 868.1942531810639
+          },
+          "intensity": {
+            "mean": 52029.50022933296,
+            "std": 19599.27843386059,
+            "range": [
+              20102.58914383941,
+              91160.3965840117
+            ]
+          },
+          "crown_fire_frequency": 0.0,
+          "correlations": {
+            "ros_vs_wind": -0.08460071713033251,
+            "ros_vs_ffmc": 0.10760852372190104
+          }
+        }
+      ],
+      "wind_effects": [
+        {
+          "wind_range_kmh": "60-100",
+          "samples": 295,
+          "ros_multiplier": {
+            "mean": 64.51783479821265,
+            "std": 507.0569987284443
+          },
+          "area_impact": {
+            "mean_ha": 103472.774779661,
+            "variability": 1.9970848734404676
+          },
+          "common_fuels": [
+            "C4",
+            "C3",
+            "C7",
+            "O1a",
+            "C5",
+            "C2"
+          ]
+        },
+        {
+          "wind_range_kmh": "40-60",
+          "samples": 5,
+          "ros_multiplier": {
+            "mean": 74.92771888314348,
+            "std": 455.18764086758193
+          },
+          "area_impact": {
+            "mean_ha": 137903.074,
+            "variability": 0.8952166202687002
+          },
+          "common_fuels": [
+            "C2",
+            "C7"
+          ]
+        }
+      ],
+      "moisture_effects": [
+        {
+          "ffmc_range": "95-97",
+          "samples": 174,
+          "ros_impact": {
+            "mean": 717.0120821517622,
+            "relative_increase": 34.85060410758811
+          },
+          "fire_type_distribution": {
+            "surface": 0.15517241379310345,
+            "passive_crown": 0.040229885057471264,
+            "active_crown": 0.8045977011494253
+          }
+        },
+        {
+          "ffmc_range": "93-95",
+          "samples": 111,
+          "ros_impact": {
+            "mean": 561.1364988021661,
+            "relative_increase": 27.056824940108307
+          },
+          "fire_type_distribution": {
+            "surface": 0.0990990990990991,
+            "passive_crown": 0.10810810810810811,
+            "active_crown": 0.7927927927927928
+          }
+        },
+        {
+          "ffmc_range": "90-93",
+          "samples": 15,
+          "ros_impact": {
+            "mean": 468.5163291624962,
+            "relative_increase": 22.42581645812481
+          },
+          "fire_type_distribution": {
+            "surface": 0.2,
+            "passive_crown": 0.06666666666666667,
+            "active_crown": 0.7333333333333333
+          }
+        }
+      ],
+      "slope_effects": [
+        {
+          "slope_range_percent": "20-30",
+          "samples": 62,
+          "ros_multiplier": 1.724118809666981,
+          "variability": 332.94551008194065
+        },
+        {
+          "slope_range_percent": "30-50",
+          "samples": 135,
+          "ros_multiplier": 2.85056849972862,
+          "variability": 587.0059694803327
+        },
+        {
+          "slope_range_percent": "0-10",
+          "samples": 42,
+          "ros_multiplier": 1.0,
+          "variability": 220.30562709340003
+        },
+        {
+          "slope_range_percent": "10-20",
+          "samples": 61,
+          "ros_multiplier": 1.2959902298680168,
+          "variability": 257.5331855910701
+        }
+      ],
+      "scale_dependency": [],
+      "performance": []
+    },
+    "level_4": {
+      "fuel_behavior": [
+        {
+          "fuel_type": "C2",
+          "samples": 26,
+          "ros": {
+            "mean": 1284.6794621537797,
+            "std": 628.4910928813066,
+            "min": 425.29261854765315,
+            "max": 2572.361182239773
+          },
+          "intensity": {
+            "mean": 616646.1418338142,
+            "std": 301675.7245830272,
+            "range": [
+              204140.45690287353,
+              1234733.367475091
+            ]
+          },
+          "crown_fire_frequency": 1.0,
+          "correlations": {
+            "ros_vs_wind": 0.07213709723281733,
+            "ros_vs_ffmc": 0.24100247422648594
+          }
+        },
+        {
+          "fuel_type": "C7",
+          "samples": 36,
+          "ros": {
+            "mean": 270.15637995698967,
+            "std": 145.05293239347512,
+            "min": 47.56659483396123,
+            "max": 534.9854983018697
+          },
+          "intensity": {
+            "mean": 80417.55723600835,
+            "std": 44388.7249947838,
+            "range": [
+              8206.78327619745,
+              160495.6494905609
+            ]
+          },
+          "crown_fire_frequency": 0.8888888888888888,
+          "correlations": {
+            "ros_vs_wind": 0.1117347679040481,
+            "ros_vs_ffmc": 0.2620077833990553
+          }
+        },
+        {
+          "fuel_type": "O1b",
+          "samples": 33,
+          "ros": {
+            "mean": 588.4679872269854,
+            "std": 282.25738982787607,
+            "min": 188.40429714641994,
+            "max": 1138.159579005292
+          },
+          "intensity": {
+            "mean": 61789.13865883346,
+            "std": 29637.025931926986,
+            "range": [
+              19782.451200374093,
+              119506.75579555565
+            ]
+          },
+          "crown_fire_frequency": 0.0,
+          "correlations": {
+            "ros_vs_wind": 0.19756072704296257,
+            "ros_vs_ffmc": 0.15902292224425466
+          }
+        },
+        {
+          "fuel_type": "C3",
+          "samples": 32,
+          "ros": {
+            "mean": 700.8115916238186,
+            "std": 315.78360052805135,
+            "min": 267.9044910354447,
+            "max": 1624.471785006634
+          },
+          "intensity": {
+            "mean": 483559.99822043476,
+            "std": 217890.68436435546,
+            "range": [
+              184854.09881445684,
+              1120885.5316545775
+            ]
+          },
+          "crown_fire_frequency": 1.0,
+          "correlations": {
+            "ros_vs_wind": 0.37889231141479673,
+            "ros_vs_ffmc": -0.131925395877334
+          }
+        },
+        {
+          "fuel_type": "C5",
+          "samples": 26,
+          "ros": {
+            "mean": 252.05665030395568,
+            "std": 128.92526693051272,
+            "min": 10.36129937240999,
+            "max": 548.6089062054358
+          },
+          "intensity": {
+            "mean": 176777.98009433429,
+            "std": 97805.31130830465,
+            "range": [
+              3730.0677740675965,
+              394998.41246791376
+            ]
+          },
+          "crown_fire_frequency": 0.6923076923076923,
+          "correlations": {
+            "ros_vs_wind": 0.2927599937321911,
+            "ros_vs_ffmc": -0.0776798213859251
+          }
+        },
+        {
+          "fuel_type": "C4",
+          "samples": 35,
+          "ros": {
+            "mean": 943.6754757579333,
+            "std": 467.40480975270947,
+            "min": 361.45567201077694,
+            "max": 2050.5159599783537
+          },
+          "intensity": {
+            "mean": 679446.3425457119,
+            "std": 336531.46302195085,
+            "range": [
+              260248.08384775938,
+              1476371.4911844146
+            ]
+          },
+          "crown_fire_frequency": 1.0,
+          "correlations": {
+            "ros_vs_wind": 0.2846265392580023,
+            "ros_vs_ffmc": -0.004291810203028188
+          }
+        },
+        {
+          "fuel_type": "C6",
+          "samples": 19,
+          "ros": {
+            "mean": 370.5292584390734,
+            "std": 185.94437189695483,
+            "min": 122.42668652412523,
+            "max": 680.9969220120466
+          },
+          "intensity": {
+            "mean": 400171.5991141993,
+            "std": 200819.9216487112,
+            "range": [
+              132220.82144605526,
+              735476.6757730104
+            ]
+          },
+          "crown_fire_frequency": 1.0,
+          "correlations": {
+            "ros_vs_wind": 0.389834585020576,
+            "ros_vs_ffmc": -0.25658595354656205
+          }
+        },
+        {
+          "fuel_type": "O1a",
+          "samples": 43,
+          "ros": {
+            "mean": 416.94577775470765,
+            "std": 210.95908418369217,
+            "min": 128.22698839610928,
+            "max": 881.0915546773531
+          },
+          "intensity": {
+            "mean": 43779.30666424431,
+            "std": 22150.70383928768,
+            "range": [
+              13463.833781591475,
+              92514.61324112208
+            ]
+          },
+          "crown_fire_frequency": 0.0,
+          "correlations": {
+            "ros_vs_wind": 0.29904149650401635,
+            "ros_vs_ffmc": 0.08924448241864255
+          }
+        }
+      ],
+      "wind_effects": [
+        {
+          "wind_range_kmh": "60-100",
+          "samples": 168,
+          "ros_multiplier": {
+            "mean": 61.72409665199285,
+            "std": 470.4589795563407
+          },
+          "area_impact": {
+            "mean_ha": 17279.307380952385,
+            "variability": 1.484555441194278
+          },
+          "common_fuels": [
+            "C2",
+            "C4",
+            "C7",
+            "O1b",
+            "C5",
+            "C6",
+            "C3",
+            "O1a"
+          ]
+        },
+        {
+          "wind_range_kmh": "100-160",
+          "samples": 62,
+          "ros_multiplier": {
+            "mean": 63.22545572120147,
+            "std": 451.4777257499563
+          },
+          "area_impact": {
+            "mean_ha": 16912.065483870967,
+            "variability": 1.162850032592735
+          },
+          "common_fuels": [
+            "C2",
+            "C6",
+            "C7",
+            "O1b",
+            "C5",
+            "C4",
+            "C3",
+            "O1a"
+          ]
+        },
+        {
+          "wind_range_kmh": "40-60",
+          "samples": 15,
+          "ros_multiplier": {
+            "mean": 38.514181682362725,
+            "std": 370.3281421274613
+          },
+          "area_impact": {
+            "mean_ha": 15672.128666666666,
+            "variability": 1.3090166748800216
+          },
+          "common_fuels": [
+            "C6",
+            "C4",
+            "C7",
+            "C5",
+            "O1b",
+            "O1a"
+          ]
+        },
+        {
+          "wind_range_kmh": "20-40",
+          "samples": 5,
+          "ros_multiplier": {
+            "mean": 17.003138865612762,
+            "std": 94.53548611521823
+          },
+          "area_impact": {
+            "mean_ha": 6405.744,
+            "variability": 0.7880846417378089
+          },
+          "common_fuels": [
+            "C7",
+            "O1a",
+            "C5"
+          ]
+        }
+      ],
+      "moisture_effects": [
+        {
+          "ffmc_range": "93-95",
+          "samples": 55,
+          "ros_impact": {
+            "mean": 609.4177195827697,
+            "relative_increase": 29.470885979138483
+          },
+          "fire_type_distribution": {
+            "surface": 0.23636363636363636,
+            "passive_crown": 0.05454545454545454,
+            "active_crown": 0.7090909090909091
+          }
+        },
+        {
+          "ffmc_range": "85-90",
+          "samples": 68,
+          "ros_impact": {
+            "mean": 615.6365557621984,
+            "relative_increase": 29.781827788109922
+          },
+          "fire_type_distribution": {
+            "surface": 0.3235294117647059,
+            "passive_crown": 0.014705882352941176,
+            "active_crown": 0.6617647058823529
+          }
+        },
+        {
+          "ffmc_range": "90-93",
+          "samples": 72,
+          "ros_impact": {
+            "mean": 625.4120974807843,
+            "relative_increase": 30.270604874039215
+          },
+          "fire_type_distribution": {
+            "surface": 0.3611111111111111,
+            "passive_crown": 0.05555555555555555,
+            "active_crown": 0.5833333333333334
+          }
+        },
+        {
+          "ffmc_range": "70-85",
+          "samples": 17,
+          "ros_impact": {
+            "mean": 455.4415445796832,
+            "relative_increase": 21.77207722898416
+          },
+          "fire_type_distribution": {
+            "surface": 0.35294117647058826,
+            "passive_crown": 0.11764705882352941,
+            "active_crown": 0.5294117647058824
+          }
+        },
+        {
+          "ffmc_range": "95-97",
+          "samples": 38,
+          "ros_impact": {
+            "mean": 562.371354546711,
+            "relative_increase": 27.118567727335552
+          },
+          "fire_type_distribution": {
+            "surface": 0.2631578947368421,
+            "passive_crown": 0.02631578947368421,
+            "active_crown": 0.7105263157894737
+          }
+        }
+      ],
+      "slope_effects": [
+        {
+          "slope_range_percent": "20-30",
+          "samples": 53,
+          "ros_multiplier": 1.6123491647398756,
+          "variability": 293.19784111952475
+        },
+        {
+          "slope_range_percent": "10-20",
+          "samples": 52,
+          "ros_multiplier": 1.069998307779918,
+          "variability": 201.45477110650023
+        },
+        {
+          "slope_range_percent": "30-50",
+          "samples": 105,
+          "ros_multiplier": 2.747609143220616,
+          "variability": 541.479006076702
+        },
+        {
+          "slope_range_percent": "0-10",
+          "samples": 40,
+          "ros_multiplier": 1.0,
+          "variability": 173.445073789764
+        }
+      ],
+      "scale_dependency": [],
+      "performance": []
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "task_id": "DEPLOY-001",
+  "title": "Render Deployment Failure Investigation",
+  "description": "Investigate and fix the Render deployment that has been failing for several hours with database authentication errors",
+  "priority": "critical",
+  "assigned_agents": [
+    "backend-developer-agent",
+    "devops-engineer-agent",
+    "qa-testing-agent"
+  ],
+  "context": {
+    "issue": "Render deployment failing with 502 errors after 3+ hours of troubleshooting",
+    "services": [
+      "wildfire-api-v2 (srv-d44n8hn5r7bs73b1dvp0)",
+      "wildfire-worker-v2 (srv-d44n8hn5r7bs73b1dvpg)"
+    ],
+    "root_cause": "SUPABASE_DB_USER environment variable was missing, causing authentication to fail with username 'postgres' instead of 'postgres.ocwmvlamlxkfxohuzloh'",
+    "actions_taken": [
+      "Added SUPABASE_DB_USER manually via Render dashboard",
+      "Triggered manual redeployment",
+      "Services have been deploying for 3+ minutes but still showing 502 errors"
+    ],
+    "database_config": {
+      "host": "aws-1-us-east-1.pooler.supabase.com",
+      "port": 5432,
+      "database": "postgres",
+      "required_username": "postgres.ocwmvlamlxkfxohuzloh"
+    }
+  },
+  "investigation_tasks": [
+    "Review backend/config_supabase.py for username auto-detection logic",
+    "Check if SUPABASE_DB_USER was actually added to Render environment",
+    "Analyze deployment logs for specific error messages",
+    "Verify all 5 required Supabase environment variables are set correctly",
+    "Test local database connection with the same credentials",
+    "Provide diagnosis and recommended fix"
+  ],
+  "expected_outputs": [
+    "Root cause analysis",
+    "List of configuration issues found",
+    "Step-by-step fix instructions",
+    "Verification steps to confirm fix worked"
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "agent": "backend-cleanup-agent",
+  "tasks": [
+    {
+      "task_id": "backend-001",
+      "priority": "high",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Remove unused imports and dead code from Python backend files",
+      "scope": {
+        "files": ["app.py", "models/*.py", "routes/*.py", "utils/*.py"],
+        "directories": ["tools", "tests"],
+        "exclusions": ["venv", "__pycache__", ".git"]
+      },
+      "success_criteria": [
+        "No unused imports remain",
+        "Dead code removed",
+        "pylint score improved",
+        "All tests still pass"
+      ],
+      "dependencies": [],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Use tools like autoflake or manual inspection"
+    },
+    {
+      "task_id": "backend-002",
+      "priority": "high",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Fix Python linting errors and improve code style",
+      "scope": {
+        "files": ["*.py"],
+        "directories": [".", "tools", "tests"],
+        "exclusions": ["venv", "node_modules"]
+      },
+      "success_criteria": [
+        "All pylint errors resolved",
+        "Code follows PEP 8 style guide",
+        "No trailing whitespace",
+        "Consistent indentation"
+      ],
+      "dependencies": ["backend-001"],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Run: pylint *.py tools/*.py"
+    },
+    {
+      "task_id": "backend-003",
+      "priority": "medium",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Add type hints to critical backend functions",
+      "scope": {
+        "files": ["app.py", "models/*.py", "utils/*.py"],
+        "directories": [],
+        "exclusions": []
+      },
+      "success_criteria": [
+        "Type hints added to all public functions",
+        "mypy type checking passes",
+        "Return types documented"
+      ],
+      "dependencies": ["backend-002"],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Focus on API endpoints and data models first"
+    },
+    {
+      "task_id": "backend-004",
+      "priority": "medium",
+      "status": "pending",
+      "assigned_by": "dev-team-controller",
+      "objective": "Improve error handling and logging in backend",
+      "scope": {
+        "files": ["app.py", "routes/*.py"],
+        "directories": ["tools"],
+        "exclusions": []
+      },
+      "success_criteria": [
+        "All try-except blocks have proper error logging",
+        "User-facing errors are informative",
+        "Critical operations have error recovery",
+        "Logging is consistent across modules"
+      ],
+      "dependencies": [],
+      "output_location": ".agents/development_team/reports/",
+      "notes": "Use Python logging module consistently"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+README.md
+pyproject.toml
+setup.py
+src/agent_management_mcp.egg-info/PKG-INFO
+src/agent_management_mcp.egg-info/SOURCES.txt
+src/agent_management_mcp.egg-info/dependency_links.txt
+src/agent_management_mcp.egg-info/entry_points.txt
+src/agent_management_mcp.egg-info/requires.txt
+src/agent_management_mcp.egg-info/top_level.txt
+src/agent_mcp/__init__.py
+src/agent_mcp/__main__.py
+src/agent_mcp/agent_manager.py
+src/agent_mcp/config.py
+src/agent_mcp/executor.py
+src/agent_mcp/models.py
+src/agent_mcp/server.py

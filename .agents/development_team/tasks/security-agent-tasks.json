@@ -1,0 +1,225 @@
+{
+  "agent": "security-agent",
+  "priority": "P0 - CRITICAL",
+  "assigned_date": "2025-10-27",
+  "estimated_effort_days": 3,
+  "dependencies": [],
+  "tasks": [
+    {
+      "id": "SEC-001",
+      "title": "API Key Exposure Audit",
+      "priority": "P0",
+      "status": "pending",
+      "description": "Conduct comprehensive audit of all API keys exposed in source code",
+      "acceptance_criteria": [
+        "List all exposed keys with file locations and line numbers",
+        "Identify which keys are active/compromised",
+        "Document rotation requirements for each key",
+        "Verify no keys in git history (.env, .env.local, etc.)"
+      ],
+      "files_to_audit": [
+        "frontend/.env.local",
+        "frontend/app/components/MapEditor.js",
+        ".env",
+        "frontend/.env.production",
+        "All *.env files across repository"
+      ],
+      "deliverable": ".agents/reports/security-api-key-audit.json"
+    },
+    {
+      "id": "SEC-002",
+      "title": "Rotate Exposed API Keys",
+      "priority": "P0",
+      "status": "pending",
+      "description": "Immediately rotate all exposed API keys identified in SEC-001",
+      "blocked_by": ["SEC-001"],
+      "acceptance_criteria": [
+        "MapBox token rotated and updated in environment variables",
+        "MapTiler key rotated (or removed if not critical)",
+        "Nominatim email moved to environment variable",
+        "All old keys invalidated in respective platforms",
+        "New keys stored only in environment variables, never in source",
+        "Update deployment configs (Vercel, Railway) with new keys"
+      ],
+      "deliverable": ".agents/reports/security-key-rotation-log.json"
+    },
+    {
+      "id": "SEC-003",
+      "title": "Input Validation Assessment",
+      "priority": "P0",
+      "status": "pending",
+      "description": "Audit all API endpoints for input validation vulnerabilities",
+      "acceptance_criteria": [
+        "List all endpoints accepting user input",
+        "Identify missing Pydantic models",
+        "Document injection attack vectors (SQL, XSS, command injection)",
+        "Check HTML escaping in form rendering (forms.py)",
+        "Verify coordinate validation logic",
+        "Test for path traversal in file operations"
+      ],
+      "files_to_audit": [
+        "app.py (all POST/PUT endpoints)",
+        "forms.py (HTML rendering)",
+        "mapping.py (GeoJSON parsing)",
+        "infrastructure.py (radius parameters)"
+      ],
+      "deliverable": ".agents/reports/security-input-validation-audit.json"
+    },
+    {
+      "id": "SEC-004",
+      "title": "Implement Input Validation",
+      "priority": "P0",
+      "status": "pending",
+      "description": "Add Pydantic models for all request bodies and sanitize inputs",
+      "blocked_by": ["SEC-003"],
+      "acceptance_criteria": [
+        "Create SubmissionSchema Pydantic model with full validation",
+        "Add field validators for coordinates, radii, enum values",
+        "Implement max submission size limit (10MB)",
+        "Add HTML sanitization for user text fields",
+        "Update all endpoints to use validated models",
+        "Add unit tests for validation logic"
+      ],
+      "files_to_modify": [
+        "app.py (add schema models)",
+        "Create: schemas/submission.py",
+        "Create: schemas/forms.py",
+        "Create: tests/test_validation.py"
+      ],
+      "deliverable": "Code changes + test results"
+    },
+    {
+      "id": "SEC-005",
+      "title": "CORS Hardening",
+      "priority": "P0",
+      "status": "pending",
+      "description": "Restrict CORS to specific production domains only",
+      "acceptance_criteria": [
+        "Remove *.vercel.app wildcard from allow_origins",
+        "Add environment-based CORS configuration (DEPLOYMENT_TARGET)",
+        "Local: allow localhost:3000, 127.0.0.1:3000 only",
+        "Production: allow exact production domains only",
+        "Remove hardcoded 192.168.4.84 from committed code",
+        "Document CORS configuration in README"
+      ],
+      "files_to_modify": [
+        "app.py:27-40 (CORS middleware)",
+        "Create: config/cors.py (environment-specific rules)"
+      ],
+      "deliverable": "Code changes + documentation"
+    },
+    {
+      "id": "SEC-006",
+      "title": "Data Encryption at Rest",
+      "priority": "P1",
+      "status": "pending",
+      "description": "Identify sensitive fields and implement encryption",
+      "acceptance_criteria": [
+        "List all PII fields (IC phone, contact info, etc.)",
+        "Design encryption strategy (field-level vs full DB)",
+        "Implement encryption for sensitive fields in submissions table",
+        "Add key management solution (environment variable for now)",
+        "Test encryption/decryption performance impact",
+        "Document encryption approach in security.md"
+      ],
+      "files_to_modify": [
+        "app.py (_prepare_submission, submission storage)",
+        "Create: utils/crypto.py (encryption helpers)"
+      ],
+      "deliverable": ".agents/reports/security-encryption-implementation.md"
+    },
+    {
+      "id": "SEC-007",
+      "title": "Rate Limiting",
+      "priority": "P1",
+      "status": "pending",
+      "description": "Implement rate limiting to prevent abuse and manage API costs",
+      "acceptance_criteria": [
+        "Add rate limiting middleware (slowapi or custom)",
+        "Limit /generate-plan to 5 requests per minute per IP",
+        "Limit /forms to 10 requests per minute per IP",
+        "Limit /infrastructure/suggest to 20 requests per minute per IP",
+        "Add rate limit headers (X-RateLimit-Limit, X-RateLimit-Remaining)",
+        "Test rate limiting behavior"
+      ],
+      "files_to_modify": [
+        "app.py (add middleware)",
+        "requirements.txt (add slowapi)"
+      ],
+      "deliverable": "Code changes + test results"
+    },
+    {
+      "id": "SEC-008",
+      "title": "Security Headers Audit",
+      "priority": "P1",
+      "status": "pending",
+      "description": "Add security headers (HSTS, CSP, X-Frame-Options, etc.)",
+      "acceptance_criteria": [
+        "Add HSTS header (Strict-Transport-Security)",
+        "Strengthen CSP header (currently allows unsafe-eval)",
+        "Add X-Content-Type-Options: nosniff",
+        "Add X-Frame-Options: DENY",
+        "Add Referrer-Policy: strict-origin-when-cross-origin",
+        "Test headers with securityheaders.com"
+      ],
+      "files_to_modify": [
+        "app.py (add middleware)",
+        "frontend/next.config.mjs (update headers)"
+      ],
+      "deliverable": "Code changes + header scan results"
+    },
+    {
+      "id": "SEC-009",
+      "title": "Dependency Security Scan",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Scan all dependencies for known vulnerabilities",
+      "acceptance_criteria": [
+        "Run safety check on requirements.txt",
+        "Run npm audit on frontend/package.json",
+        "Document all CVEs found",
+        "Upgrade vulnerable packages where possible",
+        "Document any CVEs that cannot be fixed (with justification)"
+      ],
+      "commands": [
+        "pip install safety && safety check -r requirements.txt",
+        "cd frontend && npm audit"
+      ],
+      "deliverable": ".agents/reports/security-dependency-scan.json"
+    },
+    {
+      "id": "SEC-010",
+      "title": "Git Secret Scanning",
+      "priority": "P2",
+      "status": "pending",
+      "description": "Scan git history for committed secrets",
+      "acceptance_criteria": [
+        "Run truffleHog or git-secrets on entire repo history",
+        "Identify all committed secrets",
+        "Provide instructions for secret rotation",
+        "Document git history cleanup procedure (BFG Repo-Cleaner)",
+        "Add pre-commit hook to prevent future secret commits"
+      ],
+      "tools": ["truffleHog", "git-secrets"],
+      "deliverable": ".agents/reports/security-git-secrets-scan.json"
+    }
+  ],
+  "overall_objectives": [
+    "Eliminate critical security vulnerabilities (auth, keys, validation)",
+    "Harden API surface against common attacks (injection, DoS, etc.)",
+    "Implement security best practices (encryption, headers, rate limiting)",
+    "Document security posture for compliance review"
+  ],
+  "success_metrics": {
+    "all_exposed_keys_rotated": true,
+    "input_validation_on_all_endpoints": true,
+    "cors_restricted_to_production_domains": true,
+    "rate_limiting_implemented": true,
+    "no_critical_cves_in_dependencies": true
+  },
+  "report_format": {
+    "summary": ".agents/reports/security-agent-report.json",
+    "detailed_findings": ".agents/reports/security-detailed-findings.md",
+    "remediation_log": ".agents/reports/security-remediation-log.json"
+  }
+}
