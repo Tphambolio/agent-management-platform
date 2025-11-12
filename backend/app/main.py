@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 from typing import List, Optional
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.exceptions import RequestValidationError
+from sqlalchemy.exc import SQLAlchemyError
 from pydantic import BaseModel
 
 from app.config import settings
@@ -15,8 +17,28 @@ from app.local_agent_skills import local_agent_skills_system  # Use local CLI-ba
 from app.agent_memory import agent_memory
 from app.dataset_manager import dataset_manager
 from app.code_extractor import code_extractor
+# Import error handlers
+from app.middleware.error_handler import (
+    AppException,
+    NotFoundException,
+    DatabaseException,
+    handle_app_exception,
+    handle_validation_error,
+    handle_database_error,
+    handle_generic_exception
+)
+# Import auth routes
+from app.routes.auth import router as auth_router
+# Import logging
+from app.logging import setup_logging, get_logger
+# Import request ID middleware
+from app.middleware.request_id import RequestIDMiddleware
 # Temporarily disabled to debug deployment
 # from app.agent_executor import AgentExecutor
+
+# Setup structured logging
+setup_logging()
+logger = get_logger(__name__)
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -24,6 +46,12 @@ app = FastAPI(
     version=settings.API_VERSION,
     description="Cloud-based agent workforce management platform"
 )
+
+# Register exception handlers
+app.add_exception_handler(AppException, handle_app_exception)
+app.add_exception_handler(RequestValidationError, handle_validation_error)
+app.add_exception_handler(SQLAlchemyError, handle_database_error)
+app.add_exception_handler(Exception, handle_generic_exception)
 
 # Configure CORS
 app.add_middleware(
@@ -34,19 +62,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Add request ID middleware for tracking
+app.add_middleware(RequestIDMiddleware)
+
+# Include routers
+app.include_router(auth_router)
+
 # Initialize database and agent executor (initialize on first import, not on startup)
 try:
     init_db()
-    print("✅ Database initialized")
+    logger.info("Database initialized successfully")
 except Exception as e:
-    print(f"⚠️  Database init warning: {e}")
+    logger.warning("Database initialization warning", error=str(e))
 
 # Temporarily disabled to debug deployment
 # try:
 #     agent_executor = AgentExecutor(settings.AGENTS_DIR)
-#     print(f"✅ Agent executor initialized (dir: {settings.AGENTS_DIR})")
+#     logger.info("Agent executor initialized", agents_dir=settings.AGENTS_DIR)
 # except Exception as e:
-#     print(f"⚠️  Agent executor warning: {e}")
+#     logger.warning("Agent executor initialization warning", error=str(e))
 agent_executor = None  # Disabled for debugging
 
 # WebSocket connections manager
@@ -190,7 +224,7 @@ async def task_processor():
 async def startup_event():
     """Start background task processor"""
     asyncio.create_task(task_processor())
-    print("✅ Background task processor started")
+    logger.info("Background task processor started")
 
 # Pydantic schemas
 class AgentResponse(BaseModel):

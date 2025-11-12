@@ -1,5 +1,5 @@
 """Database models for Agent Management Platform"""
-from sqlalchemy import Column, String, DateTime, JSON, Text, Integer, Enum as SQLEnum
+from sqlalchemy import Column, String, DateTime, JSON, Text, Integer, Enum as SQLEnum, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 from datetime import datetime
@@ -23,6 +23,22 @@ class TaskStatus(str, enum.Enum):
     COMPLETED = "completed"
     FAILED = "failed"
     CANCELLED = "cancelled"
+
+
+class User(Base):
+    """User model for authentication"""
+    __tablename__ = "users"
+
+    id = Column(String, primary_key=True)
+    username = Column(String(100), unique=True, nullable=False, index=True)
+    email = Column(String(255), unique=True, nullable=False, index=True)
+    hashed_password = Column(String(255), nullable=False)
+    full_name = Column(String(255))
+    is_active = Column(Boolean, default=True)
+    is_admin = Column(Boolean, default=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    last_login = Column(DateTime(timezone=True))
+    meta = Column(JSON, default=dict)
 
 
 class Agent(Base):

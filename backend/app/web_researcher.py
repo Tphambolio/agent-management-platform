@@ -93,17 +93,36 @@ class WebResearcher:
         """
         Conduct comprehensive research on a topic
 
-        1. Search the web for relevant information
-        2. Analyze findings using Claude
-        3. Generate a structured research report
+        1. Expand and refine the research request (prefilter)
+        2. Search the web for relevant information
+        3. Analyze findings using Claude
+        4. Generate a structured research report
         """
 
         print(f"\n🔬 Starting research: {task_title}")
         print(f"   Agent: {agent_type}")
         print(f"   Topic: {task_description}")
 
-        # Determine search queries based on task
-        search_queries = self._generate_search_queries(task_description)
+        # Step 1: Expand and refine the research request
+        if self.claude:
+            print(f"   🎯 Expanding research scope...")
+            expanded_request = await self._expand_research_request(
+                task_title,
+                task_description,
+                agent_type
+            )
+            print(f"   ✅ Research scope refined")
+        else:
+            expanded_request = {
+                "refined_title": task_title,
+                "refined_description": task_description,
+                "research_objectives": [task_description],
+                "key_questions": [task_description],
+                "search_strategy": task_description
+            }
+
+        # Step 2: Determine search queries based on expanded request
+        search_queries = self._generate_search_queries(expanded_request["search_strategy"])
 
         # Collect research data from web
         all_results = []
@@ -117,10 +136,11 @@ class WebResearcher:
         # Synthesize findings using Claude
         if self.claude and len(all_results) > 0:
             report_content = await self._synthesize_with_ai(
-                task_title,
-                task_description,
+                expanded_request["refined_title"],
+                expanded_request["refined_description"],
                 all_results,
-                agent_type
+                agent_type,
+                expanded_request
             )
         else:
             report_content = self._generate_basic_report(
@@ -139,6 +159,122 @@ class WebResearcher:
             "generated_at": datetime.now().isoformat(),
             "agent_type": agent_type
         }
+
+    async def _expand_research_request(
+        self,
+        title: str,
+        description: str,
+        agent_type: str
+    ) -> Dict:
+        """
+        Prefilter: Expand and refine research request for optimal, scientifically defensible,
+        action-oriented results.
+
+        This step ensures:
+        - Research objectives are clearly defined
+        - Scientific rigor in framing
+        - Actionable outcomes are prioritized
+        - Search strategy is optimized
+        """
+
+        expansion_prompt = f"""You are an expert research strategist helping to refine a research request. Your goal is to expand and clarify the request to ensure optimal, scientifically defensible, and action-oriented results.
+
+**Original Request:**
+Title: {title}
+Description: {description}
+Agent Type: {agent_type}
+
+**Your Task:**
+Analyze this research request and expand it into a well-structured research plan that will yield the best possible results.
+
+Please provide your analysis in the following JSON format:
+
+{{
+  "refined_title": "A clear, specific title that captures the core research question",
+  "refined_description": "An expanded description that clarifies scope, context, and relevance",
+  "research_objectives": [
+    "Primary objective 1 (what we need to discover)",
+    "Secondary objective 2",
+    "Additional objective 3 (if needed)"
+  ],
+  "key_questions": [
+    "Specific question 1 that must be answered",
+    "Specific question 2 that must be answered",
+    "Specific question 3 (if applicable)"
+  ],
+  "success_criteria": [
+    "Criterion 1 for evaluating quality of results",
+    "Criterion 2 for scientific defensibility",
+    "Criterion 3 for actionability"
+  ],
+  "search_strategy": "Optimized search query/keywords that will find the most relevant, recent, and authoritative sources",
+  "expected_deliverables": [
+    "Deliverable 1 (e.g., 'Evidence-based recommendations')",
+    "Deliverable 2 (e.g., 'Comparison of approaches with pros/cons')"
+  ],
+  "scientific_rigor_notes": "How to ensure findings are scientifically defensible (e.g., 'Prioritize peer-reviewed sources', 'Compare multiple authoritative sources')",
+  "action_orientation": "How to make results actionable (e.g., 'Include specific implementation steps', 'Provide decision framework')"
+}}
+
+**Guidelines:**
+1. Make objectives SMART (Specific, Measurable, Achievable, Relevant, Time-bound where applicable)
+2. Ensure questions can be answered with available web sources
+3. Frame the search strategy to find authoritative, recent, and relevant sources
+4. Emphasize practical applications and actionable insights
+5. Consider scientific validity and evidence quality
+6. Keep the scope focused but comprehensive enough to be useful
+
+Return ONLY the JSON, no additional text."""
+
+        try:
+            message = self.claude.messages.create(
+                model="claude-sonnet-4-20250514",
+                max_tokens=2048,
+                messages=[{"role": "user", "content": expansion_prompt}]
+            )
+
+            # Parse JSON response
+            import json
+            response_text = message.content[0].text.strip()
+
+            # Handle potential markdown code blocks
+            if response_text.startswith("```"):
+                # Extract JSON from markdown code block
+                lines = response_text.split("\n")
+                json_lines = []
+                in_json = False
+                for line in lines:
+                    if line.strip().startswith("```"):
+                        if in_json:
+                            break
+                        in_json = True
+                        continue
+                    if in_json:
+                        json_lines.append(line)
+                response_text = "\n".join(json_lines)
+
+            expanded = json.loads(response_text)
+
+            # Log the expansion
+            print(f"   📋 Refined objectives: {len(expanded.get('research_objectives', []))}")
+            print(f"   ❓ Key questions: {len(expanded.get('key_questions', []))}")
+
+            return expanded
+
+        except Exception as e:
+            print(f"⚠️  Research expansion error: {e}")
+            # Fallback to basic structure
+            return {
+                "refined_title": title,
+                "refined_description": description,
+                "research_objectives": [description],
+                "key_questions": [f"What are the key findings about {title}?"],
+                "success_criteria": ["Find authoritative sources", "Provide actionable insights"],
+                "search_strategy": description,
+                "expected_deliverables": ["Research summary", "Recommendations"],
+                "scientific_rigor_notes": "Use reputable sources",
+                "action_orientation": "Focus on practical applications"
+            }
 
     def _generate_search_queries(self, description: str) -> List[str]:
         """Generate relevant search queries from task description"""
@@ -159,7 +295,8 @@ class WebResearcher:
         title: str,
         description: str,
         search_results: List[Dict],
-        agent_type: str
+        agent_type: str,
+        expanded_request: Dict = None
     ) -> str:
         """Use Claude to synthesize research findings into a comprehensive report"""
 
@@ -171,35 +308,83 @@ class WebResearcher:
             for i, r in enumerate(search_results[:15])  # Limit to 15 sources
         ])
 
+        # Build enhanced prompt with expanded request context
+        objectives_text = ""
+        if expanded_request:
+            objectives_list = "\n".join([f"- {obj}" for obj in expanded_request.get("research_objectives", [])])
+            questions_list = "\n".join([f"- {q}" for q in expanded_request.get("key_questions", [])])
+            deliverables_list = "\n".join([f"- {d}" for d in expanded_request.get("expected_deliverables", [])])
+
+            objectives_text = f"""
+**Research Objectives:**
+{objectives_list}
+
+**Key Questions to Address:**
+{questions_list}
+
+**Expected Deliverables:**
+{deliverables_list}
+
+**Scientific Rigor Requirements:**
+{expanded_request.get("scientific_rigor_notes", "Ensure findings are evidence-based")}
+
+**Action Orientation:**
+{expanded_request.get("action_orientation", "Focus on practical, actionable insights")}
+"""
+
         prompt = f"""You are a {agent_type} conducting research on the following topic:
 
 **Task:** {title}
 **Description:** {description}
+{objectives_text}
 
 I have gathered the following information from web searches:
 
 {sources_text}
 
-Please synthesize these findings into a comprehensive research report with the following structure:
+Please synthesize these findings into a comprehensive, scientifically rigorous, action-oriented research report with the following structure:
 
 # {title}
 
 ## Executive Summary
-[Brief overview of key findings]
+[2-3 paragraph overview of key findings, conclusions, and recommendations]
 
-## Research Findings
-[Detailed analysis organized by themes/topics]
+## Introduction
+[Context, scope, and objectives of the research]
+
+## Research Methodology
+[Brief description of research approach and sources]
+
+## Findings & Analysis
+[Detailed analysis organized by themes/topics. Reference specific sources. Include evidence and data.]
 
 ## Key Insights
-[Most important discoveries and conclusions]
+[Most important discoveries and conclusions supported by evidence]
 
-## Sources & References
-[List of sources used]
+## Practical Applications
+[How these findings can be applied in practice]
 
 ## Recommendations
-[Actionable recommendations based on research]
+[Specific, actionable recommendations with priority levels and implementation guidance]
 
-Make the report professional, well-structured, and data-driven. Include specific details from the sources."""
+## Limitations & Future Research
+[Acknowledge limitations and suggest areas for deeper investigation]
+
+## References
+[Numbered list of all sources cited, formatted academically]
+
+## Appendix (if applicable)
+[Additional supporting data, tables, or detailed information]
+
+**Important Guidelines:**
+- Use evidence-based reasoning throughout
+- Cite specific sources when making claims
+- Provide actionable, practical recommendations
+- Maintain scientific rigor and objectivity
+- Structure content logically with clear headings
+- Use professional, academic tone
+- Include specific data points and examples from sources
+- Ensure all claims are defensible and well-supported"""
 
         try:
             message = self.claude.messages.create(
