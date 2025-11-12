@@ -1,15 +1,20 @@
-# Render.com configuration for backend
 services:
   - type: web
-    name: agent-management-backend
-    env: python
-    buildCommand: |
-      cd mcp-server && pip install -e . && cd ../backend && pip install -r requirements.txt
-    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    name: agent-mgmt-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile.backend
+    dockerContext: .
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.0
-      - key: HOST
-        value: 0.0.0.0
-      - key: DEBUG
-        value: false
+      - key: PORT
+        value: 8000
+      - key: ANTHROPIC_API_KEY
+        sync: false  # Set manually in Render dashboard
+      - key: BRAVE_API_KEY
+        sync: false  # Set manually in Render dashboard
+      - key: DATABASE_URL
+        value: sqlite:///./agent_management.db
+    disk:
+      name: agent-data
+      mountPath: /app/.agents
+      sizeGB: 10
+    healthCheckPath: /health

@@ -20,6 +20,9 @@ COPY backend/app /app/app
 RUN mkdir -p /app/.agents/tasks /app/.agents/projects /app/.agents/reports /app/.agents/status \
     /app/.agents/datasets /app/.agents/artifacts /app/.agents/cache /app/.agents/memory
 
+# Copy agent DNA/genome files from repository root
+COPY .agents/dna /app/.agents/dna
+
 # Expose port
 EXPOSE 8000
 

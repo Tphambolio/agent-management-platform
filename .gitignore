@@ -31,3 +31,10 @@ logs/
 dist/
 build/
 *.egg-info/
+
+# Agent runtime data (created during execution)
+.agents/amp.db
+.agents/memory/
+.agents/cache/
+.agents/datasets/
+.agents/artifacts/
