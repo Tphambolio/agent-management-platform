@@ -38,3 +38,4 @@ build/
 .agents/cache/
 .agents/datasets/
 .agents/artifacts/
+backend/.env

@@ -11,7 +11,7 @@ from app.config import settings
 from app.database import init_db, get_db
 from app.models import Agent, Task, Report, Project, AgentStatus, TaskStatus
 from app.web_researcher import web_researcher
-from app.agent_skills import agent_skills_system
+from app.local_agent_skills import local_agent_skills_system  # Use local CLI-based system
 from app.agent_memory import agent_memory
 from app.dataset_manager import dataset_manager
 from app.code_extractor import code_extractor
