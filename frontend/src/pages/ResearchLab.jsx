@@ -1,12 +1,26 @@
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { knowledgeAPI } from '../api/client'
-import { FileText, Search, X, Download, BookOpen, TrendingUp } from 'lucide-react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { knowledgeAPI, agentsAPI, tasksAPI } from '../api/client'
+import { FileText, Search, X, Download, BookOpen, TrendingUp, Plus, Sparkles } from 'lucide-react'
 
 export default function ResearchLab() {
   const [selectedReport, setSelectedReport] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [viewMode, setViewMode] = useState('list') // 'list' or 'pdf'
+  const [showRequestForm, setShowRequestForm] = useState(false)
+  const [researchRequest, setResearchRequest] = useState({
+    title: '',
+    description: '',
+    agent_id: ''
+  })
+
+  const queryClient = useQueryClient()
+
+  // Fetch available agents for research requests
+  const { data: agentsData } = useQuery({
+    queryKey: ['agents'],
+    queryFn: () => agentsAPI.list().then(res => res.data),
+  })
 
   // Fetch knowledge base reports
   const { data: knowledgeData, isLoading } = useQuery({
@@ -36,6 +50,41 @@ export default function ResearchLab() {
 
   const reports = searchQuery.length > 2 ? searchResults?.results : knowledgeData?.reports
 
+  // Create research request mutation
+  const createResearchMutation = useMutation({
+    mutationFn: (data) => tasksAPI.create(data),
+    onSuccess: (response) => {
+      // Execute the task immediately
+      tasksAPI.execute(response.data.id)
+
+      queryClient.invalidateQueries(['knowledge'])
+      setShowRequestForm(false)
+      setResearchRequest({ title: '', description: '', agent_id: '' })
+
+      // Show success message
+      alert('Research request submitted! Check back in a few minutes for the report.')
+    },
+    onError: (error) => {
+      alert(`Error: ${error.response?.data?.detail || error.message}`)
+    }
+  })
+
+  const handleSubmitResearch = (e) => {
+    e.preventDefault()
+
+    if (!researchRequest.title || !researchRequest.description || !researchRequest.agent_id) {
+      alert('Please fill in all fields')
+      return
+    }
+
+    createResearchMutation.mutate({
+      title: researchRequest.title,
+      description: researchRequest.description,
+      agent_id: researchRequest.agent_id,
+      priority: 1
+    })
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -45,9 +94,19 @@ export default function ResearchLab() {
           <p className="text-gray-600 mt-2">AI-generated research reports and knowledge base</p>
         </div>
 
-        {/* Stats Cards */}
-        {stats && (
-          <div className="flex gap-4">
+        <div className="flex items-center gap-4">
+          {/* Request Research Button */}
+          <button
+            onClick={() => setShowRequestForm(true)}
+            className="btn-primary flex items-center gap-2"
+          >
+            <Sparkles size={20} />
+            Request New Research
+          </button>
+
+          {/* Stats Cards */}
+          {stats && (
+            <div className="flex gap-4">
             <div className="bg-blue-50 px-4 py-2 rounded-lg">
               <div className="text-2xl font-bold text-blue-600">{stats.total_reports || 0}</div>
               <div className="text-xs text-blue-800">Reports</div>
@@ -63,7 +122,8 @@ export default function ResearchLab() {
               <div className="text-xs text-purple-800">Words</div>
             </div>
           </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Search Bar */}
@@ -266,6 +326,130 @@ export default function ResearchLab() {
                 </div>
               )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Research Request Form Modal */}
+      {showRequestForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-2xl w-full p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <Sparkles size={24} className="text-primary-600" />
+                Request New Research
+              </h3>
+              <button
+                onClick={() => setShowRequestForm(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmitResearch} className="space-y-4">
+              {/* Research Title */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Research Topic <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={researchRequest.title}
+                  onChange={(e) => setResearchRequest({ ...researchRequest, title: e.target.value })}
+                  placeholder="e.g., Wildfire Spread Prediction in Pine Forests"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  required
+                />
+              </div>
+
+              {/* Select Agent */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Select Specialist Agent <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={researchRequest.agent_id}
+                  onChange={(e) => setResearchRequest({ ...researchRequest, agent_id: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  required
+                >
+                  <option value="">Choose an agent...</option>
+                  {agentsData?.agents?.map((agent) => (
+                    <option key={agent.id} value={agent.id}>
+                      {agent.name} - {agent.specialty}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-xs text-gray-500 mt-1">
+                  Each agent has specialized training and expertise for different research areas
+                </p>
+              </div>
+
+              {/* Research Description */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Research Requirements <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  value={researchRequest.description}
+                  onChange={(e) => setResearchRequest({ ...researchRequest, description: e.target.value })}
+                  placeholder="Describe what you want the agent to research. Be specific about:
+- Key questions to answer
+- Required calculations or simulations
+- Specific code examples needed
+- Data or methodologies to explore
+
+Example: Research and design how to implement real-time fire spread prediction using the Canadian FBP model. Include working Python code for calculating rate of spread in different fuel types, performance benchmarks, and integration with weather data APIs."
+                  rows={8}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono text-sm"
+                  required
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  More detailed requirements lead to better research reports
+                </p>
+              </div>
+
+              {/* How It Works */}
+              <div className="bg-blue-50 rounded-lg p-4 text-sm">
+                <p className="font-semibold text-blue-900 mb-2">How This Works:</p>
+                <ol className="list-decimal list-inside space-y-1 text-blue-800">
+                  <li>Your request creates a research task for the selected agent</li>
+                  <li>The agent performs web research using Brave Search API</li>
+                  <li>Claude Code CLI generates a scientific report with working code</li>
+                  <li>Code is automatically extracted and added to agent's skills</li>
+                  <li>Report appears in Research Lab within a few minutes</li>
+                </ol>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="submit"
+                  disabled={createResearchMutation.isPending}
+                  className="btn-primary flex-1"
+                >
+                  {createResearchMutation.isPending ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Submitting...
+                    </span>
+                  ) : (
+                    <span className="flex items-center justify-center gap-2">
+                      <Sparkles size={16} />
+                      Submit Research Request
+                    </span>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowRequestForm(false)}
+                  className="btn-secondary px-6"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
