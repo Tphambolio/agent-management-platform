@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import { agentsAPI, tasksAPI, reportsAPI, healthAPI } from '../api/client'
 import { Users, CheckSquare, FileText, Activity } from 'lucide-react'
 
 export default function Dashboard() {
+  const navigate = useNavigate()
   const { data: health } = useQuery({
     queryKey: ['health'],
     queryFn: () => healthAPI.check().then(res => res.data),
@@ -121,7 +123,15 @@ export default function Dashboard() {
               <p className="text-gray-500 text-sm">No tasks yet</p>
             ) : (
               tasks.slice(0, 5).map((task) => (
-                <div key={task.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div
+                  key={task.id}
+                  onClick={() => task.status === 'completed' && navigate('/reports')}
+                  className={`flex items-center justify-between p-3 bg-gray-50 rounded-lg transition-all ${
+                    task.status === 'completed'
+                      ? 'cursor-pointer hover:bg-blue-50 hover:shadow-md'
+                      : ''
+                  }`}
+                >
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 truncate">{task.title}</p>
                     <p className="text-sm text-gray-600">
