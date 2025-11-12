@@ -375,9 +375,9 @@ export default function ResearchLab() {
                   required
                 >
                   <option value="">Choose an agent...</option>
-                  {agentsData?.agents?.map((agent) => (
+                  {agentsData?.data?.map((agent) => (
                     <option key={agent.id} value={agent.id}>
-                      {agent.name} - {agent.specialty}
+                      {agent.name} - {agent.specialization}
                     </option>
                   ))}
                 </select>
