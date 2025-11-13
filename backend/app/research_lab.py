@@ -4,6 +4,7 @@ import anthropic
 from datetime import datetime
 from typing import Dict, List, Optional
 from pydantic import BaseModel
+from app.gemini_researcher import gemini_researcher
 
 class ResearchRequest(BaseModel):
     """Research request from user"""
@@ -11,17 +12,26 @@ class ResearchRequest(BaseModel):
     agent_type: str  # e.g., "Security Analyst", "Data Scientist"
     depth: str = "comprehensive"  # quick, standard, comprehensive
     output_format: str = "markdown"  # markdown, json, pdf
-    
+
 class ResearchLab:
-    """AI-powered research lab using Claude"""
-    
+    """AI-powered research lab using Gemini (FREE) or Claude (paid)"""
+
     def __init__(self):
-        self.api_key = os.getenv("ANTHROPIC_API_KEY")
-        if self.api_key:
-            self.client = anthropic.Anthropic(api_key=self.api_key)
+        # Try Gemini first (FREE), fallback to Anthropic if needed
+        if gemini_researcher.available:
+            self.client = None  # Use Gemini
+            self.ai_provider = "gemini"
+            print("✅ Research Lab using Gemini AI (FREE)")
         else:
-            self.client = None
-            print("⚠️  No ANTHROPIC_API_KEY found - research features disabled")
+            self.api_key = os.getenv("ANTHROPIC_API_KEY")
+            if self.api_key:
+                self.client = anthropic.Anthropic(api_key=self.api_key)
+                self.ai_provider = "anthropic"
+                print("✅ Research Lab using Anthropic Claude")
+            else:
+                self.client = None
+                self.ai_provider = None
+                print("⚠️  No AI API keys found - research features disabled")
     
     def get_agent_prompt(self, agent_type: str, topic: str, depth: str) -> str:
         """Generate specialized prompt based on agent type"""
