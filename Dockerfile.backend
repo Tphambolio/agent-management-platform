@@ -16,6 +16,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy backend application
 COPY backend/app /app/app
 
+# Copy alembic migration files
+COPY backend/alembic.ini /app/
+COPY backend/alembic /app/alembic
+
 # Create necessary directories for agent operations
 RUN mkdir -p /app/.agents/tasks /app/.agents/projects /app/.agents/reports /app/.agents/status \
     /app/.agents/datasets /app/.agents/artifacts /app/.agents/cache /app/.agents/memory
