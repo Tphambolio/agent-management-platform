@@ -249,6 +249,10 @@ class TaskCreate(BaseModel):
     priority: int = 1
     context: dict = {}
 
+class TaskUpdate(BaseModel):
+    status: Optional[str] = None
+    error: Optional[str] = None
+
 class TaskResponse(BaseModel):
     id: str
     agent_id: str
@@ -728,6 +732,50 @@ async def execute_task(task_id: str):
             "id": task_id,
             "status": "running",
             "message": "Task execution started"
+        }
+
+@app.patch("/api/tasks/{task_id}")
+async def update_task(task_id: str, task_update: TaskUpdate):
+    """Update task status (e.g., mark as failed/cancelled)"""
+    with get_db() as db:
+        task = db.query(Task).filter(Task.id == task_id).first()
+        if not task:
+            raise HTTPException(status_code=404, detail="Task not found")
+
+        # Update status if provided
+        if task_update.status:
+            valid_statuses = ["pending", "running", "completed", "failed"]
+            if task_update.status not in valid_statuses:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Invalid status. Must be one of: {valid_statuses}"
+                )
+
+            task.status = TaskStatus(task_update.status)
+
+            # If marking as completed or failed, set completed_at
+            if task_update.status in ["completed", "failed"]:
+                task.completed_at = datetime.utcnow()
+
+        # Update error message if provided
+        if task_update.error is not None:
+            task.error = task_update.error
+
+        db.commit()
+
+        # Broadcast task update
+        await manager.broadcast({
+            "type": "task_updated",
+            "task_id": task_id,
+            "status": task.status.value,
+            "agent_id": task.agent_id
+        })
+
+        return {
+            "id": task_id,
+            "status": task.status.value,
+            "message": f"Task updated to {task.status.value}",
+            "error": task.error
         }
 
 # ============================================================================
