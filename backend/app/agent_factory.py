@@ -279,6 +279,84 @@ Return ONLY the JSON, no other text."""
         print(f"✅ Genome saved: {genome_path}")
         return str(genome_path)
 
+    async def create_intelligent_agent_stream(
+        self,
+        description: str,
+        requirements: Optional[List[str]] = None
+    ):
+        """
+        Streaming version - yields progress updates during agent creation
+
+        Yields progress dicts with 'step', 'message', and optionally 'data'
+        """
+        yield {"step": "starting", "message": "🤖 Starting intelligent agent creation..."}
+
+        # Step 1: Generate profile using Gemini
+        yield {"step": "profile", "message": "🧠 Analyzing description with Gemini AI..."}
+        profile = await self.generate_agent_profile(description, requirements)
+
+        yield {
+            "step": "profile_complete",
+            "message": f"✅ Agent profile generated: {profile['name']}",
+            "data": {
+                "name": profile['name'],
+                "type": profile['type'],
+                "technical_skills": len(profile['recommended_skills']['technical']),
+                "domain_skills": len(profile['recommended_skills']['domain'])
+            }
+        }
+
+        # Step 2: Generate genome
+        yield {"step": "genome", "message": "🧬 Building agent genome with skills..."}
+        genome = self.generate_genome(profile, description)
+
+        total_skills = len(genome["skills"]["technical"]) + len(genome["skills"]["domain"])
+        yield {
+            "step": "genome_complete",
+            "message": f"✅ Genome generated with {total_skills} initial skills"
+        }
+
+        # Step 3: Save genome
+        yield {"step": "saving", "message": "💾 Saving agent genome to disk..."}
+        genome_path = self.save_genome(genome)
+
+        # Step 4: Prepare agent data
+        yield {"step": "finalizing", "message": "🎯 Finalizing agent registration..."}
+
+        agent_data = {
+            "id": str(uuid.uuid4()),
+            "name": profile["name"],
+            "type": profile["type"],
+            "specialization": profile["specialization"],
+            "capabilities": profile["capabilities"],
+            "config": {
+                "created_by": "intelligent-agent-factory",
+                "original_description": description,
+                "genome_path": genome_path,
+                "evolution_stage": "beginner"
+            },
+            "prompt_file": None,
+            "status": "idle"
+        }
+
+        result = {
+            "agent": agent_data,
+            "profile": profile,
+            "genome": genome,
+            "genome_path": genome_path,
+            "skills_created": {
+                "technical": len(genome["skills"]["technical"]),
+                "domain": len(genome["skills"]["domain"]),
+                "templates": len([s for s in genome["skills"]["technical"].values() if s.get("is_template")]),
+                "total": total_skills
+            },
+            "ready_for_tasks": True,
+            "evolution_stage": "beginner",
+            "message": f"Agent '{profile['name']}' created successfully with {total_skills} initial skills!"
+        }
+
+        yield {"step": "complete", "message": "🎉 Agent creation complete!", "data": result}
+
     async def create_intelligent_agent(
         self,
         description: str,

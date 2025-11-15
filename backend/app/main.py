@@ -1,9 +1,11 @@
 """Agent Management Platform - FastAPI Backend"""
 import uuid
+import json
 import asyncio
 from datetime import datetime, timedelta
 from typing import List, Optional
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from sqlalchemy.exc import SQLAlchemyError
@@ -468,6 +470,111 @@ async def create_intelligent_agent(request: IntelligentAgentCreate):
     except Exception as e:
         logger.error(f"Failed to create intelligent agent: {e}")
         raise HTTPException(status_code=500, detail=f"Agent creation failed: {str(e)}")
+
+
+@app.post("/api/agents/create-intelligent-stream")
+async def create_intelligent_agent_stream(request: IntelligentAgentCreate):
+    """
+    Streaming version of intelligent agent creation with real-time progress updates
+
+    Returns Server-Sent Events (SSE) stream showing progress:
+    - Starting creation
+    - Analyzing with Gemini AI
+    - Generating genome
+    - Saving to disk
+    - Complete with full results
+    """
+    async def event_stream():
+        try:
+            factory = get_agent_factory()
+            final_result = None
+
+            # Stream progress updates from factory
+            async for progress in factory.create_intelligent_agent_stream(
+                description=request.description,
+                requirements=request.requirements
+            ):
+                # Send progress as SSE
+                yield f"data: {json.dumps(progress)}\n\n"
+
+                # Capture final result
+                if progress.get("step") == "complete":
+                    final_result = progress.get("data")
+
+            # Register agent in database after creation
+            if final_result:
+                agent_data = final_result["agent"]
+
+                with get_db() as db:
+                    # Check if agent already exists
+                    existing = db.query(Agent).filter(Agent.name == agent_data["name"]).first()
+                    if existing:
+                        error_msg = {"step": "error", "message": f"Agent with name '{agent_data['name']}' already exists"}
+                        yield f"data: {json.dumps(error_msg)}\n\n"
+                        return
+
+                    # Truncate specialization to fit database
+                    specialization = agent_data["specialization"]
+                    if len(specialization) > 250:
+                        specialization = specialization[:250] + "..."
+
+                    # Create new agent
+                    agent = Agent(
+                        id=agent_data["id"],
+                        name=agent_data["name"],
+                        type=agent_data["type"],
+                        specialization=specialization,
+                        capabilities=agent_data["capabilities"],
+                        config=agent_data["config"],
+                        prompt_file=agent_data["prompt_file"],
+                        status=AgentStatus.IDLE
+                    )
+
+                    db.add(agent)
+                    db.commit()
+
+                # Broadcast agent creation
+                await manager.broadcast({
+                    "type": "agent_created",
+                    "agent_id": agent_data["id"],
+                    "name": agent_data["name"],
+                    "creation_method": "intelligent-agent-factory-stream"
+                })
+
+                # Send final success message
+                success_data = {
+                    "step": "registered",
+                    "message": "✅ Agent registered in database",
+                    "agent": {
+                        "id": agent_data["id"],
+                        "name": agent_data["name"],
+                        "type": agent_data["type"],
+                        "specialization": agent_data["specialization"],
+                        "status": "idle",
+                        "evolution_stage": final_result["evolution_stage"]
+                    },
+                    "skills_created": final_result["skills_created"],
+                    "genome_path": final_result["genome_path"]
+                }
+                yield f"data: {json.dumps(success_data)}\n\n"
+
+        except ValueError as e:
+            error_data = {"step": "error", "message": str(e)}
+            yield f"data: {json.dumps(error_data)}\n\n"
+        except Exception as e:
+            logger.error(f"Streaming agent creation failed: {e}")
+            error_data = {"step": "error", "message": f"Agent creation failed: {str(e)}"}
+            yield f"data: {json.dumps(error_data)}\n\n"
+
+    return StreamingResponse(
+        event_stream(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
+    )
 
 
 # ============================================================================

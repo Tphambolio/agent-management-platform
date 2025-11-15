@@ -130,27 +130,75 @@ function IntelligentAgentModal({ onClose, onSuccess }) {
   const [description, setDescription] = useState('')
   const [requirements, setRequirements] = useState('')
   const [createdAgent, setCreatedAgent] = useState(null)
+  const [progress, setProgress] = useState([])
+  const [isCreating, setIsCreating] = useState(false)
+  const [error, setError] = useState(null)
 
-  const createMutation = useMutation({
-    mutationFn: (data) => {
-      const reqs = data.requirements
-        ? data.requirements.split('\n').map(r => r.trim()).filter(Boolean)
-        : []
-
-      return agentsAPI.createIntelligent({
-        description: data.description,
-        ...(reqs.length > 0 && { requirements: reqs })
-      })
-    },
-    onSuccess: (response) => {
-      setCreatedAgent(response.data)
-    },
-  })
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setCreatedAgent(null)
-    createMutation.mutate({ description, requirements })
+    setProgress([])
+    setError(null)
+    setIsCreating(true)
+
+    const reqs = requirements
+      ? requirements.split('\n').map(r => r.trim()).filter(Boolean)
+      : []
+
+    const payload = {
+      description,
+      ...(reqs.length > 0 && { requirements: reqs })
+    }
+
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+      const response = await fetch(`${API_URL}/api/agents/create-intelligent-stream`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to create agent')
+      }
+
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+
+      while (true) {
+        const { value, done } = await reader.read()
+        if (done) break
+
+        const chunk = decoder.decode(value)
+        const lines = chunk.split('\n')
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = JSON.parse(line.slice(6))
+
+            setProgress(prev => [...prev, data])
+
+            if (data.step === 'registered') {
+              setCreatedAgent({
+                agent: data.agent,
+                skills_created: data.skills_created,
+                genome_path: data.genome_path,
+                message: data.message
+              })
+              setIsCreating(false)
+            } else if (data.step === 'error') {
+              setError(data.message)
+              setIsCreating(false)
+            }
+          }
+        }
+      }
+    } catch (err) {
+      setError(err.message || 'Failed to create agent')
+      setIsCreating(false)
+    }
   }
 
   const handleClose = () => {
@@ -209,20 +257,36 @@ function IntelligentAgentModal({ onClose, onSuccess }) {
                 <p className="text-xs text-gray-500 mt-1">One requirement per line (optional but helps create better agents)</p>
               </div>
 
-              {createMutation.isError && (
+              {error && (
                 <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
                   <p className="text-sm text-red-800">
-                    Error: {createMutation.error?.response?.data?.detail || createMutation.error?.message || 'Failed to create agent'}
+                    Error: {error}
                   </p>
                 </div>
               )}
 
+              {isCreating && progress.length > 0 && (
+                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm font-medium text-blue-900 mb-2">Progress</p>
+                  <div className="space-y-1">
+                    {progress.map((item, idx) => (
+                      <div key={idx} className="text-sm text-blue-700 flex items-start gap-2">
+                        {idx === progress.length - 1 && (
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mt-0.5 flex-shrink-0"></div>
+                        )}
+                        <span>{item.message}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="flex gap-3 pt-4">
-                <button type="submit" className="btn-primary flex-1" disabled={createMutation.isPending}>
-                  {createMutation.isPending ? (
+                <button type="submit" className="btn-primary flex-1" disabled={isCreating}>
+                  {isCreating ? (
                     <span className="flex items-center gap-2 justify-center">
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                      Creating with Gemini AI...
+                      {progress.length > 0 ? progress[progress.length - 1].message : 'Creating with Gemini AI...'}
                     </span>
                   ) : (
                     <span className="flex items-center gap-2 justify-center">
@@ -231,7 +295,7 @@ function IntelligentAgentModal({ onClose, onSuccess }) {
                     </span>
                   )}
                 </button>
-                <button type="button" onClick={onClose} className="btn-secondary">
+                <button type="button" onClick={onClose} className="btn-secondary" disabled={isCreating}>
                   Cancel
                 </button>
               </div>
