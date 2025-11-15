@@ -2,7 +2,7 @@
 import uuid
 import json
 import asyncio
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Optional
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.responses import StreamingResponse
@@ -117,7 +117,7 @@ async def task_processor():
 
                 for task in running_tasks:
                     if task.started_at:
-                        elapsed = datetime.utcnow() - task.started_at
+                        elapsed = datetime.now(timezone.utc) - task.started_at
                         if elapsed > timedelta(seconds=30):
                             # Get agent details
                             agent = db.query(Agent).filter(Agent.id == task.agent_id).first()
@@ -157,7 +157,7 @@ async def task_processor():
 
                                     # Mark task as completed
                                     task.status = TaskStatus.COMPLETED
-                                    task.completed_at = datetime.utcnow()
+                                    task.completed_at = datetime.now(timezone.utc)
                                     task.result = {
                                     "message": "Task completed with agent skills",
                                     "duration": str(elapsed),
@@ -227,7 +227,7 @@ async def task_processor():
                                 # Task exceeded 5-minute timeout
                                 print(f"⏱️  Task {task.id} timed out after 5 minutes")
                                 task.status = TaskStatus.FAILED
-                                task.completed_at = datetime.utcnow()
+                                task.completed_at = datetime.now(timezone.utc)
                                 task.error = "Task execution timed out after 5 minutes. This usually indicates a Gemini API hang or network issue."
                                 db.commit()
                                 
@@ -737,7 +737,7 @@ async def execute_task(task_id: str):
 
         # Update task status to running
         task.status = TaskStatus.RUNNING
-        task.started_at = datetime.utcnow()
+        task.started_at = datetime.now(timezone.utc)
         db.commit()
 
         # Broadcast task execution
@@ -774,7 +774,7 @@ async def update_task(task_id: str, task_update: TaskUpdate):
 
             # If marking as completed or failed, set completed_at
             if task_update.status in ["completed", "failed"]:
-                task.completed_at = datetime.utcnow()
+                task.completed_at = datetime.now(timezone.utc)
 
         # Update error message if provided
         if task_update.error is not None:
