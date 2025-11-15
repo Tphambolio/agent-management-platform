@@ -146,14 +146,14 @@ async def task_processor():
 
                                     # Combine web research with skills-based synthesis
                                     if skills_result.get("status") == "success":
-                                    final_content = skills_result["content"]
-                                    skills_utilized = skills_result.get("skills_utilized", 0)
-                                    print(f"✅ Agent skills applied ({skills_utilized} knowledge items)")
+                                        final_content = skills_result["content"]
+                                        skills_utilized = skills_result.get("skills_utilized", 0)
+                                        print(f"✅ Agent skills applied ({skills_utilized} knowledge items)")
                                     else:
-                                    # Fallback to basic research if skills synthesis fails
-                                    final_content = research_result.get("content", "No content generated")
-                                    skills_utilized = 0
-                                    print(f"⚠️  Skills synthesis unavailable, using basic research")
+                                        # Fallback to basic research if skills synthesis fails
+                                        final_content = research_result.get("content", "No content generated")
+                                        skills_utilized = 0
+                                        print(f"⚠️  Skills synthesis unavailable, using basic research")
 
                                     # Mark task as completed
                                     task.status = TaskStatus.COMPLETED
@@ -210,7 +210,7 @@ async def task_processor():
                                     )
 
                                     if learning_result.get("skills_learned", 0) > 0:
-                                    print(f"   ✅ Agent learned {learning_result['skills_learned']} new skills!")
+                                        print(f"   ✅ Agent learned {learning_result['skills_learned']} new skills!")
 
                                     # Broadcast completion with report info
                                     await manager.broadcast({
