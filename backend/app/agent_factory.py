@@ -35,7 +35,7 @@ class AgentFactory:
             raise ValueError("GEMINI_API_KEY environment variable not set")
 
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        self.model = genai.GenerativeModel('gemini-pro')
         self.dna_dir = Path(__file__).parent.parent.parent / ".agents" / "dna"
 
         print("✅ Agent Factory initialized with Gemini AI (FREE)")
