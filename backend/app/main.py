@@ -124,101 +124,120 @@ async def task_processor():
                             agent_name = agent.name if agent else "Research Agent"
                             agent_type = agent.type if agent else "general"
 
-                            # Step 1: Conduct real web research
-                            print(f"\n🔬 Conducting research for task: {task.title}")
-                            research_result = await web_researcher.conduct_research(
-                                task_title=task.title,
-                                task_description=task.description,
-                                agent_type=agent_name
-                            )
+                            try:
+                                # Wrap task execution in 5-minute timeout
+                                async with asyncio.timeout(300):  # 5 minutes
+                                    # Step 1: Conduct real web research
+                                    print(f"\n🔬 Conducting research for task: {task.title}")
+                                    research_result = await web_researcher.conduct_research(
+                                    task_title=task.title,
+                                    task_description=task.description,
+                                    agent_type=agent_name
+                                    )
 
-                            # Step 2: Use agent's specialized skills to synthesize findings
-                            print(f"🧠 Loading agent skills for {agent_name}")
-                            skills_result = await local_agent_skills_system.execute_task_with_skills(
-                                agent_name=agent_name,
-                                task_title=task.title,
-                                task_description=task.description,
-                                research_data=research_result
-                            )
+                                    # Step 2: Use agent's specialized skills to synthesize findings
+                                    print(f"🧠 Loading agent skills for {agent_name}")
+                                    skills_result = await local_agent_skills_system.execute_task_with_skills(
+                                    agent_name=agent_name,
+                                    task_title=task.title,
+                                    task_description=task.description,
+                                    research_data=research_result
+                                    )
 
-                            # Combine web research with skills-based synthesis
-                            if skills_result.get("status") == "success":
-                                final_content = skills_result["content"]
-                                skills_utilized = skills_result.get("skills_utilized", 0)
-                                print(f"✅ Agent skills applied ({skills_utilized} knowledge items)")
-                            else:
-                                # Fallback to basic research if skills synthesis fails
-                                final_content = research_result.get("content", "No content generated")
-                                skills_utilized = 0
-                                print(f"⚠️  Skills synthesis unavailable, using basic research")
+                                    # Combine web research with skills-based synthesis
+                                    if skills_result.get("status") == "success":
+                                    final_content = skills_result["content"]
+                                    skills_utilized = skills_result.get("skills_utilized", 0)
+                                    print(f"✅ Agent skills applied ({skills_utilized} knowledge items)")
+                                    else:
+                                    # Fallback to basic research if skills synthesis fails
+                                    final_content = research_result.get("content", "No content generated")
+                                    skills_utilized = 0
+                                    print(f"⚠️  Skills synthesis unavailable, using basic research")
 
-                            # Mark task as completed
-                            task.status = TaskStatus.COMPLETED
-                            task.completed_at = datetime.utcnow()
-                            task.result = {
-                                "message": "Task completed with agent skills",
-                                "duration": str(elapsed),
-                                "sources_found": research_result.get("sources_found", 0),
-                                "search_queries": research_result.get("search_queries", []),
-                                "skills_utilized": skills_utilized > 0
-                            }
+                                    # Mark task as completed
+                                    task.status = TaskStatus.COMPLETED
+                                    task.completed_at = datetime.utcnow()
+                                    task.result = {
+                                    "message": "Task completed with agent skills",
+                                    "duration": str(elapsed),
+                                    "sources_found": research_result.get("sources_found", 0),
+                                    "search_queries": research_result.get("search_queries", []),
+                                    "skills_utilized": skills_utilized > 0
+                                    }
 
-                            # Create comprehensive report with agent skills
-                            report = Report(
-                                id=str(uuid.uuid4()),
-                                task_id=task.id,
-                                agent_id=task.agent_id,
-                                project_id=task.project_id,
-                                title=f"Research Report: {task.title}",
-                                summary=f"Agent '{agent_name}' leveraged specialized skills and web research on '{task.title}'. Found {research_result.get('sources_found', 0)} relevant sources and applied {skills_utilized} knowledge items.",
-                                content=final_content,
-                                format="markdown",
-                                tags=["web-research", "agent-skills", "task-completion", f"agent-{agent_type}"],
-                                meta={
+                                    # Create comprehensive report with agent skills
+                                    report = Report(
+                                    id=str(uuid.uuid4()),
+                                    task_id=task.id,
+                                    agent_id=task.agent_id,
+                                    project_id=task.project_id,
+                                    title=f"Research Report: {task.title}",
+                                    summary=f"Agent '{agent_name}' leveraged specialized skills and web research on '{task.title}'. Found {research_result.get('sources_found', 0)} relevant sources and applied {skills_utilized} knowledge items.",
+                                    content=final_content,
+                                    format="markdown",
+                                    tags=["web-research", "agent-skills", "task-completion", f"agent-{agent_type}"],
+                                    meta={
                                     "duration_seconds": elapsed.total_seconds(),
                                     "agent_type": agent_type,
                                     "sources_count": research_result.get("sources_found", 0),
                                     "search_queries": research_result.get("search_queries", []),
                                     "skills_utilized": skills_utilized > 0,
                                     "skills_knowledge_items": skills_utilized
-                                }
-                            )
+                                    }
+                                    )
 
-                            db.add(report)
-                            db.commit()
+                                    db.add(report)
+                                    db.commit()
 
-                            # Record task in agent's memory for learning
-                            agent_memory.record_task_completion(
-                                agent_id=task.agent_id,
-                                task_id=task.id,
-                                task_title=task.title,
-                                duration_seconds=elapsed.total_seconds(),
-                                sources_found=research_result.get("sources_found", 0),
-                                skills_utilized=report.tags,
-                                report_id=report.id
-                            )
+                                    # Record task in agent's memory for learning
+                                    agent_memory.record_task_completion(
+                                    agent_id=task.agent_id,
+                                    task_id=task.id,
+                                    task_title=task.title,
+                                    duration_seconds=elapsed.total_seconds(),
+                                    sources_found=research_result.get("sources_found", 0),
+                                    skills_utilized=report.tags,
+                                    report_id=report.id
+                                    )
 
-                            # Extract code from report and learn new skills
-                            print(f"🧠 Extracting code and learning skills...")
-                            learning_result = code_extractor.learn_from_report(
-                                agent_name=agent_name,
-                                report_content=final_content,
-                                task_title=task.title
-                            )
+                                    # Extract code from report and learn new skills
+                                    print(f"🧠 Extracting code and learning skills...")
+                                    learning_result = code_extractor.learn_from_report(
+                                    agent_name=agent_name,
+                                    report_content=final_content,
+                                    task_title=task.title
+                                    )
 
-                            if learning_result.get("skills_learned", 0) > 0:
-                                print(f"   ✅ Agent learned {learning_result['skills_learned']} new skills!")
+                                    if learning_result.get("skills_learned", 0) > 0:
+                                    print(f"   ✅ Agent learned {learning_result['skills_learned']} new skills!")
 
-                            # Broadcast completion with report info
-                            await manager.broadcast({
-                                "type": "task_completed",
-                                "task_id": task.id,
-                                "report_id": report.id,
-                                "duration": str(elapsed),
-                                "sources_found": research_result.get("sources_found", 0)
-                            })
+                                    # Broadcast completion with report info
+                                    await manager.broadcast({
+                                    "type": "task_completed",
+                                    "task_id": task.id,
+                                    "report_id": report.id,
+                                    "duration": str(elapsed),
+                                    "sources_found": research_result.get("sources_found", 0)
+                                    })
 
-                            print(f"✅ Task {task.id} completed | Research report {report.id} generated | {research_result.get('sources_found', 0)} sources")
+                                    print(f"✅ Task {task.id} completed | Research report {report.id} generated | {research_result.get('sources_found', 0)} sources")
+
+                            except asyncio.TimeoutError:
+                                # Task exceeded 5-minute timeout
+                                print(f"⏱️  Task {task.id} timed out after 5 minutes")
+                                task.status = TaskStatus.FAILED
+                                task.completed_at = datetime.utcnow()
+                                task.error = "Task execution timed out after 5 minutes. This usually indicates a Gemini API hang or network issue."
+                                db.commit()
+                                
+                                # Broadcast timeout
+                                await manager.broadcast({
+                                    "type": "task_failed",
+                                    "task_id": task.id,
+                                    "error": "timeout",
+                                    "agent_id": task.agent_id
+                                })
 
         except Exception as e:
             print(f"⚠️  Task processor error: {e}")
