@@ -17,6 +17,7 @@ from app.local_agent_skills import local_agent_skills_system  # Use local CLI-ba
 from app.agent_memory import agent_memory
 from app.dataset_manager import dataset_manager
 from app.code_extractor import code_extractor
+from app.agent_factory import get_agent_factory
 # Import error handlers
 from app.middleware.error_handler import (
     AppException,
@@ -369,6 +370,100 @@ async def sync_agents():
     agent_executor.sync_agents_to_db()
     await manager.broadcast({"type": "agents_synced"})
     return {"message": "Agents synced successfully"}
+
+
+class IntelligentAgentCreate(BaseModel):
+    """Request model for intelligent agent creation"""
+    description: str
+    requirements: Optional[List[str]] = None
+
+
+@app.post("/api/agents/create-intelligent")
+async def create_intelligent_agent(request: IntelligentAgentCreate):
+    """
+    Create an agent from natural language description using AI
+
+    Uses Gemini AI to generate complete agent profile with skills from description.
+
+    Example:
+        {
+            "description": "I need an agent that can analyze satellite imagery for wildfire detection",
+            "requirements": ["Must use Python", "Should integrate with NASA FIRMS data"]
+        }
+    """
+    try:
+        # Get agent factory
+        factory = get_agent_factory()
+
+        # Create intelligent agent
+        result = await factory.create_intelligent_agent(
+            description=request.description,
+            requirements=request.requirements
+        )
+
+        # Register agent in database
+        agent_data = result["agent"]
+
+        with get_db() as db:
+            # Check if agent already exists
+            existing = db.query(Agent).filter(Agent.name == agent_data["name"]).first()
+            if existing:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Agent with name '{agent_data['name']}' already exists. Try a different description."
+                )
+
+            # Create new agent
+            agent = Agent(
+                id=agent_data["id"],
+                name=agent_data["name"],
+                type=agent_data["type"],
+                specialization=agent_data["specialization"],
+                capabilities=agent_data["capabilities"],
+                config=agent_data["config"],
+                prompt_file=agent_data["prompt_file"],
+                status=AgentStatus.IDLE
+            )
+
+            db.add(agent)
+            db.commit()
+
+        # Broadcast agent creation
+        await manager.broadcast({
+            "type": "agent_created",
+            "agent_id": agent_data["id"],
+            "name": agent_data["name"],
+            "creation_method": "intelligent-agent-factory"
+        })
+
+        # Return detailed creation result
+        return {
+            "success": True,
+            "agent": {
+                "id": agent_data["id"],
+                "name": agent_data["name"],
+                "type": agent_data["type"],
+                "specialization": agent_data["specialization"],
+                "status": "idle",
+                "evolution_stage": result["evolution_stage"]
+            },
+            "skills_created": {
+                "technical": result["technical_skills"],
+                "domain": result["domain_skills"],
+                "templates": result["starter_templates"],
+                "total": result["skills_count"]
+            },
+            "genome_path": result["genome_path"],
+            "ready_for_tasks": result["ready_for_tasks"],
+            "message": result["message"]
+        }
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Failed to create intelligent agent: {e}")
+        raise HTTPException(status_code=500, detail=f"Agent creation failed: {str(e)}")
+
 
 # ============================================================================
 # TASK ENDPOINTS
