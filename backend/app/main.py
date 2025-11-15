@@ -131,7 +131,7 @@ async def task_processor():
 
                             # Step 2: Use agent's specialized skills to synthesize findings
                             print(f"🧠 Loading agent skills for {agent_name}")
-                            skills_result = await agent_skills_system.execute_task_with_skills(
+                            skills_result = await local_agent_skills_system.execute_task_with_skills(
                                 agent_name=agent_name,
                                 task_title=task.title,
                                 task_description=task.description,
