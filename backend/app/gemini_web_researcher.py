@@ -115,7 +115,8 @@ class GeminiWebResearcher:
         self,
         task_title: str,
         task_description: str,
-        agent_type: str = "Research Agent"
+        agent_type: str = "Research Agent",
+        target_audience: str = "general"  # New parameter: "developers", "general", "researchers"
     ) -> Dict:
         """
         Conduct comprehensive professional research
@@ -125,6 +126,12 @@ class GeminiWebResearcher:
         3. Synthesize findings with Gemini AI
         4. Generate professional research report
 
+        Args:
+            task_title: Research topic title
+            task_description: Detailed research objectives
+            agent_type: Type of agent conducting research
+            target_audience: "developers" for dev-focused reports, "general" otherwise
+
         Returns:
             Dict with status, content, sources, and metadata
         """
@@ -132,6 +139,7 @@ class GeminiWebResearcher:
         print(f"\n🔬 Professional Research Starting")
         print(f"   Topic: {task_title}")
         print(f"   Agent: {agent_type}")
+        print(f"   Audience: {target_audience}")
 
         # Step 1: Generate intelligent search queries using Gemini
         search_queries = await self._generate_smart_queries(task_title, task_description)
@@ -161,7 +169,8 @@ class GeminiWebResearcher:
             task_description,
             unique_sources,
             agent_type,
-            search_queries
+            search_queries,
+            target_audience=target_audience
         )
 
         print(f"   ✅ Professional report generated ({len(report_content)} chars)")
@@ -242,7 +251,8 @@ Keep queries concise (under 100 characters each) and focused on findable content
         description: str,
         sources: List[Dict],
         agent_type: str,
-        search_queries: List[str]
+        search_queries: List[str],
+        target_audience: str = "general"
     ) -> str:
         """Synthesize sources into professional research report using Gemini"""
 
@@ -255,8 +265,23 @@ Keep queries concise (under 100 characters each) and focused on findable content
             for i, s in enumerate(sources[:20])  # Limit to 20 sources
         ])
 
+        # Add developer-specific context if needed
+        audience_context = ""
+        if target_audience == "developers":
+            audience_context = """
+**CRITICAL - DEVELOPER AUDIENCE:**
+This report is for a software development team implementing this feature. You MUST include:
+- Production-ready Python code with type hints
+- Database schema examples (SQL/NoSQL)
+- API endpoint designs
+- Performance considerations (time/space complexity)
+- Testing strategies and test cases
+- Integration patterns and examples
+- Error handling approaches
+"""
+
         # Build comprehensive synthesis prompt
-        prompt = f"""You are an expert {agent_type} creating a professional research report.
+        prompt = f"""You are an expert {agent_type} creating a professional research report.{audience_context}
 
 **Research Assignment:**
 Title: {title}
