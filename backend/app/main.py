@@ -414,11 +414,16 @@ async def create_intelligent_agent(request: IntelligentAgentCreate):
                 )
 
             # Create new agent
+            # Truncate specialization to fit database VARCHAR(255)
+            specialization = agent_data["specialization"]
+            if len(specialization) > 250:
+                specialization = specialization[:250] + "..."
+
             agent = Agent(
                 id=agent_data["id"],
                 name=agent_data["name"],
                 type=agent_data["type"],
-                specialization=agent_data["specialization"],
+                specialization=specialization,
                 capabilities=agent_data["capabilities"],
                 config=agent_data["config"],
                 prompt_file=agent_data["prompt_file"],
