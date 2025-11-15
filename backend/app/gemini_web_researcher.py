@@ -191,10 +191,13 @@ Topic: {title}
 Details: {description}
 
 Generate search queries that will find:
-1. Technical documentation and implementation guides
-2. Recent research papers and authoritative sources
-3. Practical examples and case studies
-4. Best practices and expert recommendations
+1. Implementation guides with working code examples and formulas
+2. Technical documentation with mathematical equations and algorithms
+3. Tutorial articles with step-by-step Python implementations
+4. API documentation and library usage examples
+5. Research papers with methodology and calculations
+
+IMPORTANT: Prioritize queries that will find actual code, formulas, and implementation details over general overviews.
 
 Return ONLY a JSON array of search query strings, no other text.
 Example format: ["query 1", "query 2", "query 3"]
@@ -296,8 +299,36 @@ Create a comprehensive, professional research report that synthesizes these sour
 ## Technical Analysis
 *Deep dive into technical aspects, implementation details, or methodological considerations. Include specifics, data points, and expert perspectives from sources.*
 
+### Mathematical Foundations
+*Provide exact formulas, equations, and calculations discovered in the sources. Use proper mathematical notation.*
+
+### Implementation Code
+*CRITICAL: Include working Python code examples that implement the key concepts. Code must be:*
+- *Fully functional and self-contained*
+- *Properly documented with docstrings*
+- *Based on information from sources*
+- *Wrapped in ```python code blocks*
+
+Example structure for code blocks:
+```python
+def example_function(param1: float, param2: float) -> float:
+    """
+    Clear description of what this function does.
+
+    Args:
+        param1: Description of first parameter
+        param2: Description of second parameter
+
+    Returns:
+        Description of return value
+    """
+    # Implementation based on research findings
+    result = param1 + param2
+    return result
+```
+
 ## Practical Applications
-*How can these findings be applied? Real-world use cases, implementation strategies, and actionable steps.*
+*How can these findings be applied? Real-world use cases, implementation strategies, and actionable steps. Include code examples where relevant.*
 
 ## Recommendations
 
@@ -334,6 +365,10 @@ Create a comprehensive, professional research report that synthesizes these sour
 - Maintain objectivity and scientific rigor
 - Structure information logically with clear headings
 - Make recommendations specific and implementable
+- **MUST include working Python code examples in ```python blocks**
+- **MUST provide exact formulas and mathematical equations**
+- **Code must be production-ready with proper docstrings**
+- Include at least 2-3 substantial code examples demonstrating key concepts
 - Total length: 800-1500 words (comprehensive but concise)
 
 Generate the report now:"""
