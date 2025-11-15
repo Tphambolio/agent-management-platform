@@ -14,9 +14,19 @@ from pydantic import BaseModel
 from app.config import settings
 from app.database import init_db, get_db
 from app.models import Agent, Task, Report, Project, AgentStatus, TaskStatus
-from app.web_researcher import web_researcher
+from app.gemini_web_researcher import get_gemini_researcher
 from app.local_agent_skills import local_agent_skills_system  # Use local CLI-based system
 from app.agent_memory import agent_memory
+
+# Initialize Gemini researcher for high-quality reports
+try:
+    web_researcher = get_gemini_researcher()
+    print("✅ Using Gemini Web Researcher for professional-quality reports")
+except Exception as e:
+    print(f"⚠️  Failed to initialize Gemini researcher: {e}")
+    # Fallback to old researcher if Gemini fails
+    from app.web_researcher import web_researcher
+    print("⚠️  Using fallback researcher")
 from app.dataset_manager import dataset_manager
 from app.code_extractor import code_extractor
 from app.agent_factory import get_agent_factory
