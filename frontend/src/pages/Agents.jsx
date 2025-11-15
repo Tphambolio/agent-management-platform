@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { agentsAPI } from '../api/client'
-import { RefreshCw, Plus, X } from 'lucide-react'
+import { RefreshCw, Plus, X, Sparkles } from 'lucide-react'
 
 export default function Agents() {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [showIntelligentModal, setShowIntelligentModal] = useState(false)
   const queryClient = useQueryClient()
 
   const { data: agents, isLoading, refetch } = useQuery({
@@ -26,13 +27,17 @@ export default function Agents() {
           <p className="text-gray-600 mt-2">Manage your AI agent workforce</p>
         </div>
         <div className="flex gap-3">
-          <button onClick={() => setShowRegisterModal(true)} className="btn-primary flex items-center gap-2">
+          <button onClick={() => setShowIntelligentModal(true)} className="btn-primary flex items-center gap-2">
+            <Sparkles size={16} />
+            Create Intelligent Agent
+          </button>
+          <button onClick={() => setShowRegisterModal(true)} className="btn-secondary flex items-center gap-2">
             <Plus size={16} />
-            Register Agent
+            Manual Register
           </button>
           <button onClick={handleRediscover} className="btn-secondary flex items-center gap-2">
             <RefreshCw size={16} />
-            Sync Agents
+            Sync
           </button>
         </div>
       </div>
@@ -98,6 +103,16 @@ export default function Agents() {
         </div>
       )}
 
+      {showIntelligentModal && (
+        <IntelligentAgentModal
+          onClose={() => setShowIntelligentModal(false)}
+          onSuccess={() => {
+            setShowIntelligentModal(false)
+            queryClient.invalidateQueries(['agents'])
+          }}
+        />
+      )}
+
       {showRegisterModal && (
         <RegisterAgentModal
           onClose={() => setShowRegisterModal(false)}
@@ -107,6 +122,181 @@ export default function Agents() {
           }}
         />
       )}
+    </div>
+  )
+}
+
+function IntelligentAgentModal({ onClose, onSuccess }) {
+  const [description, setDescription] = useState('')
+  const [requirements, setRequirements] = useState('')
+  const [createdAgent, setCreatedAgent] = useState(null)
+
+  const createMutation = useMutation({
+    mutationFn: (data) => {
+      const reqs = data.requirements
+        ? data.requirements.split('\n').map(r => r.trim()).filter(Boolean)
+        : []
+
+      return agentsAPI.createIntelligent({
+        description: data.description,
+        ...(reqs.length > 0 && { requirements: reqs })
+      })
+    },
+    onSuccess: (response) => {
+      setCreatedAgent(response.data)
+    },
+  })
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    setCreatedAgent(null)
+    createMutation.mutate({ description, requirements })
+  }
+
+  const handleClose = () => {
+    if (createdAgent) {
+      onSuccess()
+    } else {
+      onClose()
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg max-w-3xl w-full p-6 max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2">
+            <Sparkles size={24} className="text-purple-600" />
+            <h3 className="text-2xl font-bold text-gray-900">Create Intelligent Agent</h3>
+          </div>
+          <button onClick={handleClose} className="text-gray-400 hover:text-gray-600">
+            <X size={24} />
+          </button>
+        </div>
+
+        {!createdAgent ? (
+          <>
+            <div className="mb-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+              <p className="text-sm text-purple-900 font-medium">Powered by Gemini AI</p>
+              <p className="text-sm text-purple-700 mt-1">
+                Describe what you want your agent to do in plain English. Gemini will automatically generate the agent profile, assign relevant skills, and create starter code templates.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">What should this agent do? *</label>
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="input"
+                  rows={4}
+                  placeholder="Example: I need an agent that analyzes satellite imagery for wildfire detection and predicts fire spread patterns"
+                  required
+                />
+                <p className="text-xs text-gray-500 mt-1">Be as specific as possible about the agent's purpose and capabilities</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Specific Requirements (optional)</label>
+                <textarea
+                  value={requirements}
+                  onChange={(e) => setRequirements(e.target.value)}
+                  className="input"
+                  rows={3}
+                  placeholder={"Must use Python\nShould integrate with NASA FIRMS data\nGenerate PDF reports with visualizations"}
+                />
+                <p className="text-xs text-gray-500 mt-1">One requirement per line (optional but helps create better agents)</p>
+              </div>
+
+              {createMutation.isError && (
+                <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <p className="text-sm text-red-800">
+                    Error: {createMutation.error?.response?.data?.detail || createMutation.error?.message || 'Failed to create agent'}
+                  </p>
+                </div>
+              )}
+
+              <div className="flex gap-3 pt-4">
+                <button type="submit" className="btn-primary flex-1" disabled={createMutation.isPending}>
+                  {createMutation.isPending ? (
+                    <span className="flex items-center gap-2 justify-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Creating with Gemini AI...
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-2 justify-center">
+                      <Sparkles size={16} />
+                      Create Intelligent Agent
+                    </span>
+                  )}
+                </button>
+                <button type="button" onClick={onClose} className="btn-secondary">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </>
+        ) : (
+          <div className="space-y-6">
+            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-green-900 font-medium">Agent Created Successfully!</p>
+              <p className="text-sm text-green-700 mt-1">{createdAgent.message}</p>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Agent Details</h4>
+                <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                  <div><span className="font-medium">Name:</span> {createdAgent.agent.name}</div>
+                  <div><span className="font-medium">Type:</span> {createdAgent.agent.type}</div>
+                  <div><span className="font-medium">Specialization:</span> {createdAgent.agent.specialization}</div>
+                  <div><span className="font-medium">Evolution Stage:</span> {createdAgent.agent.evolution_stage}</div>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Generated Skills</h4>
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="bg-blue-50 p-3 rounded-lg text-center">
+                    <div className="text-2xl font-bold text-blue-900">{createdAgent.skills_created.technical}</div>
+                    <div className="text-sm text-blue-700">Technical Skills</div>
+                  </div>
+                  <div className="bg-purple-50 p-3 rounded-lg text-center">
+                    <div className="text-2xl font-bold text-purple-900">{createdAgent.skills_created.domain}</div>
+                    <div className="text-sm text-purple-700">Domain Skills</div>
+                  </div>
+                  <div className="bg-green-50 p-3 rounded-lg text-center">
+                    <div className="text-2xl font-bold text-green-900">{createdAgent.skills_created.templates}</div>
+                    <div className="text-sm text-green-700">Code Templates</div>
+                  </div>
+                </div>
+                <div className="mt-2 text-center">
+                  <span className="text-sm text-gray-600">
+                    Total: <span className="font-semibold">{createdAgent.skills_created.total} skills</span> created automatically
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button onClick={handleClose} className="btn-primary flex-1">
+                  View Agent
+                </button>
+                <button
+                  onClick={() => {
+                    setCreatedAgent(null)
+                    setDescription('')
+                    setRequirements('')
+                  }}
+                  className="btn-secondary"
+                >
+                  Create Another
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

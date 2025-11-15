@@ -14,6 +14,7 @@ export const agentsAPI = {
   list: (params) => apiClient.get('/api/agents', { params }),
   get: (id) => apiClient.get(`/api/agents/${id}`),
   create: (data) => apiClient.post('/api/agents', data),
+  createIntelligent: (data) => apiClient.post('/api/agents/create-intelligent', data),
   sync: () => apiClient.post('/api/agents/sync'),
 };
 
