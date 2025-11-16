@@ -211,7 +211,6 @@ async def task_processor():
                                     db.commit()
 
                                     # Auto-ingest report into vector memory for RAG
-                                    import asyncio
                                     asyncio.create_task(auto_ingest_report_to_memory(
                                         report_id=report.id,
                                         agent_id=report.agent_id,
