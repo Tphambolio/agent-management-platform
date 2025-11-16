@@ -407,10 +407,36 @@ Generate the report now:"""
                 )
             )
 
-            return response.text
+            # Add comprehensive debugging
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"🔍 DEBUG: Gemini response type: {type(response)}")
+            logger.error(f"🔍 DEBUG: Has text attr: {hasattr(response, 'text')}")
+
+            if hasattr(response, 'prompt_feedback'):
+                logger.error(f"🔍 DEBUG: Prompt feedback: {response.prompt_feedback}")
+
+            if hasattr(response, 'candidates'):
+                logger.error(f"🔍 DEBUG: Candidates count: {len(response.candidates)}")
+                if len(response.candidates) > 0:
+                    logger.error(f"🔍 DEBUG: First candidate: {response.candidates[0]}")
+
+            text_content = response.text if hasattr(response, 'text') else None
+            logger.error(f"🔍 DEBUG: Text length: {len(text_content) if text_content else 0}")
+
+            if text_content:
+                logger.error(f"✅ SUCCESS: Gemini generated {len(text_content)} chars")
+                return text_content
+            else:
+                logger.error("❌ ERROR: response.text is empty or None")
+                return self._generate_fallback_report(title, description, sources)
 
         except Exception as e:
-            print(f"❌ Gemini synthesis failed: {e}")
+            import logging
+            import traceback
+            logger = logging.getLogger(__name__)
+            logger.error(f"❌ EXCEPTION: {type(e).__name__}: {str(e)}")
+            logger.error(f"❌ TRACEBACK: {traceback.format_exc()}")
             # Fallback to basic report
             return self._generate_fallback_report(title, description, sources)
 
