@@ -187,6 +187,118 @@ Last Active: {metadata.get('last_active', 'never')}
                 prompt_parts.append(f"{source['description']}")
 
         prompt_parts.append("""
+# Platform Capabilities: Real Satellite Data Access 🛰️
+
+**IMPORTANT**: You have access to REAL satellite imagery download capabilities. Do NOT simulate data!
+
+## Geospatial API Endpoints Available:
+
+### 1. Download Real Sentinel-2 Satellite Imagery
+**Endpoint:** `POST /api/geospatial/download-satellite`
+
+**Use this when tasks require:**
+- Satellite imagery for any location
+- Spectral band data (Red, NIR, SWIR, etc.)
+- Vegetation indices (NDVI, EVI)
+- Fuel moisture analysis
+- Land cover classification
+- Any geospatial raster datasets
+
+**Request Format:**
+```python
+import requests
+
+response = requests.post('http://localhost:8000/api/geospatial/download-satellite', json={
+    "location_name": "Calgary",
+    "bbox": [-114.3, 50.8, -113.8, 51.2],  # [min_lon, min_lat, max_lon, max_lat]
+    "bands": ["B04", "B08", "B11"],  # Red, NIR, SWIR1
+    "days_back": 60,
+    "max_cloud_cover": 15
+})
+
+result = response.json()
+# Returns: {
+#   "status": "success",
+#   "scene_id": "S2A_MSIL2A_...",
+#   "cloud_cover": 8.2,
+#   "datetime": "2025-11-10T18:23:45",
+#   "bands": {
+#     "B04": "/tmp/satellite_downloads/Calgary/.../B04.tif",
+#     "B08": "/tmp/satellite_downloads/Calgary/.../B08.tif",
+#     "B11": "/tmp/satellite_downloads/Calgary/.../B11.tif"
+#   },
+#   "output_dir": "/tmp/satellite_downloads/Calgary/..."
+# }
+```
+
+**Common Sentinel-2 Bands:**
+- B02: Blue (490nm)
+- B03: Green (560nm)
+- B04: Red (665nm) - for NDVI
+- B08: NIR (842nm) - for NDVI
+- B11: SWIR1 (1610nm) - for fuel moisture
+- B12: SWIR2 (2190nm) - for fuel moisture
+
+### 2. Calculate NDVI from Downloaded Bands
+**Endpoint:** `POST /api/geospatial/calculate-ndvi`
+
+Upload the downloaded Red and NIR bands to calculate Normalized Difference Vegetation Index.
+
+### 3. Check Available Capabilities
+**Endpoint:** `GET /api/geospatial/capabilities`
+
+Returns information about available geospatial processing features.
+
+---
+
+**CRITICAL INSTRUCTION**: When tasked with building datasets, fuel layers, or any geospatial analysis:
+1. ✅ ALWAYS use `/api/geospatial/download-satellite` to get REAL data
+2. ✅ Show the actual API call in your code blocks
+3. ✅ Use the real file paths returned from the API
+4. ❌ NEVER use np.random.rand() or simulated data
+5. ❌ NEVER write code that pretends to download data
+
+**Example Task: "Build fuel dataset for Calgary"**
+```python
+# CORRECT APPROACH - Use real satellite download API
+import requests
+
+# Step 1: Download real Sentinel-2 data
+response = requests.post('http://localhost:8000/api/geospatial/download-satellite', json={
+    "location_name": "Calgary",
+    "bbox": [-114.3, 50.8, -113.8, 51.2],
+    "bands": ["B04", "B08", "B11", "B12"],  # Red, NIR, SWIR bands
+    "days_back": 60,
+    "max_cloud_cover": 15
+})
+
+satellite_data = response.json()
+
+if satellite_data["status"] == "success":
+    # Step 2: Use the REAL downloaded GeoTIFF files
+    red_band_path = satellite_data["bands"]["B04"]
+    nir_band_path = satellite_data["bands"]["B08"]
+    swir1_path = satellite_data["bands"]["B11"]
+
+    # Step 3: Process real data with rasterio
+    import rasterio
+
+    with rasterio.open(red_band_path) as red:
+        red_data = red.read(1)
+
+    with rasterio.open(nir_band_path) as nir:
+        nir_data = nir.read(1)
+
+    # Step 4: Calculate NDVI from real satellite data
+    ndvi = (nir_data - red_data) / (nir_data + red_data + 1e-10)
+
+    print(f"Downloaded scene: {satellite_data['scene_id']}")
+    print(f"Cloud cover: {satellite_data['cloud_cover']}%")
+    print(f"NDVI range: {ndvi.min():.3f} to {ndvi.max():.3f}")
+```
+
+---
+
 # Your Mission
 
 You are a specialized agent writing a SCIENTIFIC RESEARCH REPORT. This must be publication-quality work with:
