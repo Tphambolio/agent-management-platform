@@ -23,7 +23,7 @@ class GeminiWebResearcher:
             raise ValueError("GEMINI_API_KEY environment variable required")
 
         genai.configure(api_key=self.gemini_api_key)
-        self.model = genai.GenerativeModel('models/gemini-2.0-flash-exp')
+        self.model = genai.GenerativeModel('models/gemini-2.5-flash')  # Changed from gemini-2.0-flash-exp (quota exceeded)
 
         # Brave Search API
         self.brave_api_key = os.getenv("BRAVE_API_KEY")
