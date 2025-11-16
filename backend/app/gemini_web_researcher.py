@@ -23,7 +23,20 @@ class GeminiWebResearcher:
             raise ValueError("GEMINI_API_KEY environment variable required")
 
         genai.configure(api_key=self.gemini_api_key)
-        self.model = genai.GenerativeModel('models/gemini-2.5-flash')  # Changed from gemini-2.0-flash-exp (quota exceeded)
+
+        # Configure safety settings to allow research content about fire, fuel, etc.
+        # Research about wildfire simulation is legitimate scientific work
+        safety_settings = {
+            'HARM_CATEGORY_DANGEROUS_CONTENT': 'BLOCK_NONE',
+            'HARM_CATEGORY_HARASSMENT': 'BLOCK_NONE',
+            'HARM_CATEGORY_HATE_SPEECH': 'BLOCK_NONE',
+            'HARM_CATEGORY_SEXUALLY_EXPLICIT': 'BLOCK_NONE',
+        }
+
+        self.model = genai.GenerativeModel(
+            'models/gemini-2.5-flash',
+            safety_settings=safety_settings
+        )
 
         # Brave Search API
         self.brave_api_key = os.getenv("BRAVE_API_KEY")
@@ -433,9 +446,10 @@ Generate the report now:"""
             response = self.model.generate_content(
                 prompt,
                 generation_config=genai.GenerationConfig(
-                    max_output_tokens=4096,
+                    max_output_tokens=8192,  # Increased from 4096 to allow longer reports
                     temperature=0.4,  # Lower temperature for more focused output
-                )
+                ),
+                request_options={"timeout": 120}  # 2 minute timeout for complex synthesis
             )
 
             # Add comprehensive debugging
