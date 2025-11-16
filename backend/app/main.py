@@ -30,6 +30,8 @@ except Exception as e:
 from app.dataset_manager import dataset_manager
 from app.code_extractor import code_extractor
 from app.agent_factory import get_agent_factory
+# Import RAG routes for agent memory
+from app.rag_routes import register_rag_routes, auto_ingest_report_to_memory
 # Import error handlers
 from app.middleware.error_handler import (
     AppException,
@@ -80,6 +82,9 @@ app.add_middleware(RequestIDMiddleware)
 
 # Include routers
 app.include_router(auth_router)
+
+# Register RAG routes for agent memory
+register_rag_routes(app)
 
 # Initialize database and agent executor (initialize on first import, not on startup)
 try:
@@ -199,6 +204,16 @@ async def task_processor():
 
                                     db.add(report)
                                     db.commit()
+
+                                    # Auto-ingest report into vector memory for RAG
+                                    import asyncio
+                                    asyncio.create_task(auto_ingest_report_to_memory(
+                                        report_id=report.id,
+                                        agent_id=report.agent_id,
+                                        report_title=report.title,
+                                        report_content=report.content,
+                                        is_shared=False
+                                    ))
 
                                     # Record task in agent's memory for learning
                                     agent_memory.record_task_completion(
