@@ -34,6 +34,8 @@ from app.agent_factory import get_agent_factory
 from app.rag_routes import register_rag_routes, auto_ingest_report_to_memory
 # Import geospatial routes for satellite imagery processing
 from app.geospatial_routes import register_geospatial_routes
+# Import MCP routes for Model Context Protocol (JSON-RPC 2.0)
+from app.mcp_routes import register_mcp_routes
 # Import error handlers
 from app.middleware.error_handler import (
     AppException,
@@ -90,6 +92,9 @@ register_rag_routes(app)
 
 # Register geospatial routes for satellite imagery processing
 register_geospatial_routes(app)
+
+# Register MCP routes for Model Context Protocol (NON-BREAKING: coexists with REST)
+register_mcp_routes(app)
 
 # Initialize database and agent executor (initialize on first import, not on startup)
 try:
