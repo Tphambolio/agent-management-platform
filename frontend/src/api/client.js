@@ -48,6 +48,10 @@ export const knowledgeAPI = {
   stats: () => apiClient.get('/api/knowledge/stats'),
 };
 
+export const geospatialAPI = {
+  capabilities: () => apiClient.get('/api/geospatial/capabilities'),
+};
+
 // Backward compatibility - individual exports
 export const getAgents = () => apiClient.get('/api/agents');
 export const getAgent = (id) => apiClient.get(`/api/agents/${id}`);

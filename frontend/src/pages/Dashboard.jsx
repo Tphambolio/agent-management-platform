@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { agentsAPI, tasksAPI, reportsAPI, healthAPI } from '../api/client'
 import { Users, CheckSquare, FileText, Activity } from 'lucide-react'
+import GeospatialStatus from '../components/GeospatialStatus'
 
 export default function Dashboard() {
   const navigate = useNavigate()
@@ -172,6 +173,9 @@ export default function Dashboard() {
           </div>
         </div>
       )}
+
+      {/* Geospatial Capabilities */}
+      <GeospatialStatus />
     </div>
   )
 }
