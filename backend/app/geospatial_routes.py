@@ -21,6 +21,7 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 from .geospatial_pipeline import get_geospatial_processor
+from .satellite_data import get_satellite_downloader
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +64,26 @@ class RasterProcessingResponse(BaseModel):
     operation: Optional[str] = None
     error: Optional[str] = None
     download_url: Optional[str] = None
+
+
+class SatelliteDownloadRequest(BaseModel):
+    """Request for satellite data download"""
+    location_name: str = Field(default="Calgary", description="Location name")
+    bbox: list = Field(default=[-114.3, 50.8, -113.8, 51.2], description="Bounding box [min_lon, min_lat, max_lon, max_lat]")
+    bands: list = Field(default=["B04", "B08"], description="List of band names to download")
+    days_back: int = Field(default=30, description="How many days back to search")
+    max_cloud_cover: float = Field(default=20.0, description="Maximum cloud cover percentage")
+
+
+class SatelliteDownloadResponse(BaseModel):
+    """Response from satellite data download"""
+    status: str
+    scene_id: Optional[str] = None
+    cloud_cover: Optional[float] = None
+    datetime: Optional[str] = None
+    bands: Optional[dict] = None
+    output_dir: Optional[str] = None
+    error: Optional[str] = None
 
 
 # === Route Registration === #
@@ -296,5 +317,75 @@ def register_geospatial_routes(app):
             media_type="application/octet-stream",
             filename=filename
         )
+
+    @app.post("/api/geospatial/download-satellite", response_model=SatelliteDownloadResponse)
+    async def download_satellite_data(request: SatelliteDownloadRequest):
+        """
+        Download satellite imagery from Microsoft Planetary Computer.
+
+        Searches for recent, low-cloud Sentinel-2 scenes and downloads specified spectral bands.
+
+        **Frontend Integration:**
+        ```javascript
+        const response = await fetch('/api/geospatial/download-satellite', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            location_name: "Calgary",
+            bbox: [-114.3, 50.8, -113.8, 51.2],
+            bands: ["B04", "B08", "B11"],  // Red, NIR, SWIR
+            days_back: 60,
+            max_cloud_cover: 15
+          })
+        });
+
+        const result = await response.json();
+        if (result.status === "success") {
+          console.log("Downloaded bands:", result.bands);
+          // Band files are now available at result.bands.B04, result.bands.B08, etc.
+        }
+        ```
+
+        **Use Case:** Enable agents to download REAL satellite imagery for fuel moisture analysis,
+        NDVI calculation, and other geospatial tasks.
+
+        **Common Sentinel-2 Bands:**
+        - B02: Blue (490nm)
+        - B03: Green (560nm)
+        - B04: Red (665nm) - for NDVI
+        - B08: NIR (842nm) - for NDVI
+        - B11: SWIR1 (1610nm) - for fuel moisture
+        - B12: SWIR2 (2190nm) - for fuel moisture
+        """
+        logger.info(f"🛰️  Satellite data download requested for {request.location_name}")
+
+        downloader = get_satellite_downloader()
+
+        if not downloader.available:
+            raise HTTPException(
+                status_code=503,
+                detail="Satellite data download unavailable - STAC libraries not installed"
+            )
+
+        try:
+            result = downloader.download_scene_for_location(
+                location_name=request.location_name,
+                bbox=tuple(request.bbox),
+                bands=request.bands,
+                days_back=request.days_back,
+                max_cloud_cover=request.max_cloud_cover
+            )
+
+            if result["status"] == "error":
+                raise HTTPException(status_code=500, detail=result["error"])
+
+            logger.info(f"✅ Satellite download complete: {result['scene_id']}")
+            logger.info(f"   Downloaded {len(result['bands'])} bands to {result['output_dir']}")
+
+            return SatelliteDownloadResponse(**result)
+
+        except Exception as e:
+            logger.error(f"❌ Satellite download failed: {str(e)}", exc_info=True)
+            raise HTTPException(status_code=500, detail=str(e))
 
     logger.info("✅ Geospatial routes registered successfully")

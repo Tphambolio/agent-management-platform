@@ -42,5 +42,10 @@ rasterio==1.3.9  # Uncomment after GDAL is installed in Docker
 rioxarray==0.15.0  # Uncomment for memory-efficient raster processing
 dask[array]==2023.12.0  # Uncomment for chunked parallel processing
 
+# Satellite Data Acquisition via STAC
+pystac-client==0.8.3  # Search STAC catalogs for satellite imagery
+planetary-computer==1.0.0  # Microsoft Planetary Computer API
+stackstac==0.5.1  # Load STAC items into xarray for processing
+
 # Development
 python-dotenv==1.0.0

@@ -50,6 +50,7 @@ export const knowledgeAPI = {
 
 export const geospatialAPI = {
   capabilities: () => apiClient.get('/api/geospatial/capabilities'),
+  downloadSatellite: (data) => apiClient.post('/api/geospatial/download-satellite', data),
 };
 
 // Backward compatibility - individual exports
