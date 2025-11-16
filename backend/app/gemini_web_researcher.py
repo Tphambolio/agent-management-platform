@@ -368,15 +368,13 @@ Create a comprehensive, professional research report that synthesizes these sour
 ## Technical Analysis
 *Deep dive into technical aspects, implementation details, or methodological considerations. Include specifics, data points, and expert perspectives from sources.*
 
-### Mathematical Foundations
-*Provide exact formulas, equations, and calculations discovered in the sources. Use proper mathematical notation.*
-
 ### Implementation Code
-*CRITICAL: Include working Python code examples that implement the key concepts. Code must be:*
+*CRITICAL PRIORITY: Include working Python code examples FIRST that implement the key concepts. Code must be:*
 - *Fully functional and self-contained*
 - *Properly documented with docstrings*
 - *Based on information from sources*
 - *Wrapped in ```python code blocks*
+- *At least 2-3 substantial code examples*
 
 Example structure for code blocks:
 ```python
@@ -395,6 +393,9 @@ def example_function(param1: float, param2: float) -> float:
     result = param1 + param2
     return result
 ```
+
+### Mathematical Foundations
+*Provide key formulas and equations discovered in the sources. Be concise - include only the most essential mathematical relationships.*
 
 ## Practical Applications
 *How can these findings be applied? Real-world use cases, implementation strategies, and actionable steps. Include code examples where relevant.*
@@ -446,7 +447,7 @@ Generate the report now:"""
             response = self.model.generate_content(
                 prompt,
                 generation_config=genai.GenerationConfig(
-                    max_output_tokens=8192,  # Increased from 4096 to allow longer reports
+                    max_output_tokens=16384,  # Increased to 16K to prevent truncation before code examples
                     temperature=0.4,  # Lower temperature for more focused output
                 ),
                 request_options={"timeout": 120}  # 2 minute timeout for complex synthesis
