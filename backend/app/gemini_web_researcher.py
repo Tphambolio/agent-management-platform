@@ -337,7 +337,7 @@ Create a comprehensive, professional research report that synthesizes these sour
 Example structure for code blocks:
 ```python
 def example_function(param1: float, param2: float) -> float:
-    """
+    \"""
     Clear description of what this function does.
 
     Args:
@@ -346,7 +346,7 @@ def example_function(param1: float, param2: float) -> float:
 
     Returns:
         Description of return value
-    """
+    \"""
     # Implementation based on research findings
     result = param1 + param2
     return result
