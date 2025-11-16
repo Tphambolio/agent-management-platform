@@ -32,6 +32,37 @@ class GeminiWebResearcher:
         if not self.brave_api_key:
             print("⚠️  BRAVE_API_KEY not set - will use limited mock data")
 
+        # Test Google AI API connectivity
+        self._test_gemini_connectivity()
+
+    def _test_gemini_connectivity(self):
+        """Test network connectivity to Google AI API"""
+        import socket
+        import logging
+        logger = logging.getLogger(__name__)
+
+        try:
+            # Test DNS resolution and TCP connection
+            logger.error("🔍 CONNECTIVITY TEST: Testing Google AI API access...")
+            socket.create_connection(("generativelanguage.googleapis.com", 443), timeout=5)
+            logger.error("✅ CONNECTIVITY TEST: Successfully connected to generativelanguage.googleapis.com:443")
+
+            # Test actual API call
+            logger.error("🔍 CONNECTIVITY TEST: Testing Gemini API call...")
+            response = self.model.generate_content("Say 'Hello'", request_options={"timeout": 10})
+            if response.text:
+                logger.error(f"✅ CONNECTIVITY TEST: Gemini API working! Response: {response.text[:50]}")
+            else:
+                logger.error("❌ CONNECTIVITY TEST: Gemini API returned empty response")
+        except socket.timeout:
+            logger.error("❌ CONNECTIVITY TEST: Connection timeout to generativelanguage.googleapis.com")
+        except socket.gaierror as e:
+            logger.error(f"❌ CONNECTIVITY TEST: DNS resolution failed: {e}")
+        except ConnectionRefusedError:
+            logger.error("❌ CONNECTIVITY TEST: Connection refused by server")
+        except Exception as e:
+            logger.error(f"❌ CONNECTIVITY TEST: Failed with {type(e).__name__}: {str(e)}")
+
     def search_web(self, query: str, count: int = 10) -> List[Dict]:
         """Conduct real web search using Brave Search API"""
 
