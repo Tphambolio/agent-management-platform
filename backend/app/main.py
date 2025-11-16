@@ -32,6 +32,8 @@ from app.code_extractor import code_extractor
 from app.agent_factory import get_agent_factory
 # Import RAG routes for agent memory
 from app.rag_routes import register_rag_routes, auto_ingest_report_to_memory
+# Import geospatial routes for satellite imagery processing
+from app.geospatial_routes import register_geospatial_routes
 # Import error handlers
 from app.middleware.error_handler import (
     AppException,
@@ -85,6 +87,9 @@ app.include_router(auth_router)
 
 # Register RAG routes for agent memory
 register_rag_routes(app)
+
+# Register geospatial routes for satellite imagery processing
+register_geospatial_routes(app)
 
 # Initialize database and agent executor (initialize on first import, not on startup)
 try:
