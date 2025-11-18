@@ -95,6 +95,92 @@ class Report(Base):
     meta = Column(JSON, default=dict)  # Renamed from metadata to avoid SQLAlchemy conflict
 
 
+class SessionStatus(str, enum.Enum):
+    """Session status enumeration"""
+    IN_PROGRESS = "in_progress"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    CANCELLED = "cancelled"
+
+
+class EventType(str, enum.Enum):
+    """Interaction event type enumeration"""
+    USER_INPUT = "user_input"
+    AGENT_THOUGHT = "agent_thought"
+    TOOL_CALL = "tool_call"
+    TOOL_OUTPUT = "tool_output"
+    LLM_RESPONSE = "llm_response"
+    ERROR = "error"
+    STATUS_UPDATE = "status_update"
+
+
+class ArtifactType(str, enum.Enum):
+    """Artifact type enumeration"""
+    RESEARCH_SUMMARY = "research_summary"
+    CODE_SNIPPET = "code_snippet"
+    DOCUMENT = "document"
+    DATA_ANALYSIS = "data_analysis"
+    DIAGRAM = "diagram"
+    REPORT = "report"
+
+
+class Session(Base):
+    """
+    Session model for tracking user-agent interactions
+    Based on research recommendations for comprehensive archiving
+    """
+    __tablename__ = "sessions"
+
+    id = Column(String, primary_key=True)
+    user_id = Column(String, index=True)  # Optional: for multi-user support
+    agent_id = Column(String, nullable=False, index=True)
+    initial_query = Column(Text, nullable=False)
+    final_output = Column(Text)
+    status = Column(SQLEnum(SessionStatus), default=SessionStatus.IN_PROGRESS, index=True)
+    agent_model_id = Column(String(255))  # e.g., 'claude-sonnet-4', 'gpt-4'
+    cost_estimate_usd = Column(Integer)  # Store as cents to avoid decimal issues
+    duration_seconds = Column(Integer)
+    start_time = Column(DateTime(timezone=True), server_default=func.now())
+    end_time = Column(DateTime(timezone=True))
+    meta = Column(JSON, default=dict)
+
+
+class InteractionLog(Base):
+    """
+    Interaction log for tracking every step within a session
+    Enables full audit trail and replay capability
+    """
+    __tablename__ = "interaction_logs"
+
+    id = Column(String, primary_key=True)
+    session_id = Column(String, nullable=False, index=True)
+    timestamp = Column(DateTime(timezone=True), server_default=func.now())
+    event_type = Column(SQLEnum(EventType), nullable=False, index=True)
+    content = Column(JSON)  # Structured event data
+    agent_state = Column(JSON)  # Optional: snapshot of agent internal state
+    token_count = Column(Integer)
+    cost_estimate_usd = Column(Integer)  # Store as cents
+    meta = Column(JSON, default=dict)
+
+
+class Artifact(Base):
+    """
+    Artifact model for storing research results, code, documents
+    Part of the comprehensive archive system
+    """
+    __tablename__ = "artifacts"
+
+    id = Column(String, primary_key=True)
+    session_id = Column(String, nullable=False, index=True)
+    artifact_type = Column(SQLEnum(ArtifactType), nullable=False, index=True)
+    title = Column(String(500))
+    content = Column(Text)  # Main content
+    file_path = Column(String(512))  # Optional: external file storage
+    timestamp = Column(DateTime(timezone=True), server_default=func.now())
+    tags = Column(JSON, default=list)
+    meta = Column(JSON, default=dict)  # Language, sources, etc.
+
+
 class Project(Base):
     """Project model"""
     __tablename__ = "projects"

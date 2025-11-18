@@ -1,11 +1,9 @@
 """Agent Management Platform - FastAPI Backend"""
 import uuid
-import json
 import asyncio
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from typing import List, Optional
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
-from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from sqlalchemy.exc import SQLAlchemyError
@@ -14,28 +12,15 @@ from pydantic import BaseModel
 from app.config import settings
 from app.database import init_db, get_db
 from app.models import Agent, Task, Report, Project, AgentStatus, TaskStatus
-from app.gemini_web_researcher import get_gemini_researcher
+from app.web_researcher import web_researcher
 from app.local_agent_skills import local_agent_skills_system  # Use local CLI-based system
 from app.agent_memory import agent_memory
-
-# Initialize Gemini researcher for high-quality reports
-try:
-    web_researcher = get_gemini_researcher()
-    print("✅ Using Gemini Web Researcher for professional-quality reports")
-except Exception as e:
-    print(f"⚠️  Failed to initialize Gemini researcher: {e}")
-    # Fallback to old researcher if Gemini fails
-    from app.web_researcher import web_researcher
-    print("⚠️  Using fallback researcher")
 from app.dataset_manager import dataset_manager
 from app.code_extractor import code_extractor
-from app.agent_factory import get_agent_factory
-# Import RAG routes for agent memory
-from app.rag_routes import register_rag_routes, auto_ingest_report_to_memory
-# Import geospatial routes for satellite imagery processing
-from app.geospatial_routes import register_geospatial_routes
-# Import MCP routes for Model Context Protocol (JSON-RPC 2.0)
-from app.mcp_routes import register_mcp_routes
+# Import MCP + LangGraph orchestrator
+from app.agent_orchestrator import agent_orchestrator
+# Import streaming manager
+from app.streaming import streaming_manager, StreamEventType
 # Import error handlers
 from app.middleware.error_handler import (
     AppException,
@@ -87,15 +72,6 @@ app.add_middleware(RequestIDMiddleware)
 # Include routers
 app.include_router(auth_router)
 
-# Register RAG routes for agent memory
-register_rag_routes(app)
-
-# Register geospatial routes for satellite imagery processing
-register_geospatial_routes(app)
-
-# Register MCP routes for Model Context Protocol (NON-BREAKING: coexists with REST)
-register_mcp_routes(app)
-
 # Initialize database and agent executor (initialize on first import, not on startup)
 try:
     init_db()
@@ -132,6 +108,10 @@ manager = ConnectionManager()
 # Background task processor
 async def task_processor():
     """Process tasks: conduct real research and generate reports"""
+
+    # Check if MCP orchestrator is enabled
+    use_mcp_orchestrator = os.getenv("USE_MCP_ORCHESTRATOR", "true").lower() == "true"
+
     while True:
         try:
             await asyncio.sleep(5)  # Check every 5 seconds
@@ -142,136 +122,148 @@ async def task_processor():
 
                 for task in running_tasks:
                     if task.started_at:
-                        elapsed = datetime.now(timezone.utc) - task.started_at
+                        elapsed = datetime.utcnow() - task.started_at
                         if elapsed > timedelta(seconds=30):
                             # Get agent details
                             agent = db.query(Agent).filter(Agent.id == task.agent_id).first()
                             agent_name = agent.name if agent else "Research Agent"
                             agent_type = agent.type if agent else "general"
 
-                            try:
-                                # Wrap task execution in 5-minute timeout
-                                async with asyncio.timeout(300):  # 5 minutes
-                                    # Step 1: Conduct real web research
-                                    print(f"\n🔬 Conducting research for task: {task.title}")
-                                    research_result = await web_researcher.conduct_research(
+                            # Try using MCP + LangGraph orchestrator first
+                            if use_mcp_orchestrator and agent_orchestrator.enabled:
+                                print(f"\n🚀 [MCP Orchestrator] Processing task: {task.title}")
+
+                                orchestrator_result = await agent_orchestrator.execute_task(
+                                    task_id=task.id,
+                                    task_title=task.title,
+                                    task_description=task.description,
+                                    agent_name=agent_name,
+                                    agent_type=agent_type
+                                )
+
+                                if orchestrator_result.get("status") == "completed":
+                                    final_content = orchestrator_result.get("final_report", "")
+                                    sources_found = orchestrator_result.get("research_sources", 0)
+                                    skills_utilized = 0  # MCP orchestrator handles this differently
+
+                                    print(f"✅ [MCP Orchestrator] Task completed | {sources_found} sources analyzed")
+                                else:
+                                    # Fallback to legacy system
+                                    print(f"⚠️  [MCP Orchestrator] Failed, falling back to legacy system")
+                                    use_mcp_orchestrator = False  # Disable for this iteration
+                                    continue  # Re-process with legacy system
+
+                            # Legacy system (fallback)
+                            if not use_mcp_orchestrator or not agent_orchestrator.enabled:
+                                # Step 1: Conduct real web research
+                                print(f"\n🔬 [Legacy] Conducting research for task: {task.title}")
+                                research_result = await web_researcher.conduct_research(
                                     task_title=task.title,
                                     task_description=task.description,
                                     agent_type=agent_name
-                                    )
+                                )
 
-                                    # Step 2: Use agent's specialized skills to synthesize findings
-                                    print(f"🧠 Loading agent skills for {agent_name}")
-                                    skills_result = await local_agent_skills_system.execute_task_with_skills(
+                                # Step 2: Use agent's specialized skills to synthesize findings
+                                print(f"🧠 [Legacy] Loading agent skills for {agent_name}")
+                                skills_result = await local_agent_skills_system.execute_task_with_skills(
                                     agent_name=agent_name,
                                     task_title=task.title,
                                     task_description=task.description,
                                     research_data=research_result
-                                    )
+                                )
 
-                                    # Combine web research with skills-based synthesis
-                                    if skills_result.get("status") == "success":
-                                        final_content = skills_result["content"]
-                                        skills_utilized = skills_result.get("skills_utilized", 0)
-                                        print(f"✅ Agent skills applied ({skills_utilized} knowledge items)")
-                                    else:
-                                        # Fallback to basic research if skills synthesis fails
-                                        final_content = research_result.get("content", "No content generated")
-                                        skills_utilized = 0
-                                        print(f"⚠️  Skills synthesis unavailable, using basic research")
+                                # Combine web research with skills-based synthesis
+                                if skills_result.get("status") == "success":
+                                    final_content = skills_result["content"]
+                                    skills_utilized = skills_result.get("skills_utilized", 0)
+                                    sources_found = research_result.get("sources_found", 0)
+                                    print(f"✅ Agent skills applied ({skills_utilized} knowledge items)")
+                                else:
+                                    # Fallback to basic research if skills synthesis fails
+                                    final_content = research_result.get("content", "No content generated")
+                                    skills_utilized = 0
+                                    sources_found = research_result.get("sources_found", 0)
+                                    print(f"⚠️  Skills synthesis unavailable, using basic research")
 
-                                    # Mark task as completed
-                                    task.status = TaskStatus.COMPLETED
-                                    task.completed_at = datetime.now(timezone.utc)
-                                    task.result = {
-                                    "message": "Task completed with agent skills",
-                                    "duration": str(elapsed),
-                                    "sources_found": research_result.get("sources_found", 0),
-                                    "search_queries": research_result.get("search_queries", []),
-                                    "skills_utilized": skills_utilized > 0
-                                    }
+                            # Mark task as completed
+                            task.status = TaskStatus.COMPLETED
+                            task.completed_at = datetime.utcnow()
 
-                                    # Create comprehensive report with agent skills
-                                    report = Report(
-                                    id=str(uuid.uuid4()),
-                                    task_id=task.id,
-                                    agent_id=task.agent_id,
-                                    project_id=task.project_id,
-                                    title=f"Research Report: {task.title}",
-                                    summary=f"Agent '{agent_name}' leveraged specialized skills and web research on '{task.title}'. Found {research_result.get('sources_found', 0)} relevant sources and applied {skills_utilized} knowledge items.",
-                                    content=final_content,
-                                    format="markdown",
-                                    tags=["web-research", "agent-skills", "task-completion", f"agent-{agent_type}"],
-                                    meta={
+                            # Build task result based on which system was used
+                            orchestration_method = "mcp_orchestrator" if (use_mcp_orchestrator and agent_orchestrator.enabled) else "legacy"
+
+                            task.result = {
+                                "message": f"Task completed using {orchestration_method}",
+                                "duration": str(elapsed),
+                                "sources_found": sources_found,
+                                "search_queries": [],
+                                "skills_utilized": skills_utilized > 0,
+                                "orchestration": orchestration_method
+                            }
+
+                            # Create comprehensive report
+                            report_tags = ["web-research", "task-completion", f"agent-{agent_type}"]
+                            if orchestration_method == "mcp_orchestrator":
+                                report_tags.extend(["mcp", "langgraph", "advanced-orchestration"])
+                            else:
+                                report_tags.append("legacy-system")
+
+                            report = Report(
+                                id=str(uuid.uuid4()),
+                                task_id=task.id,
+                                agent_id=task.agent_id,
+                                project_id=task.project_id,
+                                title=f"Research Report: {task.title}",
+                                summary=f"Agent '{agent_name}' conducted research on '{task.title}'. Found {sources_found} relevant sources using {orchestration_method}.",
+                                content=final_content,
+                                format="markdown",
+                                tags=report_tags,
+                                meta={
                                     "duration_seconds": elapsed.total_seconds(),
                                     "agent_type": agent_type,
-                                    "sources_count": research_result.get("sources_found", 0),
-                                    "search_queries": research_result.get("search_queries", []),
+                                    "sources_count": sources_found,
+                                    "orchestration_method": orchestration_method,
                                     "skills_utilized": skills_utilized > 0,
                                     "skills_knowledge_items": skills_utilized
-                                    }
-                                    )
+                                }
+                            )
 
-                                    db.add(report)
-                                    db.commit()
+                            db.add(report)
+                            db.commit()
 
-                                    # Auto-ingest report into vector memory for RAG
-                                    asyncio.create_task(auto_ingest_report_to_memory(
-                                        report_id=report.id,
-                                        agent_id=report.agent_id,
-                                        report_title=report.title,
-                                        report_content=report.content,
-                                        is_shared=False
-                                    ))
+                            # Record task in agent's memory for learning
+                            agent_memory.record_task_completion(
+                                agent_id=task.agent_id,
+                                task_id=task.id,
+                                task_title=task.title,
+                                duration_seconds=elapsed.total_seconds(),
+                                sources_found=research_result.get("sources_found", 0),
+                                skills_utilized=report.tags,
+                                report_id=report.id
+                            )
 
-                                    # Record task in agent's memory for learning
-                                    agent_memory.record_task_completion(
-                                    agent_id=task.agent_id,
-                                    task_id=task.id,
-                                    task_title=task.title,
-                                    duration_seconds=elapsed.total_seconds(),
-                                    sources_found=research_result.get("sources_found", 0),
-                                    skills_utilized=report.tags,
-                                    report_id=report.id
-                                    )
+                            # Extract code from report and learn new skills
+                            print(f"🧠 Extracting code and learning skills...")
+                            learning_result = code_extractor.learn_from_report(
+                                agent_name=agent_name,
+                                report_content=final_content,
+                                task_title=task.title
+                            )
 
-                                    # Extract code from report and learn new skills
-                                    print(f"🧠 Extracting code and learning skills...")
-                                    learning_result = code_extractor.learn_from_report(
-                                    agent_name=agent_name,
-                                    report_content=final_content,
-                                    task_title=task.title
-                                    )
+                            if learning_result.get("skills_learned", 0) > 0:
+                                print(f"   ✅ Agent learned {learning_result['skills_learned']} new skills!")
 
-                                    if learning_result.get("skills_learned", 0) > 0:
-                                        print(f"   ✅ Agent learned {learning_result['skills_learned']} new skills!")
+                            # Broadcast completion with report info
+                            await manager.broadcast({
+                                "type": "task_completed",
+                                "task_id": task.id,
+                                "report_id": report.id,
+                                "duration": str(elapsed),
+                                "sources_found": sources_found,
+                                "orchestration": orchestration_method
+                            })
 
-                                    # Broadcast completion with report info
-                                    await manager.broadcast({
-                                    "type": "task_completed",
-                                    "task_id": task.id,
-                                    "report_id": report.id,
-                                    "duration": str(elapsed),
-                                    "sources_found": research_result.get("sources_found", 0)
-                                    })
-
-                                    print(f"✅ Task {task.id} completed | Research report {report.id} generated | {research_result.get('sources_found', 0)} sources")
-
-                            except asyncio.TimeoutError:
-                                # Task exceeded 5-minute timeout
-                                print(f"⏱️  Task {task.id} timed out after 5 minutes")
-                                task.status = TaskStatus.FAILED
-                                task.completed_at = datetime.now(timezone.utc)
-                                task.error = "Task execution timed out after 5 minutes. This usually indicates a Gemini API hang or network issue."
-                                db.commit()
-                                
-                                # Broadcast timeout
-                                await manager.broadcast({
-                                    "type": "task_failed",
-                                    "task_id": task.id,
-                                    "error": "timeout",
-                                    "agent_id": task.agent_id
-                                })
+                            print(f"✅ Task {task.id} completed | Report {report.id} | {sources_found} sources | Method: {orchestration_method}")
 
         except Exception as e:
             print(f"⚠️  Task processor error: {e}")
@@ -301,10 +293,6 @@ class TaskCreate(BaseModel):
     description: str
     priority: int = 1
     context: dict = {}
-
-class TaskUpdate(BaseModel):
-    status: Optional[str] = None
-    error: Optional[str] = None
 
 class TaskResponse(BaseModel):
     id: str
@@ -429,210 +417,6 @@ async def sync_agents():
     agent_executor.sync_agents_to_db()
     await manager.broadcast({"type": "agents_synced"})
     return {"message": "Agents synced successfully"}
-
-
-class IntelligentAgentCreate(BaseModel):
-    """Request model for intelligent agent creation"""
-    description: str
-    requirements: Optional[List[str]] = None
-
-
-@app.post("/api/agents/create-intelligent")
-async def create_intelligent_agent(request: IntelligentAgentCreate):
-    """
-    Create an agent from natural language description using AI
-
-    Uses Gemini AI to generate complete agent profile with skills from description.
-
-    Example:
-        {
-            "description": "I need an agent that can analyze satellite imagery for wildfire detection",
-            "requirements": ["Must use Python", "Should integrate with NASA FIRMS data"]
-        }
-    """
-    try:
-        # Get agent factory
-        factory = get_agent_factory()
-
-        # Create intelligent agent
-        result = await factory.create_intelligent_agent(
-            description=request.description,
-            requirements=request.requirements
-        )
-
-        # Register agent in database
-        agent_data = result["agent"]
-
-        with get_db() as db:
-            # Check if agent already exists
-            existing = db.query(Agent).filter(Agent.name == agent_data["name"]).first()
-            if existing:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"Agent with name '{agent_data['name']}' already exists. Try a different description."
-                )
-
-            # Create new agent
-            # Truncate specialization to fit database VARCHAR(255)
-            specialization = agent_data["specialization"]
-            if len(specialization) > 250:
-                specialization = specialization[:250] + "..."
-
-            agent = Agent(
-                id=agent_data["id"],
-                name=agent_data["name"],
-                type=agent_data["type"],
-                specialization=specialization,
-                capabilities=agent_data["capabilities"],
-                config=agent_data["config"],
-                prompt_file=agent_data["prompt_file"],
-                status=AgentStatus.IDLE
-            )
-
-            db.add(agent)
-            db.commit()
-
-        # Broadcast agent creation
-        await manager.broadcast({
-            "type": "agent_created",
-            "agent_id": agent_data["id"],
-            "name": agent_data["name"],
-            "creation_method": "intelligent-agent-factory"
-        })
-
-        # Return detailed creation result
-        return {
-            "success": True,
-            "agent": {
-                "id": agent_data["id"],
-                "name": agent_data["name"],
-                "type": agent_data["type"],
-                "specialization": agent_data["specialization"],
-                "status": "idle",
-                "evolution_stage": result["evolution_stage"]
-            },
-            "skills_created": {
-                "technical": result["technical_skills"],
-                "domain": result["domain_skills"],
-                "templates": result["starter_templates"],
-                "total": result["skills_count"]
-            },
-            "genome_path": result["genome_path"],
-            "ready_for_tasks": result["ready_for_tasks"],
-            "message": result["message"]
-        }
-
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    except Exception as e:
-        logger.error(f"Failed to create intelligent agent: {e}")
-        raise HTTPException(status_code=500, detail=f"Agent creation failed: {str(e)}")
-
-
-@app.post("/api/agents/create-intelligent-stream")
-async def create_intelligent_agent_stream(request: IntelligentAgentCreate):
-    """
-    Streaming version of intelligent agent creation with real-time progress updates
-
-    Returns Server-Sent Events (SSE) stream showing progress:
-    - Starting creation
-    - Analyzing with Gemini AI
-    - Generating genome
-    - Saving to disk
-    - Complete with full results
-    """
-    async def event_stream():
-        try:
-            factory = get_agent_factory()
-            final_result = None
-
-            # Stream progress updates from factory
-            async for progress in factory.create_intelligent_agent_stream(
-                description=request.description,
-                requirements=request.requirements
-            ):
-                # Send progress as SSE
-                yield f"data: {json.dumps(progress)}\n\n"
-
-                # Capture final result
-                if progress.get("step") == "complete":
-                    final_result = progress.get("data")
-
-            # Register agent in database after creation
-            if final_result:
-                agent_data = final_result["agent"]
-
-                with get_db() as db:
-                    # Check if agent already exists
-                    existing = db.query(Agent).filter(Agent.name == agent_data["name"]).first()
-                    if existing:
-                        error_msg = {"step": "error", "message": f"Agent with name '{agent_data['name']}' already exists"}
-                        yield f"data: {json.dumps(error_msg)}\n\n"
-                        return
-
-                    # Truncate specialization to fit database
-                    specialization = agent_data["specialization"]
-                    if len(specialization) > 250:
-                        specialization = specialization[:250] + "..."
-
-                    # Create new agent
-                    agent = Agent(
-                        id=agent_data["id"],
-                        name=agent_data["name"],
-                        type=agent_data["type"],
-                        specialization=specialization,
-                        capabilities=agent_data["capabilities"],
-                        config=agent_data["config"],
-                        prompt_file=agent_data["prompt_file"],
-                        status=AgentStatus.IDLE
-                    )
-
-                    db.add(agent)
-                    db.commit()
-
-                # Broadcast agent creation
-                await manager.broadcast({
-                    "type": "agent_created",
-                    "agent_id": agent_data["id"],
-                    "name": agent_data["name"],
-                    "creation_method": "intelligent-agent-factory-stream"
-                })
-
-                # Send final success message
-                success_data = {
-                    "step": "registered",
-                    "message": "✅ Agent registered in database",
-                    "agent": {
-                        "id": agent_data["id"],
-                        "name": agent_data["name"],
-                        "type": agent_data["type"],
-                        "specialization": agent_data["specialization"],
-                        "status": "idle",
-                        "evolution_stage": final_result["evolution_stage"]
-                    },
-                    "skills_created": final_result["skills_created"],
-                    "genome_path": final_result["genome_path"]
-                }
-                yield f"data: {json.dumps(success_data)}\n\n"
-
-        except ValueError as e:
-            error_data = {"step": "error", "message": str(e)}
-            yield f"data: {json.dumps(error_data)}\n\n"
-        except Exception as e:
-            logger.error(f"Streaming agent creation failed: {e}")
-            error_data = {"step": "error", "message": f"Agent creation failed: {str(e)}"}
-            yield f"data: {json.dumps(error_data)}\n\n"
-
-    return StreamingResponse(
-        event_stream(),
-        media_type="text/event-stream",
-        headers={
-            "Cache-Control": "no-cache",
-            "Connection": "keep-alive",
-            "X-Accel-Buffering": "no"
-        }
-    )
-
 
 # ============================================================================
 # TASK ENDPOINTS
@@ -771,7 +555,7 @@ async def execute_task(task_id: str):
 
         # Update task status to running
         task.status = TaskStatus.RUNNING
-        task.started_at = datetime.now(timezone.utc)
+        task.started_at = datetime.utcnow()
         db.commit()
 
         # Broadcast task execution
@@ -785,50 +569,6 @@ async def execute_task(task_id: str):
             "id": task_id,
             "status": "running",
             "message": "Task execution started"
-        }
-
-@app.patch("/api/tasks/{task_id}")
-async def update_task(task_id: str, task_update: TaskUpdate):
-    """Update task status (e.g., mark as failed/cancelled)"""
-    with get_db() as db:
-        task = db.query(Task).filter(Task.id == task_id).first()
-        if not task:
-            raise HTTPException(status_code=404, detail="Task not found")
-
-        # Update status if provided
-        if task_update.status:
-            valid_statuses = ["pending", "running", "completed", "failed"]
-            if task_update.status not in valid_statuses:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"Invalid status. Must be one of: {valid_statuses}"
-                )
-
-            task.status = TaskStatus(task_update.status)
-
-            # If marking as completed or failed, set completed_at
-            if task_update.status in ["completed", "failed"]:
-                task.completed_at = datetime.now(timezone.utc)
-
-        # Update error message if provided
-        if task_update.error is not None:
-            task.error = task_update.error
-
-        db.commit()
-
-        # Broadcast task update
-        await manager.broadcast({
-            "type": "task_updated",
-            "task_id": task_id,
-            "status": task.status.value,
-            "agent_id": task.agent_id
-        })
-
-        return {
-            "id": task_id,
-            "status": task.status.value,
-            "message": f"Task updated to {task.status.value}",
-            "error": task.error
         }
 
 # ============================================================================
@@ -970,7 +710,211 @@ async def get_stats():
         }
 
 # ============================================================================
-# WEBSOCKET
+# SESSION & ARCHIVE ENDPOINTS (Counter-Style Interaction)
+# ============================================================================
+
+@app.get("/api/sessions")
+async def list_sessions(
+    agent_id: Optional[str] = None,
+    status: Optional[str] = None,
+    limit: int = 50
+):
+    """List agent sessions with filtering"""
+    from app.models import Session, SessionStatus
+
+    with get_db() as db:
+        query = db.query(Session)
+        if agent_id:
+            query = query.filter(Session.agent_id == agent_id)
+        if status:
+            query = query.filter(Session.status == status)
+
+        sessions = query.order_by(Session.start_time.desc()).limit(limit).all()
+
+        return [
+            {
+                "id": s.id,
+                "agent_id": s.agent_id,
+                "initial_query": s.initial_query,
+                "status": s.status.value,
+                "start_time": s.start_time.isoformat() if s.start_time else None,
+                "end_time": s.end_time.isoformat() if s.end_time else None,
+                "duration_seconds": s.duration_seconds
+            }
+            for s in sessions
+        ]
+
+@app.get("/api/sessions/{session_id}")
+async def get_session(session_id: str):
+    """Get session details with full interaction log"""
+    from app.models import Session, InteractionLog, Artifact
+
+    with get_db() as db:
+        session = db.query(Session).filter(Session.id == session_id).first()
+        if not session:
+            raise HTTPException(status_code=404, detail="Session not found")
+
+        # Get interaction logs
+        logs = db.query(InteractionLog).filter(
+            InteractionLog.session_id == session_id
+        ).order_by(InteractionLog.timestamp).all()
+
+        # Get artifacts
+        artifacts = db.query(Artifact).filter(
+            Artifact.session_id == session_id
+        ).all()
+
+        return {
+            "id": session.id,
+            "agent_id": session.agent_id,
+            "initial_query": session.initial_query,
+            "final_output": session.final_output,
+            "status": session.status.value,
+            "start_time": session.start_time.isoformat() if session.start_time else None,
+            "end_time": session.end_time.isoformat() if session.end_time else None,
+            "duration_seconds": session.duration_seconds,
+            "interaction_logs": [
+                {
+                    "timestamp": log.timestamp.isoformat(),
+                    "event_type": log.event_type.value,
+                    "content": log.content
+                }
+                for log in logs
+            ],
+            "artifacts": [
+                {
+                    "id": a.id,
+                    "type": a.artifact_type.value,
+                    "title": a.title,
+                    "timestamp": a.timestamp.isoformat()
+                }
+                for a in artifacts
+            ]
+        }
+
+@app.get("/api/artifacts")
+async def list_artifacts(
+    session_id: Optional[str] = None,
+    artifact_type: Optional[str] = None,
+    limit: int = 50
+):
+    """List artifacts with filtering"""
+    from app.models import Artifact
+
+    with get_db() as db:
+        query = db.query(Artifact)
+        if session_id:
+            query = query.filter(Artifact.session_id == session_id)
+        if artifact_type:
+            query = query.filter(Artifact.artifact_type == artifact_type)
+
+        artifacts = query.order_by(Artifact.timestamp.desc()).limit(limit).all()
+
+        return [
+            {
+                "id": a.id,
+                "session_id": a.session_id,
+                "type": a.artifact_type.value,
+                "title": a.title,
+                "tags": a.tags,
+                "timestamp": a.timestamp.isoformat()
+            }
+            for a in artifacts
+        ]
+
+@app.get("/api/artifacts/{artifact_id}")
+async def get_artifact(artifact_id: str):
+    """Get full artifact content"""
+    from app.models import Artifact
+
+    with get_db() as db:
+        artifact = db.query(Artifact).filter(Artifact.id == artifact_id).first()
+        if not artifact:
+            raise HTTPException(status_code=404, detail="Artifact not found")
+
+        return {
+            "id": artifact.id,
+            "session_id": artifact.session_id,
+            "type": artifact.artifact_type.value,
+            "title": artifact.title,
+            "content": artifact.content,
+            "tags": artifact.tags,
+            "meta": artifact.meta,
+            "timestamp": artifact.timestamp.isoformat()
+        }
+
+@app.get("/api/archive/search")
+async def search_archive(q: str, limit: int = 20):
+    """Search across sessions and artifacts"""
+    from app.models import Session, Artifact
+
+    with get_db() as db:
+        # Search sessions by query
+        sessions = db.query(Session).filter(
+            Session.initial_query.ilike(f"%{q}%")
+        ).limit(limit).all()
+
+        # Search artifacts by title/content
+        artifacts = db.query(Artifact).filter(
+            (Artifact.title.ilike(f"%{q}%")) | (Artifact.content.ilike(f"%{q}%"))
+        ).limit(limit).all()
+
+        return {
+            "query": q,
+            "sessions": [
+                {
+                    "id": s.id,
+                    "initial_query": s.initial_query,
+                    "status": s.status.value,
+                    "start_time": s.start_time.isoformat() if s.start_time else None
+                }
+                for s in sessions
+            ],
+            "artifacts": [
+                {
+                    "id": a.id,
+                    "title": a.title,
+                    "type": a.artifact_type.value,
+                    "timestamp": a.timestamp.isoformat()
+                }
+                for a in artifacts
+            ]
+        }
+
+@app.get("/api/capabilities")
+async def get_agent_capabilities():
+    """Get list of all agent capabilities for discovery"""
+    with get_db() as db:
+        agents = db.query(Agent).all()
+
+        # Organize by type
+        capabilities_by_type = {}
+        for agent in agents:
+            agent_type = agent.type
+            if agent_type not in capabilities_by_type:
+                capabilities_by_type[agent_type] = []
+
+            capabilities_by_type[agent_type].append({
+                "name": agent.name,
+                "specialization": agent.specialization,
+                "capabilities": agent.capabilities or [],
+                "status": agent.status.value
+            })
+
+        return {
+            "total_agents": len(agents),
+            "by_type": capabilities_by_type,
+            "available_tools": [
+                "web_search",
+                "code_generation",
+                "data_analysis",
+                "geospatial_analysis",
+                "document_generation"
+            ]
+        }
+
+# ============================================================================
+# WEBSOCKET (Enhanced with Streaming)
 # ============================================================================
 
 @app.websocket("/ws")
@@ -984,6 +928,24 @@ async def websocket_endpoint(websocket: WebSocket):
             await websocket.send_json({"type": "pong", "data": data})
     except WebSocketDisconnect:
         manager.disconnect(websocket)
+
+@app.websocket("/ws/stream/{session_id}")
+async def streaming_websocket(websocket: WebSocket, session_id: str):
+    """
+    WebSocket for streaming agent responses
+    Provides real-time feedback during agent task execution
+    """
+    await streaming_manager.connect(websocket, session_id)
+    try:
+        while True:
+            # Keep connection alive and receive any client messages
+            data = await websocket.receive_text()
+            # Client can send control messages (pause, cancel, etc.)
+            message = json.loads(data)
+            if message.get("type") == "ping":
+                await websocket.send_json({"type": "pong"})
+    except WebSocketDisconnect:
+        streaming_manager.disconnect(websocket, session_id)
 
 # ============================================================================
 # RESEARCH LAB - AI AGENTS
