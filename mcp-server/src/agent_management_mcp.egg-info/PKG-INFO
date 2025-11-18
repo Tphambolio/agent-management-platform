@@ -1,0 +1,13 @@
+Metadata-Version: 2.1
+Name: agent-management-mcp
+Version: 1.0.0
+Summary: MCP Server for Agent Management Platform
+Home-page: UNKNOWN
+Author: Agent Management Platform
+License: UNKNOWN
+Platform: UNKNOWN
+Requires-Python: >=3.10
+Provides-Extra: dev
+
+UNKNOWN
+

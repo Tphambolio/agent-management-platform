@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: agent-mgmt-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile.backend
+    dockerContext: .
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: ANTHROPIC_API_KEY
+        sync: false  # Set manually in Render dashboard
+      - key: BRAVE_API_KEY
+        sync: false  # Set manually in Render dashboard
+      - key: DATABASE_URL
+        value: sqlite:///./agent_management.db
+    disk:
+      name: agent-data
+      mountPath: /app/.agents
+      sizeGB: 10
+    healthCheckPath: /health
