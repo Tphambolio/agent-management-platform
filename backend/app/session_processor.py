@@ -95,7 +95,7 @@ Once the API key is added, I'll be able to provide intelligent responses to your
                 await streaming_manager.send_event(
                     session_id,
                     StreamEventType.TOOL_CALL,
-                    {"tool_name": "gemini-1.5-flash", "description": "Generating AI response"}
+                    {"tool_name": "gemini-pro", "description": "Generating AI response"}
                 )
 
                 try:
@@ -105,7 +105,7 @@ Once the API key is added, I'll be able to provide intelligent responses to your
                     await streaming_manager.send_event(
                         session_id,
                         StreamEventType.TOOL_RESULT,
-                        {"tool_name": "gemini-1.5-flash", "status": "success"}
+                        {"tool_name": "gemini-pro", "status": "success"}
                     )
 
                     # Stream the response
@@ -128,7 +128,10 @@ Once the API key is added, I'll be able to provide intelligent responses to your
                     session.status = SessionStatus.COMPLETED
                     session.end_time = datetime.utcnow()
                     if session.start_time:
-                        duration = (session.end_time - session.start_time).total_seconds()
+                        # Ensure both datetimes are timezone-aware or both naive
+                        start = session.start_time.replace(tzinfo=None) if session.start_time.tzinfo else session.start_time
+                        end = session.end_time.replace(tzinfo=None) if session.end_time.tzinfo else session.end_time
+                        duration = (end - start).total_seconds()
                         session.duration_seconds = int(duration)
                     db.commit()
 
