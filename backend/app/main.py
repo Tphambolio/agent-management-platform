@@ -1022,23 +1022,32 @@ async def streaming_websocket(websocket: WebSocket, session_id: str):
     WebSocket for streaming agent responses with enhanced intelligent orchestration
     Integrates: Gemini Planning + RAG Context + Agent Skills + Real Execution
     """
-    from app.enhanced_orchestrator import enhanced_orchestrator
-
-    await streaming_manager.connect(websocket, session_id)
-
-    # Start enhanced orchestration (Gemini + RAG + Skills + Real Agents)
-    asyncio.create_task(enhanced_orchestrator.process_session(session_id))
-
     try:
-        while True:
-            # Keep connection alive and receive any client messages
-            data = await websocket.receive_text()
-            # Client can send control messages (pause, cancel, etc.)
-            message = json.loads(data)
-            if message.get("type") == "ping":
-                await websocket.send_json({"type": "pong"})
-    except WebSocketDisconnect:
-        streaming_manager.disconnect(websocket, session_id)
+        from app.enhanced_orchestrator import enhanced_orchestrator
+
+        await streaming_manager.connect(websocket, session_id)
+
+        # Start enhanced orchestration (Gemini + RAG + Skills + Real Agents)
+        asyncio.create_task(enhanced_orchestrator.process_session(session_id))
+
+        try:
+            while True:
+                # Keep connection alive and receive any client messages
+                data = await websocket.receive_text()
+                # Client can send control messages (pause, cancel, etc.)
+                message = json.loads(data)
+                if message.get("type") == "ping":
+                    await websocket.send_json({"type": "pong"})
+        except WebSocketDisconnect:
+            streaming_manager.disconnect(websocket, session_id)
+    except Exception as e:
+        logger.error(f"WebSocket error for session {session_id}: {e}")
+        import traceback
+        traceback.print_exc()
+        try:
+            await websocket.close(code=1011, reason=str(e))
+        except:
+            pass
 
 # ============================================================================
 # RESEARCH LAB - AI AGENTS
