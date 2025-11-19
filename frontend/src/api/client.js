@@ -23,6 +23,8 @@ export const tasksAPI = {
   get: (id) => apiClient.get(`/api/tasks/${id}`),
   create: (data) => apiClient.post('/api/tasks', data),
   execute: (id) => apiClient.post(`/api/tasks/${id}/execute`),
+  cancel: (id) => apiClient.post(`/api/tasks/${id}/cancel`),
+  cleanupStale: () => apiClient.post('/api/tasks/cleanup-stale'),
 };
 
 export const reportsAPI = {

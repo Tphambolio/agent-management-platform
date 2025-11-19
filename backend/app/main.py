@@ -575,6 +575,55 @@ async def execute_task(task_id: str):
             "message": "Task execution started"
         }
 
+@app.post("/api/tasks/{task_id}/cancel")
+async def cancel_task(task_id: str):
+    """Cancel a running or pending task"""
+    with get_db() as db:
+        task = db.query(Task).filter(Task.id == task_id).first()
+        if not task:
+            raise HTTPException(status_code=404, detail="Task not found")
+
+        if task.status in [TaskStatus.COMPLETED, TaskStatus.FAILED]:
+            raise HTTPException(status_code=400, detail=f"Cannot cancel {task.status.value} task")
+
+        # Mark task as failed with cancellation message
+        task.status = TaskStatus.FAILED
+        task.completed_at = datetime.utcnow()
+        task.error = "Task cancelled by user"
+        db.commit()
+
+        return {
+            "id": task_id,
+            "status": "failed",
+            "message": "Task cancelled successfully"
+        }
+
+@app.post("/api/tasks/cleanup-stale")
+async def cleanup_stale_tasks():
+    """Mark tasks running for more than 1 hour as failed"""
+    with get_db() as db:
+        # Find tasks that have been running for more than 1 hour
+        one_hour_ago = datetime.utcnow() - timedelta(hours=1)
+        stale_tasks = db.query(Task).filter(
+            Task.status == TaskStatus.RUNNING,
+            Task.started_at < one_hour_ago
+        ).all()
+
+        count = 0
+        for task in stale_tasks:
+            task.status = TaskStatus.FAILED
+            task.completed_at = datetime.utcnow()
+            task.error = "Task timed out (exceeded 1 hour)"
+            count += 1
+
+        if count > 0:
+            db.commit()
+
+        return {
+            "cleaned_up": count,
+            "message": f"Marked {count} stale task(s) as failed"
+        }
+
 # ============================================================================
 # REPORT ENDPOINTS
 # ============================================================================

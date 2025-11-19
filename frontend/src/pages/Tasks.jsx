@@ -8,6 +8,11 @@ export default function Tasks() {
   const [filterStatus, setFilterStatus] = useState('')
   const queryClient = useQueryClient()
 
+  // Auto-cleanup stale tasks on mount
+  useEffect(() => {
+    tasksAPI.cleanupStale().catch(err => console.error('Failed to cleanup stale tasks:', err))
+  }, [])
+
   const { data: tasks, isLoading } = useQuery({
     queryKey: ['tasks', filterStatus],
     queryFn: () => tasksAPI.list({ status: filterStatus || undefined }).then(res => res.data),
@@ -21,6 +26,13 @@ export default function Tasks() {
 
   const executeMutation = useMutation({
     mutationFn: (taskId) => tasksAPI.execute(taskId),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['tasks'])
+    },
+  })
+
+  const cancelMutation = useMutation({
+    mutationFn: (taskId) => tasksAPI.cancel(taskId),
     onSuccess: () => {
       queryClient.invalidateQueries(['tasks'])
     },
@@ -73,7 +85,9 @@ export default function Tasks() {
               key={task.id}
               task={task}
               onExecute={(taskId) => executeMutation.mutate(taskId)}
+              onCancel={(taskId) => cancelMutation.mutate(taskId)}
               isExecuting={executeMutation.isPending}
+              isCancelling={cancelMutation.isPending}
             />
           ))}
         </div>
@@ -94,7 +108,7 @@ export default function Tasks() {
   )
 }
 
-function TaskCard({ task, onExecute, isExecuting }) {
+function TaskCard({ task, onExecute, onCancel, isExecuting, isCancelling }) {
   const [elapsedTime, setElapsedTime] = useState('')
 
   useEffect(() => {
@@ -168,16 +182,28 @@ function TaskCard({ task, onExecute, isExecuting }) {
             </div>
           )}
         </div>
-        {task.status === 'pending' && (
-          <button
-            onClick={() => onExecute(task.id)}
-            className="btn-primary flex items-center gap-2 ml-4"
-            disabled={isExecuting}
-          >
-            <Play size={16} />
-            Execute
-          </button>
-        )}
+        <div className="flex gap-2 ml-4">
+          {task.status === 'pending' && (
+            <button
+              onClick={() => onExecute(task.id)}
+              className="btn-primary flex items-center gap-2"
+              disabled={isExecuting}
+            >
+              <Play size={16} />
+              Execute
+            </button>
+          )}
+          {(task.status === 'running' || task.status === 'pending') && (
+            <button
+              onClick={() => onCancel(task.id)}
+              className="btn-secondary flex items-center gap-2 text-red-600 hover:bg-red-50"
+              disabled={isCancelling}
+            >
+              <X size={16} />
+              Cancel
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )
