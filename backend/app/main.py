@@ -970,15 +970,15 @@ async def websocket_endpoint(websocket: WebSocket):
 @app.websocket("/ws/stream/{session_id}")
 async def streaming_websocket(websocket: WebSocket, session_id: str):
     """
-    WebSocket for streaming agent responses
+    WebSocket for streaming agent responses with intelligent Gemini orchestration
     Provides real-time feedback during agent task execution
     """
-    from app.session_processor import session_processor
+    from app.intelligent_session_processor import intelligent_session_processor
 
     await streaming_manager.connect(websocket, session_id)
 
-    # Start processing the session immediately in background
-    asyncio.create_task(session_processor.process_session(session_id))
+    # Start intelligent orchestration in background (Gemini coordinates agents)
+    asyncio.create_task(intelligent_session_processor.process_session(session_id))
 
     try:
         while True:
