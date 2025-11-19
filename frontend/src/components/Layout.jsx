@@ -1,11 +1,9 @@
 import { NavLink } from 'react-router-dom'
-import { Home, Users, CheckSquare, FileText, Folder, BookOpen } from 'lucide-react'
+import { Home, Users, CheckSquare, FileText, Folder, BookOpen, Sparkles } from 'lucide-react'
 
 const navigation = [
-  { name: 'Dashboard', to: '/', icon: Home },
-  { name: 'Agents', to: '/agents', icon: Users },
+  { name: 'Agent Lab', to: '/', icon: Sparkles },
   { name: 'Tasks', to: '/tasks', icon: CheckSquare },
-  { name: 'Research Lab', to: '/research', icon: BookOpen },
   { name: 'Reports', to: '/reports', icon: FileText },
   { name: 'Projects', to: '/projects', icon: Folder },
 ]

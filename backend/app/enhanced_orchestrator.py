@@ -222,9 +222,10 @@ Create an execution plan. Return ONLY valid JSON:
 }}
 
 Guidelines:
-- Use "real-agents" for: research, analysis, specialized domain tasks
-- Use "direct" for: simple Q&A, math, general knowledge
-- Select 1-2 most relevant agents
+- ALWAYS use "real-agents" for: research, analysis, build, create, develop, investigate, explore, any query with keywords like "research", "analyze", "build", "create", "find", "investigate"
+- ONLY use "direct" for: trivial questions like "what is 2+2", "what color is the sky"
+- When in doubt, use "real-agents" - always create visible tasks
+- Select 1-2 most relevant agents based on their skills
 - Be concise
 
 JSON:"""
