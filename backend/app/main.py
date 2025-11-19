@@ -970,15 +970,15 @@ async def websocket_endpoint(websocket: WebSocket):
 @app.websocket("/ws/stream/{session_id}")
 async def streaming_websocket(websocket: WebSocket, session_id: str):
     """
-    WebSocket for streaming agent responses with intelligent Gemini orchestration
-    Provides real-time feedback during agent task execution
+    WebSocket for streaming agent responses with enhanced intelligent orchestration
+    Integrates: Gemini Planning + RAG Context + Agent Skills + Real Execution
     """
-    from app.intelligent_session_processor import intelligent_session_processor
+    from app.enhanced_orchestrator import enhanced_orchestrator
 
     await streaming_manager.connect(websocket, session_id)
 
-    # Start intelligent orchestration in background (Gemini coordinates agents)
-    asyncio.create_task(intelligent_session_processor.process_session(session_id))
+    # Start enhanced orchestration (Gemini + RAG + Skills + Real Agents)
+    asyncio.create_task(enhanced_orchestrator.process_session(session_id))
 
     try:
         while True:
