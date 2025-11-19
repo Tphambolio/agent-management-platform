@@ -9,6 +9,10 @@ from fastapi.exceptions import RequestValidationError
 from sqlalchemy.exc import SQLAlchemyError
 from pydantic import BaseModel
 
+class SessionCreate(BaseModel):
+    agent_id: str
+    query: str
+
 from app.config import settings
 from app.database import init_db, get_db
 from app.models import Agent, Task, Report, Project, AgentStatus, TaskStatus
@@ -745,14 +749,14 @@ async def list_sessions(
         ]
 
 @app.post("/api/sessions")
-async def create_session(request: dict = Body(...)):
+async def create_session(request: SessionCreate):
     """Create a new agent session"""
     import uuid
     from datetime import datetime
     from app.models import Session, SessionStatus
 
-    agent_id = request.get("agent_id", "general-agent")
-    query = request.get("query")
+    agent_id = request.agent_id
+    query = request.query
 
     if not query:
         raise HTTPException(status_code=400, detail="Query is required")
