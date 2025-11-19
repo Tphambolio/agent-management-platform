@@ -969,7 +969,13 @@ async def streaming_websocket(websocket: WebSocket, session_id: str):
     WebSocket for streaming agent responses
     Provides real-time feedback during agent task execution
     """
+    from app.session_processor import session_processor
+
     await streaming_manager.connect(websocket, session_id)
+
+    # Start processing the session immediately in background
+    asyncio.create_task(session_processor.process_session(session_id))
+
     try:
         while True:
             # Keep connection alive and receive any client messages
