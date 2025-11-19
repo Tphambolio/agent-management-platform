@@ -12,10 +12,10 @@ class GeminiResearcher:
 
         if self.api_key:
             genai.configure(api_key=self.api_key)
-            # Use Gemini Pro for fast, free research
-            self.model = genai.GenerativeModel('gemini-pro')
+            # Use Gemini 2.5 Flash for fast, free research
+            self.model = genai.GenerativeModel('gemini-2.5-flash')
             self.available = True
-            print("✅ Gemini AI initialized (FREE tier)")
+            print("✅ Gemini AI initialized (Gemini 2.5 Flash)")
         else:
             self.model = None
             self.available = False

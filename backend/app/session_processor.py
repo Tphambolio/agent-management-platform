@@ -95,7 +95,7 @@ Once the API key is added, I'll be able to provide intelligent responses to your
                 await streaming_manager.send_event(
                     session_id,
                     StreamEventType.TOOL_CALL,
-                    {"tool_name": "gemini-pro", "description": "Generating AI response"}
+                    {"tool_name": "gemini-2.5-flash", "description": "Generating AI response"}
                 )
 
                 try:
@@ -105,7 +105,7 @@ Once the API key is added, I'll be able to provide intelligent responses to your
                     await streaming_manager.send_event(
                         session_id,
                         StreamEventType.TOOL_RESULT,
-                        {"tool_name": "gemini-pro", "status": "success"}
+                        {"tool_name": "gemini-2.5-flash", "status": "success"}
                     )
 
                     # Stream the response
