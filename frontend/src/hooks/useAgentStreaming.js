@@ -16,9 +16,18 @@ export function useAgentStreaming(sessionId, options = {}) {
   const reconnectTimeoutRef = useRef(null)
   const reconnectAttempts = useRef(0)
   const maxReconnectAttempts = 5
+  const isConnectingRef = useRef(false) // Prevent duplicate connections
 
   const connect = useCallback(() => {
     if (!sessionId) return
+
+    // Prevent duplicate connections
+    if (isConnectingRef.current || (wsRef.current && wsRef.current.readyState === WebSocket.OPEN)) {
+      console.log('[WebSocket] Already connected or connecting, skipping duplicate connection')
+      return
+    }
+
+    isConnectingRef.current = true
 
     try {
       setStatus('connecting')
@@ -38,6 +47,7 @@ export function useAgentStreaming(sessionId, options = {}) {
         setIsConnected(true)
         setStatus('connected')
         reconnectAttempts.current = 0
+        isConnectingRef.current = false // Connection successful
       }
 
       ws.onmessage = (event) => {
@@ -169,6 +179,7 @@ export function useAgentStreaming(sessionId, options = {}) {
       ws.onerror = (error) => {
         console.error('[WebSocket] Error:', error)
         setStatus('error')
+        isConnectingRef.current = false // Connection failed
 
         if (onError) {
           onError({ message: 'WebSocket connection error' })
@@ -192,6 +203,7 @@ export function useAgentStreaming(sessionId, options = {}) {
     } catch (err) {
       console.error('[WebSocket] Connection error:', err)
       setStatus('error')
+      isConnectingRef.current = false // Connection failed
 
       if (onError) {
         onError({ message: err.message })
@@ -209,6 +221,7 @@ export function useAgentStreaming(sessionId, options = {}) {
       wsRef.current = null
     }
 
+    isConnectingRef.current = false // Reset connecting flag
     setIsConnected(false)
     setStatus('disconnected')
   }, [])
@@ -221,7 +234,7 @@ export function useAgentStreaming(sessionId, options = {}) {
     }
   }, [isConnected])
 
-  // Auto-connect on mount
+  // Auto-connect on mount - only depend on sessionId and autoConnect
   useEffect(() => {
     if (autoConnect && sessionId) {
       connect()
@@ -230,7 +243,8 @@ export function useAgentStreaming(sessionId, options = {}) {
     return () => {
       disconnect()
     }
-  }, [sessionId, autoConnect, connect, disconnect])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionId, autoConnect]) // Only re-run when sessionId or autoConnect changes
 
   return {
     messages,
