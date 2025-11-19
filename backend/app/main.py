@@ -3,7 +3,7 @@ import uuid
 import asyncio
 from datetime import datetime, timedelta
 from typing import List, Optional
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from sqlalchemy.exc import SQLAlchemyError
@@ -743,6 +743,40 @@ async def list_sessions(
             }
             for s in sessions
         ]
+
+@app.post("/api/sessions")
+async def create_session(request: dict = Body(...)):
+    """Create a new agent session"""
+    import uuid
+    from datetime import datetime
+    from app.models import Session, SessionStatus
+
+    agent_id = request.get("agent_id", "general-agent")
+    query = request.get("query")
+
+    if not query:
+        raise HTTPException(status_code=400, detail="Query is required")
+
+    session_id = str(uuid.uuid4())
+
+    with get_db() as db:
+        session = Session(
+            id=session_id,
+            agent_id=agent_id,
+            initial_query=query,
+            status=SessionStatus.IN_PROGRESS,
+            start_time=datetime.utcnow()
+        )
+        db.add(session)
+        db.commit()
+
+        return {
+            "id": session.id,
+            "agent_id": session.agent_id,
+            "initial_query": session.initial_query,
+            "status": session.status.value,
+            "start_time": session.start_time.isoformat()
+        }
 
 @app.get("/api/sessions/{session_id}")
 async def get_session(session_id: str):
