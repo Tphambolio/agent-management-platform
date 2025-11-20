@@ -99,7 +99,8 @@ export function useAgentStreaming(sessionId, options = {}) {
     startPolling()
     return
 
-    /* WebSocket code temporarily disabled - will re-enable when Cloudflare issue is resolved
+    /* WebSocket code temporarily disabled - will re-enable when Cloudflare issue is resolved */
+    /*
     isConnectingRef.current = true
 
     try {
@@ -302,7 +303,8 @@ export function useAgentStreaming(sessionId, options = {}) {
         onError({ message: err.message })
       }
     }
-  }, [sessionId, onComplete, onError])
+    */
+  }, [sessionId, onComplete, onError, startPolling])
 
   const disconnect = useCallback(() => {
     if (reconnectTimeoutRef.current) {
