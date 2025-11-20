@@ -93,6 +93,13 @@ export function useAgentStreaming(sessionId, options = {}) {
       return
     }
 
+    // TEMPORARY: Skip WebSocket entirely due to Cloudflare Bot Management blocking
+    // Fall back to polling immediately until Render fixes the issue
+    console.log('[Connection] Using HTTP polling due to Cloudflare WebSocket blocking')
+    startPolling()
+    return
+
+    /* WebSocket code temporarily disabled - will re-enable when Cloudflare issue is resolved
     isConnectingRef.current = true
 
     try {
@@ -105,7 +112,10 @@ export function useAgentStreaming(sessionId, options = {}) {
 
       console.log('[WebSocket] Connecting to:', fullWsUrl)
 
-      const ws = new WebSocket(fullWsUrl)
+      // Add headers to help bypass Cloudflare Bot Management
+      // Note: WebSocket constructor doesn't support custom headers in browser,
+      // but we can try with protocols that might help
+      const ws = new WebSocket(fullWsUrl, ['websocket'])
       wsRef.current = ws
 
       ws.onopen = () => {
