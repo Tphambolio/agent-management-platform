@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { tasksAPI, agentsAPI } from '../api/client'
-import { Play, Plus, X, Loader2, Clock, CheckCircle2, XCircle } from 'lucide-react'
+import { Play, Plus, X, Loader2, Clock, CheckCircle2, XCircle, ChevronDown, ChevronUp, Search, LayoutGrid, List } from 'lucide-react'
 
 export default function Tasks() {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [filterStatus, setFilterStatus] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [compactView, setCompactView] = useState(false)
   const queryClient = useQueryClient()
 
   // Auto-cleanup stale tasks on mount
@@ -13,10 +15,18 @@ export default function Tasks() {
     tasksAPI.cleanupStale().catch(err => console.error('Failed to cleanup stale tasks:', err))
   }, [])
 
-  const { data: tasks, isLoading } = useQuery({
+  const { data: tasksData, isLoading } = useQuery({
     queryKey: ['tasks', filterStatus],
     queryFn: () => tasksAPI.list({ status: filterStatus || undefined }).then(res => res.data),
     refetchInterval: 5000,
+  })
+
+  // Filter tasks by search query
+  const tasks = tasksData?.filter(task => {
+    if (!searchQuery) return true
+    const query = searchQuery.toLowerCase()
+    return task.title.toLowerCase().includes(query) ||
+           task.description.toLowerCase().includes(query)
   })
 
   const { data: agents } = useQuery({
@@ -51,22 +61,57 @@ export default function Tasks() {
         </button>
       </div>
 
-      {/* Filters */}
+      {/* Filters & Search */}
       <div className="card">
-        <div className="flex items-center gap-4">
-          <label className="text-sm font-medium text-gray-700">Filter by status:</label>
-          <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="input w-auto"
-          >
-            <option value="">All</option>
-            <option value="pending">Pending</option>
-            <option value="running">Running</option>
-            <option value="completed">Completed</option>
-            <option value="failed">Failed</option>
-          </select>
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1 flex items-center gap-4">
+            <div className="relative flex-1 max-w-md">
+              <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search tasks..."
+                className="input pl-10 w-full"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Status:</label>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="input w-auto"
+              >
+                <option value="">All</option>
+                <option value="pending">Pending</option>
+                <option value="running">Running</option>
+                <option value="completed">Completed</option>
+                <option value="failed">Failed</option>
+              </select>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCompactView(false)}
+              className={`p-2 rounded ${!compactView ? 'bg-primary-100 text-primary-600' : 'text-gray-600 hover:bg-gray-100'}`}
+              title="Detailed view"
+            >
+              <LayoutGrid size={18} />
+            </button>
+            <button
+              onClick={() => setCompactView(true)}
+              className={`p-2 rounded ${compactView ? 'bg-primary-100 text-primary-600' : 'text-gray-600 hover:bg-gray-100'}`}
+              title="Compact view"
+            >
+              <List size={18} />
+            </button>
+          </div>
         </div>
+        {searchQuery && (
+          <div className="mt-3 text-sm text-gray-600">
+            Found {tasks?.length || 0} task{tasks?.length !== 1 ? 's' : ''} matching "{searchQuery}"
+          </div>
+        )}
       </div>
 
       {/* Tasks List */}
@@ -84,6 +129,7 @@ export default function Tasks() {
             <TaskCard
               key={task.id}
               task={task}
+              compactView={compactView}
               onExecute={(taskId) => executeMutation.mutate(taskId)}
               onCancel={(taskId) => cancelMutation.mutate(taskId)}
               isExecuting={executeMutation.isPending}
@@ -108,8 +154,9 @@ export default function Tasks() {
   )
 }
 
-function TaskCard({ task, onExecute, onCancel, isExecuting, isCancelling }) {
+function TaskCard({ task, compactView, onExecute, onCancel, isExecuting, isCancelling }) {
   const [elapsedTime, setElapsedTime] = useState('')
+  const [isExpanded, setIsExpanded] = useState(false)
 
   useEffect(() => {
     if (task.status !== 'running' || !task.started_at) return
@@ -125,6 +172,31 @@ function TaskCard({ task, onExecute, onCancel, isExecuting, isCancelling }) {
 
     return () => clearInterval(interval)
   }, [task.status, task.started_at])
+
+  // Format relative time
+  const getRelativeTime = (dateString) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffMs = now - date
+    const diffSecs = Math.floor(diffMs / 1000)
+    const diffMins = Math.floor(diffSecs / 60)
+    const diffHours = Math.floor(diffMins / 60)
+    const diffDays = Math.floor(diffHours / 24)
+
+    if (diffSecs < 60) return 'just now'
+    if (diffMins < 60) return `${diffMins}m ago`
+    if (diffHours < 24) return `${diffHours}h ago`
+    if (diffDays < 7) return `${diffDays}d ago`
+    return date.toLocaleDateString()
+  }
+
+  // Truncate description
+  const truncateText = (text, maxLength = 150) => {
+    if (text.length <= maxLength) return text
+    return text.substring(0, maxLength) + '...'
+  }
+
+  const needsTruncation = task.description && task.description.length > 150
 
   const getStatusIcon = () => {
     switch (task.status) {
@@ -146,11 +218,45 @@ function TaskCard({ task, onExecute, onCancel, isExecuting, isCancelling }) {
     4: 'critical'
   }
 
+  // Different styling for failed tasks
+  const cardClass = task.status === 'failed'
+    ? 'card hover:shadow-md transition-shadow border-2 border-red-200 bg-red-50'
+    : 'card hover:shadow-md transition-shadow'
+
+  if (compactView) {
+    // Compact view - single line with essential info
+    return (
+      <div className={cardClass}>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            {getStatusIcon()}
+            <h3 className="font-semibold text-gray-900 truncate flex-1">{task.title}</h3>
+            <span className={`badge badge-${task.status}`}>{task.status}</span>
+            <span className="text-xs text-gray-500 whitespace-nowrap">{getRelativeTime(task.created_at)}</span>
+          </div>
+          <div className="flex gap-2">
+            {task.status === 'pending' && (
+              <button onClick={() => onExecute(task.id)} className="btn-primary p-2" disabled={isExecuting} title="Execute">
+                <Play size={16} />
+              </button>
+            )}
+            {(task.status === 'running' || task.status === 'pending') && (
+              <button onClick={() => onCancel(task.id)} className="btn-secondary p-2 text-red-600" disabled={isCancelling} title="Cancel">
+                <X size={16} />
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Detailed view - full card with description
   return (
-    <div className="card hover:shadow-md transition-shadow">
+    <div className={cardClass}>
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
             {getStatusIcon()}
             <h3 className="text-lg font-semibold text-gray-900">{task.title}</h3>
             <span className={`badge badge-${task.status}`}>{task.status}</span>
@@ -162,17 +268,46 @@ function TaskCard({ task, onExecute, onCancel, isExecuting, isCancelling }) {
               </span>
             )}
           </div>
-          <p className="text-gray-700 mt-2">{task.description}</p>
-          <div className="flex items-center gap-4 mt-3 text-sm text-gray-600">
-            <span>Agent: {task.agent_id?.slice(0, 8)}...</span>
-            <span>Created: {new Date(task.created_at).toLocaleString()}</span>
-            {task.started_at && task.status === 'running' && (
-              <span>Started: {new Date(task.started_at).toLocaleString()}</span>
-            )}
-            {task.completed_at && (
-              <span>Completed: {new Date(task.completed_at).toLocaleString()}</span>
+
+          {/* Description with expand/collapse */}
+          <div className="mt-2">
+            <p className="text-gray-700">
+              {isExpanded || !needsTruncation ? task.description : truncateText(task.description)}
+            </p>
+            {needsTruncation && (
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="text-primary-600 hover:text-primary-700 text-sm mt-1 flex items-center gap-1"
+              >
+                {isExpanded ? (
+                  <>
+                    <ChevronUp size={16} />
+                    Show less
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown size={16} />
+                    Show more
+                  </>
+                )}
+              </button>
             )}
           </div>
+
+          {/* Metadata - relative time */}
+          <div className="flex items-center gap-4 mt-3 text-sm text-gray-600 flex-wrap">
+            <span className="font-medium">{getRelativeTime(task.created_at)}</span>
+            <span className="text-gray-400">•</span>
+            <span>Agent: {task.agent_id?.slice(0, 8)}...</span>
+            {task.completed_at && (
+              <>
+                <span className="text-gray-400">•</span>
+                <span>Completed: {getRelativeTime(task.completed_at)}</span>
+              </>
+            )}
+          </div>
+
+          {/* Running progress indicator */}
           {task.status === 'running' && (
             <div className="mt-3">
               <div className="w-full bg-gray-200 rounded-full h-2">
@@ -182,6 +317,8 @@ function TaskCard({ task, onExecute, onCancel, isExecuting, isCancelling }) {
             </div>
           )}
         </div>
+
+        {/* Action buttons */}
         <div className="flex gap-2 ml-4">
           {task.status === 'pending' && (
             <button
