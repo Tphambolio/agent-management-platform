@@ -1,8 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import axios from 'axios'
+
+const API_URL = import.meta.env.VITE_API_URL || 'https://agent-platform-backend-3g16.onrender.com'
 
 /**
- * Custom hook for WebSocket-based agent streaming
- * Connects to backend streaming endpoint and manages real-time events
+ * Custom hook for agent streaming with WebSocket + HTTP polling fallback
+ * Tries WebSocket first, falls back to polling if WebSocket fails (HTTP 403)
  */
 export function useAgentStreaming(sessionId, options = {}) {
   const { onComplete, onError, autoConnect = true } = options
@@ -11,12 +14,75 @@ export function useAgentStreaming(sessionId, options = {}) {
   const [isConnected, setIsConnected] = useState(false)
   const [status, setStatus] = useState('idle') // idle, connecting, connected, disconnected, error
   const [currentActivity, setCurrentActivity] = useState(null)
+  const [usingPolling, setUsingPolling] = useState(false) // Track if using polling fallback
 
   const wsRef = useRef(null)
   const reconnectTimeoutRef = useRef(null)
+  const pollingIntervalRef = useRef(null)
+  const lastLogIndexRef = useRef(0) // Track processed logs for polling
   const reconnectAttempts = useRef(0)
   const maxReconnectAttempts = 5
   const isConnectingRef = useRef(false) // Prevent duplicate connections
+
+  // Polling fallback when WebSocket fails
+  const startPolling = useCallback(() => {
+    if (!sessionId) return
+
+    console.log('[Polling] Starting HTTP polling fallback')
+    setUsingPolling(true)
+    setIsConnected(true) // Consider "connected" when polling
+    setStatus('connected')
+
+    const poll = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/sessions/${sessionId}`)
+        const data = response.data
+
+        // Process new interaction logs
+        if (data.interaction_logs && data.interaction_logs.length > lastLogIndexRef.current) {
+          const newLogs = data.interaction_logs.slice(lastLogIndexRef.current)
+          lastLogIndexRef.current = data.interaction_logs.length
+
+          // Convert logs to messages
+          newLogs.forEach(log => {
+            const msg = {
+              id: Date.now() + Math.random(),
+              timestamp: log.timestamp,
+              content: log.content.message || JSON.stringify(log.content)
+            }
+
+            // Map event types to message types
+            if (log.event_type === 'llm_response') {
+              msg.type = 'agent'
+              msg.content = log.content.response || log.content.chunk || ''
+              setMessages(prev => [...prev, msg])
+            } else if (log.event_type === 'tool_use') {
+              msg.type = 'tool'
+              setMessages(prev => [...prev, msg])
+            }
+          })
+        }
+
+        // Check if session complete
+        if (data.status === 'completed') {
+          console.log('[Polling] Session complete')
+          setStatus('completed')
+          if (pollingIntervalRef.current) {
+            clearInterval(pollingIntervalRef.current)
+          }
+          if (onComplete) {
+            onComplete({ final_output: data.final_output })
+          }
+        }
+      } catch (err) {
+        console.error('[Polling] Error:', err)
+      }
+    }
+
+    // Poll every 2 seconds
+    poll() // Initial poll
+    pollingIntervalRef.current = setInterval(poll, 2000)
+  }, [sessionId, onComplete])
 
   const connect = useCallback(() => {
     if (!sessionId) return
@@ -46,6 +112,7 @@ export function useAgentStreaming(sessionId, options = {}) {
         console.log('[WebSocket] Connected')
         setIsConnected(true)
         setStatus('connected')
+        setUsingPolling(false)
         reconnectAttempts.current = 0
         isConnectingRef.current = false // Connection successful
       }
@@ -181,23 +248,39 @@ export function useAgentStreaming(sessionId, options = {}) {
         setStatus('error')
         isConnectingRef.current = false // Connection failed
 
-        if (onError) {
+        // If we haven't tried polling yet, fall back to it
+        if (!usingPolling && reconnectAttempts.current >= maxReconnectAttempts) {
+          console.log('[WebSocket] Max reconnect attempts reached, falling back to HTTP polling')
+          startPolling()
+        } else if (onError) {
           onError({ message: 'WebSocket connection error' })
         }
       }
 
-      ws.onclose = () => {
-        console.log('[WebSocket] Connection closed')
+      ws.onclose = (event) => {
+        console.log('[WebSocket] Connection closed', event.code, event.reason)
         setIsConnected(false)
         setStatus('disconnected')
 
+        // If close code is 403 (Forbidden) or 1006 (abnormal closure from 403), fall back to polling immediately
+        if ((event.code === 403 || event.code === 1006) && !usingPolling) {
+          console.log('[WebSocket] Connection forbidden (likely Cloudflare WAF), falling back to HTTP polling')
+          isConnectingRef.current = false
+          startPolling()
+          return
+        }
+
         // Attempt reconnection if not max attempts
-        if (reconnectAttempts.current < maxReconnectAttempts) {
+        if (reconnectAttempts.current < maxReconnectAttempts && !usingPolling) {
           const delay = Math.min(1000 * Math.pow(2, reconnectAttempts.current), 10000)
           console.log(`[WebSocket] Reconnecting in ${delay}ms (attempt ${reconnectAttempts.current + 1}/${maxReconnectAttempts})`)
 
           reconnectAttempts.current++
           reconnectTimeoutRef.current = setTimeout(connect, delay)
+        } else if (!usingPolling) {
+          // Max attempts reached, fall back to polling
+          console.log('[WebSocket] Max reconnect attempts reached, falling back to HTTP polling')
+          startPolling()
         }
       }
     } catch (err) {
@@ -216,6 +299,10 @@ export function useAgentStreaming(sessionId, options = {}) {
       clearTimeout(reconnectTimeoutRef.current)
     }
 
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current)
+    }
+
     if (wsRef.current) {
       wsRef.current.close()
       wsRef.current = null
@@ -224,6 +311,7 @@ export function useAgentStreaming(sessionId, options = {}) {
     isConnectingRef.current = false // Reset connecting flag
     setIsConnected(false)
     setStatus('disconnected')
+    setUsingPolling(false)
   }, [])
 
   const sendMessage = useCallback((message) => {
