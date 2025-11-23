@@ -12,8 +12,8 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.0
-      - key: DATABASE_URL
-        sync: false  # Set manually in Render dashboard to your existing database
+      # NOTE: DATABASE_URL must be set manually in Render dashboard
+      # after service creation. Point to existing agent-management-db.
       - key: AGENTS_DIR
         value: /opt/render/project/src/.agents
       - key: CORS_ORIGINS
