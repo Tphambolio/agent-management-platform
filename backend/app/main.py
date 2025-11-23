@@ -1,5 +1,7 @@
 """Agent Management Platform - FastAPI Backend"""
+import os
 import uuid
+import json
 import asyncio
 from datetime import datetime, timedelta
 from typing import List, Optional
@@ -41,6 +43,8 @@ from app.routes.auth import router as auth_router
 from app.logging import setup_logging, get_logger
 # Import request ID middleware
 from app.middleware.request_id import RequestIDMiddleware
+# Import MCP routes
+from app.mcp_routes import register_mcp_routes
 # Temporarily disabled to debug deployment
 # from app.agent_executor import AgentExecutor
 
@@ -75,6 +79,9 @@ app.add_middleware(RequestIDMiddleware)
 
 # Include routers
 app.include_router(auth_router)
+
+# Register MCP routes
+register_mcp_routes(app)
 
 # Initialize database and agent executor (initialize on first import, not on startup)
 try:
