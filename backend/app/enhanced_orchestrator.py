@@ -143,6 +143,23 @@ class EnhancedOrchestrator:
             print(f"Error in session {session_id}: {e}")
             import traceback
             traceback.print_exc()
+
+            # Mark session as failed
+            try:
+                with get_db() as db:
+                    session = db.query(Session).filter(Session.id == session_id).first()
+                    if session and session.status == SessionStatus.IN_PROGRESS:
+                        session.status = SessionStatus.FAILED
+                        session.end_time = datetime.utcnow()
+                        session.final_output = f"Error: {error_msg}"
+                        if session.start_time:
+                            start = session.start_time.replace(tzinfo=None) if session.start_time.tzinfo else session.start_time
+                            end = session.end_time.replace(tzinfo=None) if session.end_time.tzinfo else session.end_time
+                            duration = (end - start).total_seconds()
+                            session.duration_seconds = int(duration)
+                        db.commit()
+            except Exception as cleanup_error:
+                print(f"Failed to mark session as failed: {cleanup_error}")
         finally:
             self.processing_sessions.discard(session_id)
 

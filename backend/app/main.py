@@ -123,9 +123,20 @@ async def task_processor():
     # Check if MCP orchestrator is enabled
     use_mcp_orchestrator = os.getenv("USE_MCP_ORCHESTRATOR", "true").lower() == "true"
 
+    cleanup_counter = 0  # Counter for session cleanup
+
     while True:
         try:
             await asyncio.sleep(5)  # Check every 5 seconds
+
+            # Cleanup stale sessions every 60 iterations (5 minutes)
+            cleanup_counter += 1
+            if cleanup_counter >= 60:
+                cleanup_counter = 0
+                from app.session_cleanup import cleanup_stale_sessions
+                cleaned = cleanup_stale_sessions(max_age_minutes=30)
+                if cleaned > 0:
+                    print(f"🧹 Cleaned up {cleaned} stale session(s)")
 
             with get_db() as db:
                 # Find running tasks that have been running for more than 30 seconds
@@ -630,6 +641,19 @@ async def cleanup_stale_tasks():
             "cleaned_up": count,
             "message": f"Marked {count} stale task(s) as failed"
         }
+
+@app.post("/api/sessions/cleanup-stale")
+async def cleanup_stale_sessions_endpoint(max_age_minutes: int = 30):
+    """Mark sessions running for more than max_age_minutes as failed"""
+    from app.session_cleanup import cleanup_stale_sessions
+
+    count = cleanup_stale_sessions(max_age_minutes)
+
+    return {
+        "cleaned_up": count,
+        "message": f"Marked {count} stale session(s) as failed",
+        "max_age_minutes": max_age_minutes
+    }
 
 # ============================================================================
 # REPORT ENDPOINTS
