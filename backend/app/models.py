@@ -30,10 +30,18 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(String, primary_key=True)
-    username = Column(String(100), unique=True, nullable=False, index=True)
+    username = Column(String(100), unique=True, index=True)  # Made optional for OAuth
     email = Column(String(255), unique=True, nullable=False, index=True)
-    hashed_password = Column(String(255), nullable=False)
+    hashed_password = Column(String(255))  # Made optional for OAuth
     full_name = Column(String(255))
+    profile_picture = Column(String(512))  # Google profile picture URL
+
+    # Google OAuth fields
+    google_id = Column(String(255), unique=True, index=True)  # Google user ID
+    google_access_token_encrypted = Column(Text)  # For Gemini API
+    google_refresh_token_encrypted = Column(Text)  # To refresh access token
+    token_expires_at = Column(DateTime(timezone=True))  # Token expiration
+
     is_active = Column(Boolean, default=True)
     is_admin = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
