@@ -14,7 +14,7 @@ services:
         value: 3.10.0
       - key: DATABASE_URL
         fromDatabase:
-          name: wildfire-db
+          name: agent-management-db
           property: connectionString
       - key: AGENTS_DIR
         value: /opt/render/project/src/.agents
@@ -36,5 +36,5 @@ services:
         source: /*
         destination: /index.html
 
-# Note: Using existing wildfire-db database (shared with wildfire simulator)
-# The database will be renamed to agent-management-db in Render dashboard
+# Note: Using existing agent-management-db database (renamed from wildfire-db)
+# Shared with wildfire simulator - each app has separate tables
