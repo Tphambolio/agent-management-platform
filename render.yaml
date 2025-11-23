@@ -9,13 +9,15 @@ services:
     buildCommand: pip install -r backend/requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     rootDir: backend
+    disk:
+      name: agent-data
+      mountPath: /opt/render/project/src
+      sizeGB: 1
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.0
       - key: DATABASE_URL
-        fromDatabase:
-          name: agent-management-db
-          property: connectionString
+        value: sqlite:///./agent_management.db
       - key: AGENTS_DIR
         value: /opt/render/project/src/.agents
       - key: CORS_ORIGINS
@@ -36,7 +38,8 @@ services:
         source: /*
         destination: /index.html
 
-databases:
-  - name: agent-management-db
-    plan: free
-    region: oregon
+# Using SQLite instead of PostgreSQL to avoid free tier database limit
+# databases:
+#   - name: agent-management-db
+#     plan: free
+#     region: oregon
