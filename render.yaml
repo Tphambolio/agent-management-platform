@@ -25,7 +25,6 @@ services:
   - type: web
     name: agent-platform-frontend
     env: static
-    plan: free
     branch: main
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: ./frontend/dist
