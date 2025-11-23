@@ -124,6 +124,7 @@ async def task_processor():
     use_mcp_orchestrator = os.getenv("USE_MCP_ORCHESTRATOR", "true").lower() == "true"
 
     cleanup_counter = 0  # Counter for session cleanup
+    processing_tasks = set()  # Track tasks currently being processed
 
     while True:
         try:
@@ -139,13 +140,22 @@ async def task_processor():
                     print(f"🧹 Cleaned up {cleaned} stale session(s)")
 
             with get_db() as db:
-                # Find running tasks that have been running for more than 30 seconds
-                running_tasks = db.query(Task).filter(Task.status == TaskStatus.RUNNING).all()
+                # Find running tasks that need processing (>= 5 seconds old to avoid race conditions)
+                five_seconds_ago = datetime.utcnow() - timedelta(seconds=5)
+                running_tasks = db.query(Task).filter(
+                    Task.status == TaskStatus.RUNNING,
+                    Task.started_at <= five_seconds_ago
+                ).all()
 
                 for task in running_tasks:
+                    # Skip if already being processed
+                    if task.id in processing_tasks:
+                        continue
+
+                    processing_tasks.add(task.id)
                     if task.started_at:
                         elapsed = datetime.utcnow() - task.started_at
-                        if elapsed > timedelta(seconds=30):
+                        if True:  # Process immediately (removed 30 second wait)
                             # Get agent details
                             agent = db.query(Agent).filter(Agent.id == task.agent_id).first()
                             agent_name = agent.name if agent else "Research Agent"
@@ -287,8 +297,14 @@ async def task_processor():
 
                             print(f"✅ Task {task.id} completed | Report {report.id} | {sources_found} sources | Method: {orchestration_method}")
 
+                            # Remove from processing set
+                            processing_tasks.discard(task.id)
+
         except Exception as e:
             print(f"⚠️  Task processor error: {e}")
+            # Clean up processing_tasks on error
+            if 'task' in locals() and hasattr(task, 'id'):
+                processing_tasks.discard(task.id)
 
 @app.on_event("startup")
 async def startup_event():
@@ -521,23 +537,35 @@ async def create_task(task_data: TaskCreate):
             context=task_data.context,
             status=TaskStatus.PENDING
         )
-        
+
         db.add(task)
         db.commit()
-        
+
         # Broadcast task creation
         await manager.broadcast({
             "type": "task_created",
             "task_id": task_id,
             "agent_id": agent.id
         })
-        
+
+        # Auto-execute the task immediately
+        task.status = TaskStatus.RUNNING
+        task.started_at = datetime.utcnow()
+        db.commit()
+
+        # Broadcast task started
+        await manager.broadcast({
+            "type": "task_started",
+            "task_id": task_id,
+            "agent_id": agent.id
+        })
+
         return {
             "id": task_id,
             "agent_id": agent.id,
             "agent_name": agent.name,
-            "status": "created",
-            "message": "Task created successfully"
+            "status": "running",
+            "message": "Task created and started successfully"
         }
 
 @app.get("/api/tasks/{task_id}")
