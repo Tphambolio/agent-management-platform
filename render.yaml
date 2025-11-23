@@ -1,20 +1,44 @@
 services:
+  # Backend API
   - type: web
-    name: agent-mgmt-backend
-    runtime: docker
-    dockerfilePath: ./Dockerfile.backend
-    dockerContext: .
+    name: agent-platform-backend
+    env: python
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    rootDir: backend
     envVars:
-      - key: PORT
-        value: 8000
-      - key: ANTHROPIC_API_KEY
-        sync: false  # Set manually in Render dashboard
-      - key: BRAVE_API_KEY
-        sync: false  # Set manually in Render dashboard
+      - key: PYTHON_VERSION
+        value: 3.10.0
       - key: DATABASE_URL
-        value: sqlite:///./agent_management.db
-    disk:
-      name: agent-data
-      mountPath: /app/.agents
-      sizeGB: 10
-    healthCheckPath: /health
+        fromDatabase:
+          name: agent-management-db
+          property: connectionString
+      - key: AGENTS_DIR
+        value: /opt/render/project/src/.agents
+      - key: CORS_ORIGINS
+        value: https://agent-platform-frontend.onrender.com,http://localhost:5173
+
+  # Frontend Static Site
+  - type: web
+    name: agent-platform-frontend
+    env: static
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://agent-platform-backend-3g16.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+databases:
+  - name: agent-management-db
+    plan: free
+    region: oregon
