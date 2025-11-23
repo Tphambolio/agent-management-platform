@@ -13,9 +13,7 @@ services:
       - key: PYTHON_VERSION
         value: 3.10.0
       - key: DATABASE_URL
-        fromDatabase:
-          name: agent-management-db
-          property: connectionString
+        sync: false  # Set manually in Render dashboard to your existing database
       - key: AGENTS_DIR
         value: /opt/render/project/src/.agents
       - key: CORS_ORIGINS
