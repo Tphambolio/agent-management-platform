@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { Home, Users, CheckSquare, FileText, Folder, BookOpen, Sparkles } from 'lucide-react'
+import GoogleAuth from './GoogleAuth'
 
 const navigation = [
   { name: 'Agent Lab', to: '/', icon: Sparkles },
@@ -20,8 +21,11 @@ export default function Layout({ children }) {
                 🤖 Agent Management Platform
               </h1>
             </div>
-            <div className="text-sm text-gray-500">
-              v1.0.0
+            <div className="flex items-center gap-4">
+              <GoogleAuth />
+              <div className="text-sm text-gray-500">
+                v1.0.0
+              </div>
             </div>
           </div>
         </div>
