@@ -862,6 +862,7 @@ async def create_session(request: SessionCreate):
     import uuid
     from datetime import datetime
     from app.models import Session, SessionStatus
+    from app.enhanced_orchestrator import enhanced_orchestrator
 
     agent_id = request.agent_id
     query = request.query
@@ -882,13 +883,16 @@ async def create_session(request: SessionCreate):
         db.add(session)
         db.commit()
 
-        return {
-            "id": session.id,
-            "agent_id": session.agent_id,
-            "initial_query": session.initial_query,
-            "status": session.status.value,
-            "start_time": session.start_time.isoformat()
-        }
+    # Start processing the session in the background
+    asyncio.create_task(enhanced_orchestrator.process_session(session_id))
+
+    return {
+        "id": session_id,
+        "agent_id": agent_id,
+        "initial_query": query,
+        "status": "in_progress",
+        "start_time": datetime.utcnow().isoformat()
+    }
 
 @app.get("/api/sessions/{session_id}")
 async def get_session(session_id: str):
