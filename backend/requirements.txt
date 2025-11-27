@@ -1,42 +1,40 @@
 # FastAPI Web Backend for Agent Management Platform
 # This layer sits on top of the MCP server and provides REST API + WebSockets
 
-# Web Framework
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-pydantic==2.5.0
-pydantic-settings==2.1.0
-python-multipart==0.0.6
+# Web Framework (updated for anyio>=4.5 compatibility with mcp)
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+python-multipart>=0.0.6
 
 # CORS and Security
-fastapi-cors==0.0.6
-python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
 
 # WebSocket support
-websockets==12.0
-python-socketio==5.10.0
+websockets>=12.0
+python-socketio>=5.10.0
 
-# Database (optional - for persistence beyond MCP)
-sqlalchemy==2.0.23
-alembic==1.13.0
-psycopg2-binary==2.9.9  # PostgreSQL driver for SQLAlchemy
+# Database
+sqlalchemy>=2.0.23
+alembic>=1.13.0
+psycopg2-binary>=2.9.9
 
-# HTTP Client (to communicate with other services)
-httpx==0.25.2
-requests==2.31.0
+# HTTP Client
+httpx>=0.27.0
+requests>=2.31.0
 
 # AI/ML
-anthropic==0.39.0
+anthropic>=0.39.0
 
 # Model Context Protocol
-mcp==1.2.1
-# fastmcp removed - not used in backend, version 0.5.0 doesn't exist
+mcp>=1.2.1
 
 # LLM Orchestration
-langgraph==0.2.34
-langchain==0.3.7
-langchain-anthropic==0.3.0
+langgraph>=0.2.34
+langchain>=0.3.7
+langchain-anthropic>=0.3.0
 
 # Development
-python-dotenv==1.0.0
+python-dotenv>=1.0.0
