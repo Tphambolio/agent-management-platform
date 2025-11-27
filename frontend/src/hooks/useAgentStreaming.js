@@ -17,8 +17,24 @@ export function useAgentStreaming(sessionId, options = {}) {
   const reconnectAttempts = useRef(0)
   const maxReconnectAttempts = 5
 
+  // Use refs for callbacks to avoid reconnection loops
+  const onCompleteRef = useRef(onComplete)
+  const onErrorRef = useRef(onError)
+
+  // Update refs when callbacks change
+  useEffect(() => {
+    onCompleteRef.current = onComplete
+    onErrorRef.current = onError
+  }, [onComplete, onError])
+
   const connect = useCallback(() => {
     if (!sessionId) return
+
+    // Don't connect if already connected or connecting
+    if (wsRef.current && (wsRef.current.readyState === WebSocket.CONNECTING || wsRef.current.readyState === WebSocket.OPEN)) {
+      console.log('[WebSocket] Already connected or connecting, skipping')
+      return
+    }
 
     try {
       setStatus('connecting')
@@ -106,12 +122,18 @@ export function useAgentStreaming(sessionId, options = {}) {
               break
 
             case 'status_update':
-              setMessages(prev => [...prev, {
-                id: Date.now(),
-                type: 'status',
-                content: data.data.message,
-                timestamp: data.timestamp
-              }])
+              // Only add status message if messages array is empty (first connection)
+              setMessages(prev => {
+                if (prev.length === 0) {
+                  return [{
+                    id: Date.now(),
+                    type: 'status',
+                    content: data.data.message,
+                    timestamp: data.timestamp
+                  }]
+                }
+                return prev
+              })
               break
 
             case 'session_complete':
@@ -130,8 +152,8 @@ export function useAgentStreaming(sessionId, options = {}) {
               setCurrentActivity(null)
               setStatus('completed')
 
-              if (onComplete) {
-                onComplete(data.data)
+              if (onCompleteRef.current) {
+                onCompleteRef.current(data.data)
               }
               break
 
@@ -153,8 +175,8 @@ export function useAgentStreaming(sessionId, options = {}) {
                 timestamp: data.timestamp
               }])
 
-              if (onError) {
-                onError(data.data)
+              if (onErrorRef.current) {
+                onErrorRef.current(data.data)
               }
               break
 
@@ -170,8 +192,8 @@ export function useAgentStreaming(sessionId, options = {}) {
         console.error('[WebSocket] Error:', error)
         setStatus('error')
 
-        if (onError) {
-          onError({ message: 'WebSocket connection error' })
+        if (onErrorRef.current) {
+          onErrorRef.current({ message: 'WebSocket connection error' })
         }
       }
 
@@ -193,15 +215,16 @@ export function useAgentStreaming(sessionId, options = {}) {
       console.error('[WebSocket] Connection error:', err)
       setStatus('error')
 
-      if (onError) {
-        onError({ message: err.message })
+      if (onErrorRef.current) {
+        onErrorRef.current({ message: err.message })
       }
     }
-  }, [sessionId, onComplete, onError])
+  }, [sessionId]) // Only depend on sessionId, not callbacks
 
   const disconnect = useCallback(() => {
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current)
+      reconnectTimeoutRef.current = null
     }
 
     if (wsRef.current) {
@@ -211,6 +234,7 @@ export function useAgentStreaming(sessionId, options = {}) {
 
     setIsConnected(false)
     setStatus('disconnected')
+    reconnectAttempts.current = 0
   }, [])
 
   const sendMessage = useCallback((message) => {
@@ -221,16 +245,18 @@ export function useAgentStreaming(sessionId, options = {}) {
     }
   }, [isConnected])
 
-  // Auto-connect on mount
+  // Auto-connect on mount or when sessionId changes
   useEffect(() => {
     if (autoConnect && sessionId) {
+      // Reset messages when session changes
+      setMessages([])
       connect()
     }
 
     return () => {
       disconnect()
     }
-  }, [sessionId, autoConnect, connect, disconnect])
+  }, [sessionId, autoConnect]) // Remove connect/disconnect from deps - they're stable
 
   return {
     messages,
