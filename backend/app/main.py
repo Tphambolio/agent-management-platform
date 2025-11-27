@@ -744,6 +744,39 @@ async def list_sessions(
             for s in sessions
         ]
 
+
+class CreateSessionRequest(BaseModel):
+    agent_id: str = "general-agent"
+    query: str
+
+
+@app.post("/api/sessions")
+async def create_session(request: CreateSessionRequest):
+    """Create a new agent session"""
+    from app.models import Session, SessionStatus
+
+    session_id = str(uuid.uuid4())
+
+    with get_db() as db:
+        session = Session(
+            id=session_id,
+            agent_id=request.agent_id,
+            initial_query=request.query,
+            status=SessionStatus.IN_PROGRESS
+        )
+        db.add(session)
+        db.commit()
+        db.refresh(session)
+
+        return {
+            "id": session.id,
+            "agent_id": session.agent_id,
+            "initial_query": session.initial_query,
+            "status": session.status.value,
+            "start_time": session.start_time.isoformat() if session.start_time else None
+        }
+
+
 @app.get("/api/sessions/{session_id}")
 async def get_session(session_id: str):
     """Get session details with full interaction log"""
