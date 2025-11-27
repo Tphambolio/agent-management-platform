@@ -26,6 +26,7 @@ class Settings(BaseSettings):
     AGENTS_DIR: str = os.getenv("AGENTS_DIR", "/app/.agents")
 
     # CORS - Production configuration
+    # Note: FastAPI doesn't support glob patterns - each origin must be exact
     CORS_ORIGINS: List[str] = [
         "http://localhost:3000",
         "http://localhost:5173",
@@ -38,8 +39,6 @@ class Settings(BaseSettings):
         "https://frontend-75li8b5zx-travis-kennedys-projects.vercel.app",
         "https://frontend-nuxr624jz-travis-kennedys-projects.vercel.app",
         "https://frontend-travis-kennedys-projects.vercel.app",
-        "https://*.vercel.app",
-        "https://*.onrender.com"
     ]
 
     # Security
