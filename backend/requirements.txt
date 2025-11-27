@@ -31,7 +31,7 @@ anthropic==0.39.0
 
 # Model Context Protocol
 mcp==1.2.1
-fastmcp==0.5.0
+# fastmcp removed - not used in backend, version 0.5.0 doesn't exist
 
 # LLM Orchestration
 langgraph==0.2.34
