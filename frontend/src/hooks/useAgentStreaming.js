@@ -24,7 +24,7 @@ export function useAgentStreaming(sessionId, options = {}) {
       setStatus('connecting')
 
       // Get WebSocket URL - handle both http and https
-      const backendUrl = import.meta.env.VITE_API_URL || 'https://agent-platform-backend-3g16.onrender.com'
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://agent-platform-backend-production.onrender.com'
       const wsUrl = backendUrl.replace(/^http/, 'ws')
       const fullWsUrl = `${wsUrl}/ws/stream/${sessionId}`
 

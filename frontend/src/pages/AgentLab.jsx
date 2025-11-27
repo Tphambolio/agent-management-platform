@@ -4,7 +4,7 @@ import { useAgentStreaming } from '../hooks/useAgentStreaming'
 import { Send, Sparkles, Archive, Cpu, Loader2, ChevronRight, Clock } from 'lucide-react'
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://agent-platform-backend-3g16.onrender.com'
+const API_URL = import.meta.env.VITE_API_URL || 'https://agent-platform-backend-production.onrender.com'
 
 export default function AgentLab() {
   const [query, setQuery] = useState('')
