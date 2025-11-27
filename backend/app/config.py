@@ -31,9 +31,15 @@ class Settings(BaseSettings):
         "http://localhost:5173",
         "http://127.0.0.1:3000",
         "http://127.0.0.1:5173",
+        # Render deployments
+        "https://agent-platform-frontend.onrender.com",
+        "https://agent-platform-frontend-1nmr.onrender.com",
+        # Vercel deployments (legacy)
         "https://frontend-75li8b5zx-travis-kennedys-projects.vercel.app",
         "https://frontend-nuxr624jz-travis-kennedys-projects.vercel.app",
-        "https://*.vercel.app"
+        "https://frontend-travis-kennedys-projects.vercel.app",
+        "https://*.vercel.app",
+        "https://*.onrender.com"
     ]
 
     # Security
