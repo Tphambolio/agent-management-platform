@@ -4,7 +4,7 @@ import asyncio
 from datetime import datetime, timedelta
 from typing import List, Optional
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Request
-from fastapi.middleware.cors import CORSMiddleware
+# CORSMiddleware replaced with custom implementation below
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
@@ -76,14 +76,31 @@ app.add_exception_handler(RequestValidationError, handle_validation_error)
 app.add_exception_handler(SQLAlchemyError, handle_database_error)
 app.add_exception_handler(Exception, handle_generic_exception)
 
-# Configure CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Custom CORS middleware to ensure proper origin handling
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response
+
+class CustomCORSMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        origin = request.headers.get("origin")
+
+        # Handle preflight
+        if request.method == "OPTIONS":
+            response = Response(status_code=200)
+        else:
+            response = await call_next(request)
+
+        # Add CORS headers
+        if origin and origin in settings.CORS_ORIGINS:
+            response.headers["Access-Control-Allow-Origin"] = origin
+            response.headers["Access-Control-Allow-Credentials"] = "true"
+            response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+            response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization, X-Request-ID"
+            response.headers["Access-Control-Max-Age"] = "600"
+
+        return response
+
+app.add_middleware(CustomCORSMiddleware)
 
 # Add request ID middleware for tracking
 app.add_middleware(RequestIDMiddleware)
