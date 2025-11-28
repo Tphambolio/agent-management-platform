@@ -19,13 +19,27 @@ import logging
 try:
     from langgraph.graph import StateGraph, END
     from langgraph.prebuilt import ToolNode
-    from langchain_anthropic import ChatAnthropic
     from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
     from langchain_core.tools import tool
     LANGGRAPH_AVAILABLE = True
 except ImportError:
     LANGGRAPH_AVAILABLE = False
     print("⚠️  LangGraph not available")
+
+# Try to import Gemini (preferred - free tier)
+try:
+    from langchain_google_genai import ChatGoogleGenerativeAI
+    GEMINI_AVAILABLE = True
+except ImportError:
+    GEMINI_AVAILABLE = False
+    print("⚠️  Google Gemini not available")
+
+# Fallback to Anthropic
+try:
+    from langchain_anthropic import ChatAnthropic
+    ANTHROPIC_AVAILABLE = True
+except ImportError:
+    ANTHROPIC_AVAILABLE = False
 
 from app.mcp_client import create_research_client, create_geospatial_client
 
@@ -61,6 +75,7 @@ class AgentOrchestrator:
     """
 
     def __init__(self):
+        self.gemini_api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
         self.anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
 
         if not LANGGRAPH_AVAILABLE:
@@ -68,17 +83,30 @@ class AgentOrchestrator:
             self.enabled = False
             return
 
-        if not self.anthropic_api_key:
-            logger.warning("No ANTHROPIC_API_KEY - orchestrator disabled")
+        # Prefer Gemini (free tier), fallback to Anthropic
+        if self.gemini_api_key and GEMINI_AVAILABLE:
+            logger.info("Using Google Gemini (free tier)")
+            self.enabled = True
+            self.llm = ChatGoogleGenerativeAI(
+                model="gemini-1.5-flash",
+                google_api_key=self.gemini_api_key,
+                max_output_tokens=4000,
+                temperature=0.7
+            )
+            self.llm_provider = "gemini"
+        elif self.anthropic_api_key and ANTHROPIC_AVAILABLE:
+            logger.info("Using Anthropic Claude")
+            self.enabled = True
+            self.llm = ChatAnthropic(
+                model="claude-sonnet-4-20250514",
+                api_key=self.anthropic_api_key,
+                max_tokens=4000
+            )
+            self.llm_provider = "anthropic"
+        else:
+            logger.warning("No API key configured (set GEMINI_API_KEY or ANTHROPIC_API_KEY)")
             self.enabled = False
             return
-
-        self.enabled = True
-        self.llm = ChatAnthropic(
-            model="claude-sonnet-4-20250514",
-            api_key=self.anthropic_api_key,
-            max_tokens=4000
-        )
 
         # Build the agent workflow graph
         self.workflow = self._build_workflow()
