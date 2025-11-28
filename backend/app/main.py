@@ -3,9 +3,10 @@ import uuid
 import asyncio
 from datetime import datetime, timedelta
 from typing import List, Optional
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 from pydantic import BaseModel
 
@@ -51,7 +52,25 @@ app = FastAPI(
     description="Cloud-based agent workforce management platform"
 )
 
+# Custom HTTPException handler to ensure CORS headers are included
+async def handle_http_exception(request: Request, exc: HTTPException) -> JSONResponse:
+    """Handle HTTPException with proper CORS headers"""
+    origin = request.headers.get("origin")
+    headers = {}
+
+    # Add CORS headers if origin is in allowed list
+    if origin and origin in settings.CORS_ORIGINS:
+        headers["Access-Control-Allow-Origin"] = origin
+        headers["Access-Control-Allow-Credentials"] = "true"
+
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail},
+        headers=headers
+    )
+
 # Register exception handlers
+app.add_exception_handler(HTTPException, handle_http_exception)
 app.add_exception_handler(AppException, handle_app_exception)
 app.add_exception_handler(RequestValidationError, handle_validation_error)
 app.add_exception_handler(SQLAlchemyError, handle_database_error)
