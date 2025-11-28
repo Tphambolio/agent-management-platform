@@ -10,8 +10,15 @@ class AgentMemory:
     """Manages agent memory: past tasks, learnings, patterns discovered"""
 
     def __init__(self):
-        self.memory_dir = Path("/app/.agents/memory")
-        self.memory_dir.mkdir(parents=True, exist_ok=True)
+        # Use environment variable or fallback to local directory
+        base_dir = os.getenv("AGENT_DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
+        self.memory_dir = Path(base_dir) / ".agents" / "memory"
+        try:
+            self.memory_dir.mkdir(parents=True, exist_ok=True)
+        except PermissionError:
+            # Fall back to tmp directory if we can't write
+            self.memory_dir = Path("/tmp/.agents/memory")
+            self.memory_dir.mkdir(parents=True, exist_ok=True)
 
         print(f"✅ Agent Memory System initialized")
         print(f"   Memory storage: {self.memory_dir}")

@@ -2,6 +2,7 @@
 import re
 import json
 import hashlib
+import os
 from typing import List, Dict, Optional, Tuple
 from pathlib import Path
 from datetime import datetime
@@ -10,7 +11,14 @@ class CodeExtractor:
     """Extracts code from reports and adds them to agent skills"""
 
     def __init__(self):
-        self.dna_directory = Path("/home/rpas/agent-management-platform/.agents/dna")
+        # Use environment variable or fallback
+        base_dir = os.getenv("AGENT_DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
+        self.dna_directory = Path(base_dir) / ".agents" / "dna"
+        try:
+            self.dna_directory.mkdir(parents=True, exist_ok=True)
+        except PermissionError:
+            self.dna_directory = Path("/tmp/.agents/dna")
+            self.dna_directory.mkdir(parents=True, exist_ok=True)
         print("✅ Code Extractor initialized")
 
     def extract_code_blocks(self, markdown_content: str) -> List[Dict]:
