@@ -773,9 +773,83 @@ class CreateSessionRequest(BaseModel):
     query: str
 
 
+async def process_session_query(session_id: str, query: str, agent_id: str):
+    """Background task to process a session query and stream results"""
+    from app.models import Session, SessionStatus
+
+    try:
+        # Small delay to let WebSocket connect
+        await asyncio.sleep(0.5)
+
+        # Send "thinking" status
+        await streaming_manager.send_event(
+            session_id,
+            StreamEventType.AGENT_THINKING,
+            {"message": "Processing your request..."}
+        )
+
+        # Try using the agent orchestrator
+        if agent_orchestrator.enabled:
+            await streaming_manager.send_event(
+                session_id,
+                StreamEventType.TOOL_CALL,
+                {"tool": "research", "message": "Conducting research..."}
+            )
+
+            result = await agent_orchestrator.execute_task(
+                task_id=session_id,
+                task_title=query,
+                task_description=query,
+                agent_name=agent_id,
+                agent_type="research"
+            )
+
+            if result.get("status") == "completed":
+                response_text = result.get("final_report", "Research completed but no report generated.")
+            else:
+                response_text = f"I encountered an issue: {result.get('error', 'Unknown error')}"
+        else:
+            # Fallback: Simple acknowledgment (orchestrator not available)
+            await asyncio.sleep(1)
+            response_text = f"""I received your query: "{query}"
+
+I'm the Agent Lab assistant. Currently running in limited mode because the AI orchestrator requires an API key to be configured.
+
+To enable full AI capabilities:
+1. Set the ANTHROPIC_API_KEY environment variable on the backend
+2. The agent will then be able to conduct research and provide detailed responses
+
+For now, your query has been recorded and you can view it in the session archive."""
+
+        # Stream the response
+        await streaming_manager.stream_agent_response(session_id, response_text)
+
+        # Complete the session
+        await streaming_manager.complete_session(
+            session_id,
+            final_output=response_text,
+            artifacts=[]
+        )
+
+    except Exception as e:
+        logger.error(f"Error processing session {session_id}: {e}")
+        await streaming_manager.send_event(
+            session_id,
+            StreamEventType.ERROR,
+            {"message": f"Error processing request: {str(e)}"}
+        )
+
+        # Mark session as failed
+        with get_db() as db:
+            session = db.query(Session).filter(Session.id == session_id).first()
+            if session:
+                session.status = SessionStatus.FAILED
+                db.commit()
+
+
 @app.post("/api/sessions")
 async def create_session(request: CreateSessionRequest):
-    """Create a new agent session"""
+    """Create a new agent session and start processing"""
     from app.models import Session, SessionStatus
 
     session_id = str(uuid.uuid4())
@@ -790,6 +864,9 @@ async def create_session(request: CreateSessionRequest):
         db.add(session)
         db.commit()
         db.refresh(session)
+
+        # Start background processing
+        asyncio.create_task(process_session_query(session_id, request.query, request.agent_id))
 
         return {
             "id": session.id,
