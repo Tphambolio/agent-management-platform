@@ -1,4 +1,6 @@
 """Agent Management Platform - FastAPI Backend"""
+import os
+import json
 import uuid
 import asyncio
 from datetime import datetime, timedelta
@@ -1156,6 +1158,19 @@ async def serve_pdf(report_id: str):
 async def health_check():
     """Health check endpoint"""
     return {"status": "healthy", "version": settings.API_VERSION}
+
+@app.get("/debug/cors")
+async def debug_cors(request: Request):
+    """Debug CORS configuration - shows what origins are configured"""
+    origin = request.headers.get("origin", "none")
+    return {
+        "configured_origins": settings.CORS_ORIGINS,
+        "origins_count": len(settings.CORS_ORIGINS),
+        "request_origin": origin,
+        "origin_allowed": origin in settings.CORS_ORIGINS if origin != "none" else None,
+        "cors_origins_type": str(type(settings.CORS_ORIGINS)),
+        "env_cors_origins": os.environ.get("CORS_ORIGINS", "NOT_SET")
+    }
 
 @app.get("/")
 async def root():
